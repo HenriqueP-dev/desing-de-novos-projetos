@@ -1,0 +1,37 @@
+---
+// Estrada à noite: o hotel aceso no fim da pista. Estrelas com semente fixa para não mudar a cada build.
+let s = 7; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+const estrelas = Array.from({ length: 140 }, () => ({ x: rnd() * 1600, y: rnd() * 470, r: 0.4 + rnd() * 1.3, o: 0.35 + rnd() * 0.65 }));
+const faixas = Array.from({ length: 9 }, (_, i) => { const t = i / 9; const y = 535 + Math.pow(t, 1.7) * 365; const w = 2 + t * t * 30; const h = 6 + t * t * 80; return { y, w, h }; });
+const postes = [0.1, 0.32, 0.6].flatMap((t) => { const y = 535 + t * t * 365 * 1.1; const dx = 14 + t * t * 760; const h = 20 + t * t * 330; return [-1, 1].map((lado) => ({ x: 800 + lado * dx, y, h, t })); });
+---
+<svg class="cena" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="e-ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050912"/><stop offset=".6" stop-color="#0f1a2e"/><stop offset="1" stop-color="#26324a"/></linearGradient>
+    <radialGradient id="e-luz" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd58a" stop-opacity=".7"/><stop offset="1" stop-color="#ffd58a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="e-pista" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2233"/><stop offset="1" stop-color="#090d15"/></linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#e-ceu)"/>
+  {estrelas.map((e) => <circle cx={e.x} cy={e.y} r={e.r} fill="#fff" opacity={e.o} />)}
+  <rect y="535" width="1600" height="365" fill="#070a11"/>
+  <circle cx="800" cy="505" r="300" fill="url(#e-luz)"/>
+  <g>
+    <rect x="725" y="478" width="150" height="58" fill="#0c111b"/><rect x="745" y="462" width="110" height="18" fill="#0c111b"/>
+    <g fill="#ffd58a">
+      {[0,1,2,3,4,5].map((i) => <rect x={738 + i * 23} y="488" width="12" height="9" />)}
+      {[0,1,2,3,4,5].map((i) => <rect x={738 + i * 23} y="508" width="12" height="9" opacity={i === 2 ? 0.35 : 1} />)}
+      <rect x="785" y="521" width="30" height="15" />
+    </g>
+  </g>
+  <polygon points="790,535 810,535 1500,900 100,900" fill="url(#e-pista)"/>
+  <g fill="#e9d9b0" opacity=".85">
+    {faixas.map((f) => <rect x={800 - f.w / 2} y={f.y} width={f.w} height={f.h} />)}
+  </g>
+  {postes.map((p) => (
+    <g>
+      <rect x={p.x - 1 - p.t * 4} y={p.y - p.h} width={2 + p.t * 8} height={p.h} fill="#05070c"/>
+      <circle cx={p.x} cy={p.y - p.h} r={8 + p.t * 90} fill="url(#e-luz)" opacity=".55"/>
+      <circle cx={p.x} cy={p.y - p.h} r={1.5 + p.t * 8} fill="#fff0cc"/>
+    </g>
+  ))}
+</svg>

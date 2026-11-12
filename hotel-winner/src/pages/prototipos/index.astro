@@ -1,0 +1,22 @@
+---
+import Proto from '../../layouts/Proto.astro';
+const itens = [
+  { href: '/prototipos/claro/', t: 'Claro e minimalista', d: 'Lógica da Casa Angelina: ar, silêncio e fotografia no comando.' },
+  { href: '/prototipos/paisagem/', t: 'Paisagem monumental', d: 'Lógica do Bürgenstock: o lugar é o astro, serifa grande, editorial.' },
+  { href: '/prototipos/escuro/', t: 'Escuro e urbano', d: 'Lógica do One&Only: noite, vidro escuro e uma luz quente acesa.' },
+];
+---
+<Proto title="Protótipos · Hotel Winner">
+  <main>
+    <h1>Três direções para o topo do site</h1>
+    <p>Protótipo conceitual com imagens ilustrativas. Escolha olhando.</p>
+    <ul>{itens.map((i) => <li><a href={i.href}><strong>{i.t}</strong><span>{i.d}</span></a></li>)}</ul>
+  </main>
+</Proto>
+<style is:global> body { font-family: system-ui, sans-serif; background: #f4f4f1; color: #1c1f22; } </style>
+<style>
+  main { max-width: 44rem; margin: 0 auto; padding: 4rem 1.5rem; } h1 { font-size: 2rem; margin: 0 0 .5rem; } p { color: #555; }
+  ul { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1rem; }
+  a { display: grid; gap: .25rem; padding: 1.25rem 1.5rem; background: #fff; border: 1px solid #d8d8d2; text-decoration: none; } a:hover { border-color: #1c1f22; }
+  span { color: #555; }
+</style>

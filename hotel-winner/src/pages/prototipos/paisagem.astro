@@ -1,0 +1,44 @@
+---
+// Direção 2 · PAISAGEM MONUMENTAL (lógica do Bürgenstock): o lugar é o astro, serifa grande, composição editorial.
+import '@fontsource-variable/bodoni-moda';
+import '@fontsource-variable/jost';
+import Proto from '../../layouts/Proto.astro';
+import Imagem from '../../components/Imagem.astro';
+import ReservaBarra from '../../components/ReservaBarra.astro';
+---
+<Proto title="Protótipo 2 · Paisagem · Hotel Winner">
+  <section class="hero">
+    <div class="bg"><Imagem cena="campo" alt="Planície ao entardecer com cerca e uma árvore solitária" /></div>
+    <div class="veu" aria-hidden="true"></div>
+    <header class="nav">
+      <a class="marca" href="#">Winner<span>Barretos · SP</span></a>
+      <nav aria-label="Principal"><a href="#">Menu</a><a class="cta" href="#reserva">Reservar</a></nav>
+    </header>
+    <p class="legenda-ilus">Imagem ilustrativa</p>
+    <div class="conteudo">
+      <h1>O horizonte começa aqui.</h1>
+      <p>Um hotel no interior paulista para quem chega depois da estrada e quer acordar sem pressa.</p>
+      <a class="desc" href="#">Descobrir o hotel</a>
+    </div>
+    <div class="lateral" id="reserva"><ReservaBarra /></div>
+  </section>
+</Proto>
+<style is:global>
+  body { font-family: 'Jost Variable', system-ui, sans-serif; background: #15303f; color: #fff; }
+</style>
+<style>
+  .hero { position: relative; min-height: 100svh; display: grid; grid-template-rows: auto 1fr; overflow: hidden; --rb-bg: rgb(250 247 241 / .97); --rb-fg: #15303f; --rb-linha: rgb(21 48 63 / .25); --rb-btn-bg: #15303f; --rb-btn-fg: #fff; --rb-fonte: 'Jost Variable', sans-serif; }
+  .bg { position: absolute; inset: 0; }
+  .veu { position: absolute; inset: 0; background: linear-gradient(to right, rgb(8 20 28 / .62), rgb(8 20 28 / .3) 55%, transparent 85%), linear-gradient(to top, rgb(8 20 28 / .78), rgb(8 20 28 / .12) 55%, rgb(8 20 28 / .4)); }
+  .nav { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 1.75rem clamp(1.25rem, 4vw, 3.5rem); }
+  .marca { font-family: 'Bodoni Moda Variable', serif; font-size: 1.9rem; text-decoration: none; display: grid; line-height: 1; } .marca span { font: 400 .62rem/1 'Jost Variable', sans-serif; letter-spacing: .32em; text-transform: uppercase; margin-top: .45rem; opacity: .85; }
+  .nav nav { display: flex; gap: 1.5rem; align-items: center; } .nav a { text-decoration: none; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; padding: .6rem 0; }
+  .cta { border-bottom: 1px solid #fff; }
+  .conteudo { position: relative; z-index: 2; align-self: end; padding: 0 clamp(1.25rem, 4vw, 3.5rem); padding-bottom: clamp(18rem, 36vh, 22rem); max-width: 62rem; }
+  h1 { margin: 0 0 2rem; font-family: 'Bodoni Moda Variable', serif; font-weight: 400; font-size: clamp(3.1rem, 1rem + 8.4vw, 8.6rem); line-height: .96; letter-spacing: -.025em; text-wrap: balance; }
+  .conteudo p { margin: 0 0 1.5rem; font-weight: 300; font-size: clamp(1.05rem, 1rem + .35vw, 1.25rem); max-width: 40ch; }
+  .desc { display: inline-block; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; text-decoration: none; padding: .75rem 0; border-bottom: 1px solid #fff; }
+  .lateral { position: absolute; z-index: 2; left: clamp(1.25rem, 4vw, 3.5rem); right: clamp(1.25rem, 4vw, 3.5rem); bottom: clamp(1.25rem, 3vw, 2.5rem); }
+  @media (min-width: 62rem) { .lateral { left: auto; width: 34rem; } .lateral :global(.rb) { grid-template-columns: 1fr 1fr 1fr; } .lateral :global(.rb__ok) { grid-column: 1 / -1; margin: .75rem 0; } .lateral :global(.rb__c:nth-child(3)) { border-right: 0; } .conteudo { padding-bottom: clamp(5rem, 14vh, 9rem); } }
+  @media (max-width: 61.99rem) { .conteudo { padding-bottom: 27rem; } .veu { background: linear-gradient(to top, rgb(8 20 28 / .85), rgb(8 20 28 / .45) 65%, rgb(8 20 28 / .45)); } }
+</style>

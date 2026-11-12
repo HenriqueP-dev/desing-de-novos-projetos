@@ -1,0 +1,22 @@
+---
+// Alvorada clara: céu de névoa, sol pálido, colinas em azul-acinzentado. Silêncio e muito ar.
+---
+<svg class="cena" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="a-ceu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fb6c6"/><stop offset=".5" stop-color="#d9e3e8"/><stop offset=".78" stop-color="#f3ece4"/><stop offset="1" stop-color="#f6e4d3"/>
+    </linearGradient>
+    <radialGradient id="a-sol" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffaf1" stop-opacity=".95"/><stop offset=".35" stop-color="#fff3e2" stop-opacity=".45"/><stop offset="1" stop-color="#fff3e2" stop-opacity="0"/></radialGradient>
+    <filter id="a-gr"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#a-ceu)"/>
+  <circle cx="1090" cy="520" r="330" fill="url(#a-sol)"/>
+  <circle cx="1090" cy="520" r="52" fill="#fffaf1"/>
+  <g fill="#fff" opacity=".55"><ellipse cx="330" cy="250" rx="260" ry="16"/><ellipse cx="520" cy="285" rx="190" ry="11"/><ellipse cx="1280" cy="190" rx="300" ry="14"/><ellipse cx="1180" cy="228" rx="170" ry="9"/></g>
+  <path d="M0 560 C 260 520 470 560 700 535 S 1130 520 1600 555 V900 H0Z" fill="#c9d6da"/>
+  <path d="M0 620 C 300 575 560 630 820 600 S 1260 580 1600 615 V900 H0Z" fill="#aebfc4"/>
+  <path d="M0 690 C 340 650 600 705 900 680 S 1330 660 1600 690 V900 H0Z" fill="#8fa5ac"/>
+  <path d="M0 780 C 400 745 700 800 1000 780 S 1400 760 1600 785 V900 H0Z" fill="#6f888f"/>
+  <g stroke="#fff" stroke-opacity=".28" stroke-width="1.2" fill="none"><path d="M0 735 C 400 710 700 760 1000 742 S 1400 725 1600 745"/><path d="M0 830 C 400 805 700 855 1000 838 S 1400 820 1600 840"/></g>
+  <rect width="1600" height="900" filter="url(#a-gr)" opacity=".14" style="mix-blend-mode:multiply"/>
+</svg>

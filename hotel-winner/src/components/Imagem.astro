@@ -1,0 +1,24 @@
+---
+/**
+ * Ponto único para imagens do site.
+ *  - Sem `foto`: desenha uma ILUSTRAÇÃO (cena) e marca como ilustrativa.
+ *  - Com `foto` (ex.: "/fotos/fachada.jpg"): usa a foto real, sem mais nada para mudar.
+ * Quando as fotos reais chegarem, basta passar `foto` nos lugares que usam este componente.
+ */
+import Alvorada from './cenas/Alvorada.astro';
+import Campo from './cenas/Campo.astro';
+import Estrada from './cenas/Estrada.astro';
+
+interface Props { cena: 'alvorada' | 'campo' | 'estrada'; alt: string; foto?: string; class?: string }
+const { cena, alt, foto, class: cls } = Astro.props;
+---
+{foto
+  ? <img class={cls} src={foto} alt={alt} loading="eager" decoding="async" style="width:100%;height:100%;object-fit:cover" />
+  : <div class={cls} role="img" aria-label={`${alt} (imagem ilustrativa)`} style="width:100%;height:100%">
+      {cena === 'alvorada' && <Alvorada />}
+      {cena === 'campo' && <Campo />}
+      {cena === 'estrada' && <Estrada />}
+    </div>}
+<style is:global>
+  .cena { display: block; width: 100%; height: 100%; }
+</style>
