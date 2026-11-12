@@ -1,51 +1,79 @@
 /**
  * Dados do hotel num único lugar.
  *
- * PROJETO CONCEITUAL: tudo marcado como `placeholder` é fictício e deve ser
- * substituído por dados reais, confirmados com o hotel, antes de qualquer uso.
- * Os campos `verificado` vieram de listagens de terceiros (Expedia/Trip.com)
- * e também precisam de confirmação com o hotel.
+ * PROJETO CONCEITUAL: o que está marcado como "placeholder" é fictício e deve
+ * ser trocado por dados reais, confirmados com o hotel, antes de qualquer uso.
+ * Horários de check-in/check-out e café da manhã vieram de listagens de
+ * terceiros (Expedia/Trip.com) e também precisam de confirmação.
  */
 export const hotel = {
   nome: 'Hotel Winner',
   cidade: 'Barretos',
   uf: 'SP',
-  // placeholder: vazio = modo conceitual (mostra prévia da mensagem).
-  // Para ativar, use o WhatsApp real em formato internacional, só dígitos (ex.: '5517999999999').
+  // placeholder: vazio = modo conceitual (mostra a prévia da mensagem).
+  // Para ativar, use o WhatsApp real, formato internacional, só dígitos (ex.: '5517999999999').
   whatsapp: '',
-  // placeholder
-  telefone: '(00) 0000-0000',
-  email: 'reservas@exemplo.com.br',
-  endereco: 'Endereço a confirmar · Barretos, SP',
-  // verificado em listagens de terceiros
-  checkIn: '13h às 24h',
+  telefone: '(00) 0000-0000', // placeholder
+  email: 'reservas@exemplo.com.br', // placeholder
+  endereco: 'Endereço a confirmar, Barretos, SP', // placeholder
+  // Check-in em minutos desde 00:00 (13h às 24h). Usado pelo relógio da placa.
+  checkInAbre: 13 * 60,
+  checkInFecha: 24 * 60,
   checkOut: 'até 12h',
   cafe: 'Café da manhã continental',
+  fuso: 'America/Sao_Paulo',
 } as const;
 
 export const quartos = [
   {
     id: 'standard',
     nome: 'Standard',
-    resumo: 'O essencial bem feito para quem vem a trabalho ou só precisa descansar.',
-    capacidade: 'Até 2 hóspedes',
-    itens: ['Cama casal ou duas de solteiro', 'Mesa de trabalho', 'Banheiro privativo'],
-    tom: 'areia',
+    max: 2,
+    cama: 'Casal ou duas de solteiro',
+    resumo: 'O essencial bem resolvido para quem chega depois da estrada e sai cedo.',
+    itens: ['Banheiro privativo', 'Mesa de trabalho (a confirmar)', 'Café da manhã incluso'],
   },
   {
     id: 'superior',
     nome: 'Superior',
-    resumo: 'Mais espaço e silêncio para estadias longas ou para comemorar.',
-    capacidade: 'Até 3 hóspedes',
-    itens: ['Cama king ou queen', 'Área de estar', 'Vista privilegiada'],
-    tom: 'brasa',
+    max: 3,
+    cama: 'Queen ou king',
+    resumo: 'Mais espaço para estadias longas ou para quem prefere descansar sem pressa.',
+    itens: ['Área de estar (a confirmar)', 'Banheiro privativo', 'Café da manhã incluso'],
   },
   {
     id: 'familia',
     nome: 'Família',
-    resumo: 'Todo mundo no mesmo quarto, sem apertar ninguém.',
-    capacidade: 'Até 4 hóspedes',
-    itens: ['Cama casal + solteiros', 'Espaço para bagagem', 'Perto do café da manhã'],
-    tom: 'mata',
+    max: 4,
+    cama: 'Casal e solteiros',
+    resumo: 'Todo mundo no mesmo quarto, com lugar para a bagagem de todo mundo.',
+    itens: ['Até quatro hóspedes', 'Banheiro privativo', 'Pergunte por berço ao reservar'],
+  },
+] as const;
+
+export const motivos = [
+  {
+    id: 'festa',
+    aba: 'A festa',
+    titulo: 'Na Festa do Peão, o quarto acaba antes do ingresso.',
+    texto: 'Em agosto e nos feriados prolongados, Barretos recebe gente do Brasil inteiro. Quem reserva cedo escolhe o quarto; quem deixa para depois pega o que sobrou.',
+    dicas: ['Reserve com semanas de antecedência', 'Saiu tarde do evento? O check-in vai até meia-noite', 'Café da manhã antes de voltar para a estrada'],
+    quarto: 'superior',
+  },
+  {
+    id: 'trabalho',
+    aba: 'Trabalho',
+    titulo: 'Chegou depois do expediente e da estrada.',
+    texto: 'Quem viaja a trabalho precisa de horário flexível na chegada e de saída sem fila na manhã seguinte.',
+    dicas: ['Check-in das 13h às 24h', 'Check-out até 12h', 'Avise a chegada tardia ao reservar'],
+    quarto: 'standard',
+  },
+  {
+    id: 'familia',
+    aba: 'Em família',
+    titulo: 'Quatro pessoas, um quarto, sem apertar ninguém.',
+    texto: 'Para fins de semana e visitas a parentes, o quarto Família junta todo mundo e mantém a bagagem fora do caminho.',
+    dicas: ['Quarto para até quatro hóspedes', 'Café da manhã para todos', 'Peça berço ou cama extra na hora da reserva'],
+    quarto: 'familia',
   },
 ] as const;

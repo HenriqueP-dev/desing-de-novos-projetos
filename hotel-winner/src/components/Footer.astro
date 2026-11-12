@@ -2,14 +2,16 @@
 import Logo from './Logo.astro';
 import { hotel } from '../data/hotel';
 ---
-<footer class="ft">
+<footer class="ft escuro">
   <div class="container ft__in">
-    <div><Logo /><p class="ft__nota">Projeto conceitual de design e desenvolvimento. Textos, preços e imagens são ilustrativos e não representam o {hotel.nome} real.</p></div>
-    <p class="label">© {new Date().getFullYear()} · Conceito</p>
+    <div class="ft__logo"><Logo /></div>
+    <p class="ft__nota">Projeto conceitual de design e desenvolvimento. Textos, preços e imagens são ilustrativos e não representam o {hotel.nome} real. Horários vieram de listagens públicas e precisam de confirmação com o hotel.</p>
   </div>
 </footer>
 <style>
-  .ft { background: var(--areia-200); padding-block: 3rem; }
-  .ft__in { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: flex-end; }
-  .ft__nota { margin: 1rem 0 0; font-size: .875rem; color: var(--tinta-500); max-width: 44ch; }
+  .ft { background: var(--asfalto); color: var(--cal); padding-block: 3rem; border-top: 6px solid var(--amarelo); }
+  .ft__in { display: grid; gap: 1.5rem; }
+  .ft__logo { color: #fff; } .ft :global(.logo__loc) { color: var(--cal-2); }
+  .ft__nota { margin: 0; font-size: .9rem; color: var(--cal-2); max-width: 60ch; }
+  @media (min-width: 52rem) { .ft__in { grid-template-columns: auto 1fr; gap: 4rem; align-items: center; } }
 </style>

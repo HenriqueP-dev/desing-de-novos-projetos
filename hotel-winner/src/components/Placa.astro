@@ -1,0 +1,161 @@
+---
+import { hotel, quartos } from '../data/hotel';
+const maxPorQuarto = Object.fromEntries(quartos.map((q) => [q.id, q.max]));
+---
+<section id="reserva" class="placa" aria-label="Pedido de reserva"
+  data-wa={hotel.whatsapp} data-max={JSON.stringify(maxPorQuarto)}
+  data-abre={hotel.checkInAbre} data-fecha={hotel.checkInFecha} data-fuso={hotel.fuso}>
+  <div class="placa__topo">
+    <p class="placa__cidade">{hotel.cidade}</p>
+    <p class="placa__fuso">Horário de {hotel.cidade}</p>
+  </div>
+
+  <div class="relogio" role="group" aria-label="Horário atual e situação do check-in">
+    <p class="relogio__hora" data-hora aria-hidden="true">--:--</p>
+    <p class="relogio__txt" data-situacao>Check-in das 13h às 24h.</p>
+  </div>
+
+  <form class="placa__form" novalidate>
+    <div class="campo">
+      <label for="f-in">Chegada</label>
+      <input id="f-in" name="in" type="date" required aria-describedby="e-in" />
+      <p class="erro" id="e-in" hidden></p>
+    </div>
+    <div class="campo">
+      <label for="f-out">Saída</label>
+      <input id="f-out" name="out" type="date" required aria-describedby="e-out" />
+      <p class="erro" id="e-out" hidden></p>
+    </div>
+    <div class="campo">
+      <label for="f-g">Hóspedes</label>
+      <select id="f-g" name="guests" aria-describedby="e-g">
+        <option>1</option><option selected>2</option><option>3</option><option>4</option>
+      </select>
+      <p class="erro" id="e-g" hidden></p>
+    </div>
+    <div class="campo">
+      <label for="f-r">Quarto</label>
+      <select id="f-r" name="room">
+        <option value="">Qualquer um</option>
+        {quartos.map((q) => <option value={q.id}>{q.nome}</option>)}
+      </select>
+    </div>
+    <button class="btn btn--acao placa__ok" type="submit">Pedir reserva</button>
+    <p class="placa__msg" role="status" aria-live="polite"></p>
+  </form>
+  <p class="placa__nota">Horários conforme listagens públicas. Confirmar com o hotel.</p>
+</section>
+
+<script>
+  const placa = document.querySelector<HTMLElement>('#reserva')!;
+  const d = placa.dataset;
+  const abre = Number(d.abre), fecha = Number(d.fecha), fuso = d.fuso!;
+  const horaEl = placa.querySelector<HTMLElement>('[data-hora]')!;
+  const sitEl = placa.querySelector<HTMLElement>('[data-situacao]')!;
+
+  /* ---------- relógio: hora de Barretos e situação do check-in ---------- */
+  const fmt = new Intl.DateTimeFormat('pt-BR', { timeZone: fuso, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const dur = (min: number) => (min >= 60 ? `${Math.floor(min / 60)}h${min % 60 ? String(min % 60).padStart(2, '0') : ''}` : `${min} min`);
+  function atualizar(agora = new Date()) {
+    const p = Object.fromEntries(fmt.formatToParts(agora).map((x) => [x.type, x.value]));
+    const h = Number(p.hour), m = Number(p.minute);
+    const min = h * 60 + m;
+    horaEl.textContent = `${p.hour}:${p.minute}`;
+    sitEl.textContent = min >= abre
+      ? `Faltam ${dur(fecha - min)} para o check-in encerrar, à meia-noite.`
+      : `O check-in abre às 13h. Faltam ${dur(abre - min)}.`;
+  }
+  atualizar();
+  setInterval(() => atualizar(), 20_000);
+  // gancho para testes: window.__relogio(new Date('...'))
+  (window as any).__relogio = atualizar;
+
+  /* ---------- formulário ---------- */
+  const form = placa.querySelector<HTMLFormElement>('.placa__form')!;
+  const $ = <T extends HTMLElement>(n: string) => form.elements.namedItem(n) as unknown as T;
+  const inEl = $<HTMLInputElement>('in'), outEl = $<HTMLInputElement>('out');
+  const gEl = $<HTMLSelectElement>('guests'), rEl = $<HTMLSelectElement>('room');
+  const msg = placa.querySelector<HTMLElement>('.placa__msg')!;
+  const max: Record<string, number> = JSON.parse(d.max!);
+  const nomes: Record<string, string> = Object.fromEntries([...rEl.options].map((o) => [o.value, o.text]));
+
+  const iso = (x: Date) => new Date(x.getTime() - x.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+  inEl.min = outEl.min = iso(new Date());
+  const br = (s: string) => s.split('-').reverse().join('/');
+
+  function erro(el: HTMLElement, id: string, texto: string | null) {
+    const p = placa.querySelector<HTMLElement>('#' + id)!;
+    p.hidden = !texto; p.textContent = texto ?? '';
+    texto ? el.setAttribute('aria-invalid', 'true') : el.removeAttribute('aria-invalid');
+  }
+  function limpar() { erro(inEl, 'e-in', null); erro(outEl, 'e-out', null); erro(gEl, 'e-g', null); }
+
+  inEl.addEventListener('change', () => {
+    if (!inEl.value) return;
+    const prox = new Date(inEl.value + 'T12:00'); prox.setDate(prox.getDate() + 1);
+    outEl.min = iso(prox);
+    if (outEl.value && outEl.value < outEl.min) outEl.value = '';
+  });
+  [inEl, outEl, gEl, rEl].forEach((el) => el.addEventListener('input', () => { limpar(); msg.textContent = ''; }));
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    limpar(); msg.textContent = '';
+    const falhas: HTMLElement[] = [];
+    if (!inEl.value) { erro(inEl, 'e-in', 'Escolha a data de chegada.'); falhas.push(inEl); }
+    else if (inEl.value < inEl.min) { erro(inEl, 'e-in', 'A chegada não pode ser antes de hoje. Escolha hoje ou uma data futura.'); falhas.push(inEl); }
+    if (!outEl.value) { erro(outEl, 'e-out', 'Escolha a data de saída.'); falhas.push(outEl); }
+    else if (inEl.value && outEl.value <= inEl.value) { erro(outEl, 'e-out', 'A saída precisa ser depois da chegada.'); falhas.push(outEl); }
+    const g = Number(gEl.value), lim = max[rEl.value];
+    if (lim && g > lim) { erro(gEl, 'e-g', `O quarto ${nomes[rEl.value]} recebe até ${lim}. Escolha outro quarto ou menos hóspedes.`); falhas.push(gEl); }
+    if (falhas.length) { falhas[0].focus(); return; }
+
+    const noites = Math.round((+new Date(outEl.value) - +new Date(inEl.value)) / 864e5);
+    const quarto = rEl.value ? `, quarto ${nomes[rEl.value]}` : '';
+    const texto = `Olá! Gostaria de reservar de ${br(inEl.value)} a ${br(outEl.value)} (${noites} ${noites === 1 ? 'noite' : 'noites'}) para ${g} ${g === 1 ? 'hóspede' : 'hóspedes'}${quarto}.`;
+    if (!d.wa) { msg.textContent = `Modo conceitual: aqui abriria o WhatsApp do hotel com a mensagem “${texto}”`; return; }
+    window.open(`https://wa.me/${d.wa}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+    msg.textContent = 'Abrimos o WhatsApp do hotel com o seu pedido pronto. Falta só enviar a mensagem.';
+  });
+
+  /* ---------- "Pedir este quarto" em qualquer parte da página ---------- */
+  document.addEventListener('click', (e) => {
+    const alvo = (e.target as HTMLElement).closest<HTMLElement>('[data-pedir]');
+    if (!alvo) return;
+    e.preventDefault();
+    rEl.value = alvo.dataset.pedir!;
+    limpar();
+    msg.textContent = `Quarto ${nomes[rEl.value]} selecionado. Escolha as datas.`;
+    placa.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    (inEl.value ? outEl : inEl).focus({ preventScroll: true });
+  });
+</script>
+
+<style>
+  .placa { position: relative; background: var(--placa); color: #fff; border-radius: var(--r-placa); padding: clamp(1.75rem, 3.2vw, 2.5rem); box-shadow: 0 2px 0 #0a3a2b, 0 40px 50px -34px rgb(34 38 43 / .6); animation: chegada 1s var(--ease) both; }
+  /* filete branco interno, como nas placas de verdade */
+  .placa::before { content: ''; position: absolute; inset: .55rem; border: 2px solid rgb(255 255 255 / .9); border-radius: calc(var(--r-placa) - .5rem); pointer-events: none; }
+  @keyframes chegada { from { opacity: 0; transform: translateY(-1.25rem) rotate(-1.2deg); } to { opacity: 1; transform: none; } }
+
+  .placa__topo { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .placa__cidade { margin: 0; font: 800 clamp(2.2rem, 1.6rem + 2.2vw, 3.4rem) / .95 var(--f-sinal); text-transform: uppercase; }
+  .placa__fuso { margin: 0; font-size: .9rem; font-weight: 700; color: rgb(255 255 255 / .85); }
+
+  .relogio { margin-block: .75rem 1.75rem; padding-bottom: 1.5rem; border-bottom: 2px dashed var(--amarelo); }
+  .relogio__hora { margin: 0; font: 800 clamp(5rem, 3rem + 9vw, 8.5rem) / .85 var(--f-sinal); color: var(--amarelo); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+  .relogio__txt { margin: .6rem 0 0; font-size: 1.15rem; font-weight: 700; max-width: 28ch; }
+
+  .placa__form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1rem; }
+  .campo { display: grid; gap: .4rem; align-content: start; min-width: 0; }
+  .campo label { font-weight: 700; font-size: .95rem; }
+  .campo input, .campo select { width: 100%; min-height: 3rem; padding: .5rem .75rem; font: 700 1rem var(--f-texto); color: var(--asfalto); background: var(--cal); border: 3px solid transparent; border-radius: var(--r-ctrl); }
+  .campo input[aria-invalid='true'], .campo select[aria-invalid='true'] { border-color: var(--amarelo); background: #fff7df; }
+  .erro { margin: 0; display: flex; gap: .4rem; font-size: .9rem; font-weight: 700; color: #fff; line-height: 1.35; }
+  .erro::before { content: '!' / ''; flex: none; display: grid; place-items: center; width: 1.15rem; height: 1.15rem; margin-top: .1rem; border-radius: 50%; background: var(--amarelo); color: var(--asfalto); font-size: .8rem; }
+  .erro[hidden] { display: none; }
+  .placa__ok { grid-column: 1 / -1; margin-top: .25rem; }
+  .placa__msg { grid-column: 1 / -1; margin: 0; min-height: 1.5em; font-weight: 700; max-width: none; }
+  .placa__msg:not(:empty) { padding: .75rem 1rem; background: rgb(0 0 0 / .22); border-left: 4px solid var(--amarelo); border-radius: 2px; }
+  .placa__nota { margin: 1.25rem 0 0; font-size: .85rem; color: rgb(255 255 255 / .8); max-width: none; }
+  @media (max-width: 26rem) { .placa__form { grid-template-columns: 1fr; } }
+</style>

@@ -1,272 +1,99 @@
 ---
 import Base from '../layouts/Base.astro';
-import HeroArt from '../components/HeroArt.astro';
-import { hotel, quartos } from '../data/hotel';
+import Placa from '../components/Placa.astro';
+import QuartosLista from '../components/QuartosLista.astro';
+import Motivos from '../components/Motivos.astro';
+import { hotel } from '../data/hotel';
 
-const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
-
-const vantagens = [
-  { n: '01', t: 'Sem intermediário', d: 'Quem reserva direto conversa com o hotel, não com uma plataforma. Menos ruído, mais clareza sobre o que você vai encontrar.' },
-  { n: '02', t: 'Condição combinada', d: 'Pedidos de horário, berço, andar ou chegada tardia ficam registrados desde o início, e não perdidos num formulário.' },
-  { n: '03', t: 'Resposta de gente', d: 'Do WhatsApp à recepção, a mesma equipe que vai receber você é quem responde.' },
-];
-
-const jeitos = [
-  { n: '01', t: 'Pela festa', tag: 'Agosto e feriados', d: 'Quando Barretos recebe o Brasil inteiro, o quarto certo acaba primeiro. Reserve com antecedência e chegue sem correria, com a tarde livre e o café da manhã garantido no dia seguinte.' },
-  { n: '02', t: 'A trabalho', tag: 'Durante o ano', d: 'Check-in que vai até meia-noite para quem chega depois da estrada, mesa de trabalho no quarto e saída tranquila na manhã seguinte.' },
-  { n: '03', t: 'Em família', tag: 'Fins de semana', d: 'Quartos para quatro, espaço para a bagagem de todo mundo e uma base confortável para conhecer a cidade sem pressa.' },
+const compromissos = [
+  { t: 'Chegada tardia', d: 'Avise o horário ao reservar. O check-in vai até meia-noite e a recepção espera por você.' },
+  { t: 'Pedidos especiais', d: 'Berço, andar, quarto mais silencioso: peça na hora e fica combinado por escrito, antes da viagem.' },
+  { t: 'Conversa direta', d: 'Quem responde no WhatsApp é a equipe que vai receber você, sem intermediário.' },
 ];
 ---
 <Base>
-  <!-- ============ HERO ============ -->
+  <!-- HERO -->
   <section class="hero" aria-labelledby="h-hero">
     <div class="container hero__grid">
       <div class="hero__txt">
-        <p class="label label--brasa reveal">Hospedagem em Barretos, SP</p>
-        <h1 id="h-hero" class="reveal" style="--d:80ms">Chegue como <em>visita</em>, descanse como campeão.</h1>
-        <p class="hero__lead reveal" style="--d:160ms">Quartos confortáveis, café da manhã e check-in até meia-noite, no coração do interior paulista. Reserve direto e fale com quem vai receber você.</p>
-        <div class="hero__cta reveal" style="--d:240ms">
-          <a class="btn btn--primary" href="#reserva">Fazer meu pedido <Fragment set:html={arrow} /></a>
-          <a class="btn btn--ghost" href="#quartos">Ver os quartos</a>
-        </div>
+        <h1 id="h-hero">Chegou tarde? A gente espera até meia-noite.</h1>
+        <p class="hero__lead">Hospedagem em Barretos com check-in das 13h às 24h, café da manhã continental e reserva direta com o hotel.</p>
+        <a class="btn btn--contorno" href="#quartos">Ver os quartos</a>
       </div>
-      <div class="hero__media reveal" style="--d:200ms">
-        <div class="arco"><HeroArt /></div>
-        <p class="label hero__cap">Imagem ilustrativa · sem foto real</p>
-      </div>
-    </div>
-
-    <!-- barra de reserva -->
-    <div class="container">
-      <form class="book reveal" id="reserva" data-wa={hotel.whatsapp} aria-labelledby="book-t" novalidate>
-        <h2 id="book-t" class="sr-only">Pedido de reserva</h2>
-        <label class="field"><span class="label">Chegada</span><input type="date" name="in" required /></label>
-        <label class="field"><span class="label">Saída</span><input type="date" name="out" required /></label>
-        <label class="field"><span class="label">Hóspedes</span>
-          <select name="guests"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
-        </label>
-        <button class="btn btn--primary" type="submit">Pedir reserva <Fragment set:html={arrow} /></button>
-        <p class="book__msg" role="status" aria-live="polite"></p>
-      </form>
+      <Placa />
     </div>
   </section>
 
-  <!-- ============ FATOS ============ -->
-  <section class="fatos" aria-label="Informações rápidas">
-    <div class="container fatos__grid">
-      <div class="fato"><span class="label">Check-in</span><strong>{hotel.checkIn}</strong></div>
-      <div class="fato"><span class="label">Check-out</span><strong>{hotel.checkOut}</strong></div>
-      <div class="fato"><span class="label">Manhã</span><strong>{hotel.cafe}</strong></div>
-      <div class="fato"><span class="label">Cidade</span><strong>{hotel.cidade}, {hotel.uf}</strong></div>
-    </div>
-  </section>
-
-  <!-- ============ QUARTOS ============ -->
+  <!-- QUARTOS -->
   <section class="section" id="quartos" aria-labelledby="h-quartos">
     <div class="container">
       <header class="sec-hd">
-        <p class="label label--brasa reveal">Acomodações</p>
-        <h2 id="h-quartos" class="reveal" style="--d:80ms">Escolha o seu <em>descanso</em></h2>
+        <h2 id="h-quartos">Escolha o quarto</h2>
+        <p>Abra um quarto para ver os detalhes e peça direto, já com ele escolhido na reserva.</p>
       </header>
-      <ul class="quartos">
-        {quartos.map((q, i) => (
-          <li class={`quarto reveal tom-${q.tom}`} style={`--d:${i * 110}ms`}>
-            <div class="quarto__img" aria-hidden="true"><span class="label">Foto a definir</span></div>
-            <div class="quarto__body">
-              <p class="label">{q.capacidade}</p>
-              <h3>{q.nome}</h3>
-              <p>{q.resumo}</p>
-              <ul class="quarto__itens">{q.itens.map((it) => <li>{it}</li>)}</ul>
-              <div class="quarto__rod">
-                <span class="quarto__preco">Valor a definir</span>
-                <a class="link" href="#reserva">Reservar <Fragment set:html={arrow} /></a>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <QuartosLista />
     </div>
   </section>
 
-  <!-- ============ RESERVA DIRETA ============ -->
-  <section class="section direto" id="direto" aria-labelledby="h-direto">
+  <!-- RESERVA DIRETA -->
+  <section class="section escuro direto" id="direto" aria-labelledby="h-direto">
     <div class="container direto__grid">
-      <header class="sec-hd sec-hd--stick">
-        <p class="label label--brasa reveal">Reserva direta</p>
-        <h2 id="h-direto" class="reveal" style="--d:80ms">Falar com o hotel <em>vale mais</em> que um filtro de busca.</h2>
-      </header>
-      <ol class="vantagens">
-        {vantagens.map((v, i) => (
-          <li class="vant reveal" style={`--d:${i * 100}ms`}>
-            <span class="vant__n">{v.n}</span>
-            <div><h3>{v.t}</h3><p>{v.d}</p></div>
-          </li>
-        ))}
-      </ol>
+      <h2 id="h-direto">Reserve direto e combine tudo antes de chegar.</h2>
+      <dl class="comp">
+        {compromissos.map((c) => (<div class="comp__i"><dt>{c.t}</dt><dd>{c.d}</dd></div>))}
+      </dl>
     </div>
   </section>
 
-  <!-- ============ CAPÍTULOS (escuro) ============ -->
-  <section class="noite" id="chegar" aria-labelledby="h-noite">
-    <div class="container noite__in">
+  <!-- MOTIVO DA VIAGEM -->
+  <section class="section" id="motivo" aria-labelledby="h-motivo">
+    <div class="container">
       <header class="sec-hd">
-        <p class="label reveal" style="color:var(--brasa-300)">Barretos</p>
-        <h2 id="h-noite" class="reveal" style="--d:80ms">Três jeitos de <em>chegar</em>.</h2>
-        <p class="noite__lead reveal" style="--d:140ms">Conteúdo ilustrativo: o roteiro real seria escrito com a equipe do hotel.</p>
+        <h2 id="h-motivo">Você vem para quê?</h2>
+        <p>Escolha o motivo da viagem e veja o que mais ajuda quem chega a Barretos.</p>
       </header>
-      <ol class="caps">
-        {jeitos.map((j, i) => (
-          <li class="cap reveal" style={`--d:${i * 90}ms`}>
-            <span class="cap__n" aria-hidden="true">{j.n}</span>
-            <div class="cap__corpo">
-              <p class="label" style="color:var(--ouro)">{j.tag}</p>
-              <h3>{j.t}</h3>
-              <p>{j.d}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
+      <Motivos />
     </div>
   </section>
 
-  <!-- ============ CONTATO ============ -->
-  <section class="section" id="contato" aria-labelledby="h-contato">
-    <div class="container contato">
-      <div>
-        <p class="label label--brasa reveal">Contato</p>
-        <h2 id="h-contato" class="reveal" style="--d:80ms">Vamos <em>combinar</em> a sua estadia?</h2>
-      </div>
-      <address class="contato__dados reveal" style="--d:140ms">
-        <p><span class="label">Endereço</span><br />{hotel.endereco}</p>
-        <p><span class="label">Telefone</span><br />{hotel.telefone}</p>
-        <p><span class="label">E-mail</span><br />{hotel.email}</p>
-        <a class="btn btn--primary" href="#reserva">Pedir reserva <Fragment set:html={arrow} /></a>
+  <!-- CONTATO -->
+  <section class="contato" id="contato" aria-labelledby="h-contato">
+    <div class="container contato__grid">
+      <h2 id="h-contato">Fale com a recepção.</h2>
+      <address>
+        <p><span class="rotulo">Telefone</span><br /><span class="contato__tel">{hotel.telefone}</span></p>
+        <p><span class="rotulo">E-mail</span><br />{hotel.email}</p>
+        <p><span class="rotulo">Endereço</span><br />{hotel.endereco}</p>
+        <a class="btn btn--acao" href="#reserva">Pedir reserva</a>
       </address>
     </div>
   </section>
 </Base>
 
-<script>
-  // Barra de reserva: monta a mensagem de WhatsApp. Com número fictício, apenas mostra a prévia.
-  const form = document.querySelector<HTMLFormElement>('#reserva');
-  if (form) {
-    const inEl = form.elements.namedItem('in') as HTMLInputElement;
-    const outEl = form.elements.namedItem('out') as HTMLInputElement;
-    const msg = form.querySelector<HTMLElement>('.book__msg')!;
-    const iso = (d: Date) => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
-    const today = new Date();
-    inEl.min = iso(today);
-    outEl.min = iso(today);
-    inEl.addEventListener('change', () => {
-      if (!inEl.value) return;
-      const next = new Date(inEl.value + 'T12:00'); next.setDate(next.getDate() + 1);
-      outEl.min = iso(next);
-      if (outEl.value && outEl.value < outEl.min) outEl.value = '';
-    });
-    const br = (s: string) => s.split('-').reverse().join('/');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (!inEl.value || !outEl.value || outEl.value <= inEl.value) {
-        msg.textContent = 'Escolha a chegada e uma saída posterior à chegada.';
-        msg.dataset.erro = 'true';
-        return;
-      }
-      delete msg.dataset.erro;
-      const g = (form.elements.namedItem('guests') as HTMLSelectElement).value;
-      const texto = `Olá! Gostaria de reservar de ${br(inEl.value)} a ${br(outEl.value)} para ${g} hóspede(s).`;
-      const numero = form.dataset.wa ?? '';
-      if (!numero) {
-        msg.textContent = `Modo conceitual: aqui abriria o WhatsApp do hotel com a mensagem “${texto}”`;
-        return;
-      }
-      msg.textContent = '';
-      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
-    });
-  }
-</script>
-
 <style>
-  /* ---------- hero ---------- */
-  .hero { padding-top: clamp(2rem, 5vw, 4.5rem); }
-  .hero__grid { display: grid; gap: 3rem; align-items: center; }
-  .hero__txt h1 { margin-block: 1.25rem 1.75rem; }
-  .hero__lead { font-size: var(--t-lead); color: var(--tinta-700); max-width: 46ch; }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2rem; }
-  .hero__media { position: relative; }
-  .arco { aspect-ratio: 3 / 4; border-radius: var(--r-arco); overflow: hidden; box-shadow: 0 40px 60px -35px rgb(26 21 17 / .55); }
-  .hero__cap { margin: .75rem 0 0; text-align: right; }
-  @media (min-width: 60rem) {
-    .hero__grid { grid-template-columns: 1.25fr .75fr; gap: 4rem; }
-    .arco { max-width: 26rem; margin-left: auto; }
-  }
+  .hero { padding-block: clamp(2.5rem, 6vw, 5.5rem) clamp(3.5rem, 7vw, 6.5rem); }
+  .hero__grid { display: grid; gap: clamp(2.5rem, 5vw, 4rem); align-items: center; }
+  .hero__txt { display: grid; gap: 1.75rem; justify-items: start; }
+  .hero__lead { margin: 0; font-size: var(--t-lead); max-width: 34ch; }
+  @media (min-width: 64rem) { .hero__grid { grid-template-columns: 1.15fr .85fr; gap: 4rem; } }
 
-  /* ---------- barra de reserva ---------- */
-  .book { position: relative; z-index: 2; display: grid; gap: 1rem; margin-top: clamp(2.5rem, 5vw, 4.5rem); padding: 1.25rem; background: var(--areia-50); border: 1px solid var(--areia-300); border-radius: var(--r-md); box-shadow: 0 24px 40px -28px rgb(26 21 17 / .35); }
-  .field { display: grid; gap: .4rem; padding: .35rem .5rem; }
-  .field input, .field select { width: 100%; min-height: 2.75rem; padding: .5rem .75rem; font: 600 1rem var(--f-body); color: var(--tinta-900); background: #fff; border: 1.5px solid var(--areia-300); border-radius: var(--r-sm); }
-  .field input:focus, .field select:focus { border-color: var(--brasa-500); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--brasa-500) 25%, transparent); }
-  .book .btn { align-self: end; }
-  .book__msg { grid-column: 1 / -1; margin: 0; min-height: 1.4em; font-size: .9rem; color: var(--mata-800); max-width: none; }
-  .book__msg[data-erro] { color: var(--brasa-600); font-weight: 600; }
-  @media (min-width: 52rem) { .book { grid-template-columns: 1fr 1fr .6fr auto; align-items: end; padding: 1rem 1rem 1rem 1.25rem; } }
+  .sec-hd { display: grid; gap: 1rem; margin-bottom: clamp(2rem, 4vw, 3.25rem); }
+  .sec-hd p { margin: 0; font-size: var(--t-lead); max-width: 46ch; color: var(--texto-2); }
 
-  /* ---------- fatos ---------- */
-  .fatos { margin-top: clamp(3rem, 6vw, 5rem); border-block: 1px solid var(--areia-300); }
-  .fatos__grid { display: grid; grid-template-columns: repeat(2, 1fr); }
-  .fato { display: grid; gap: .35rem; padding: 1.4rem 1rem; border-left: 1px solid var(--areia-300); }
-  .fato:nth-child(odd) { border-left: 0; padding-left: 0; }
-  .fato strong { font: 400 1.25rem/1.25 var(--f-display); }
-  @media (min-width: 52rem) { .fatos__grid { grid-template-columns: repeat(4, 1fr); } .fato:nth-child(odd) { border-left: 1px solid var(--areia-300); padding-left: 1rem; } .fato:first-child { border-left: 0; padding-left: 0; } }
-
-  /* ---------- seções ---------- */
-  .sec-hd { display: grid; gap: 1rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
-  .sec-hd--stick { align-self: start; margin-bottom: 0; }
-  .link { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid var(--brasa-500); padding-bottom: .15rem; }
-  .link svg { width: 1em; height: 1em; transition: transform .3s var(--ease); } .link:hover svg { transform: translateX(3px); }
-
-  /* ---------- quartos ---------- */
-  .quartos { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
-  .quarto { display: flex; flex-direction: column; background: var(--areia-50); border: 1px solid var(--areia-300); border-radius: var(--r-md); overflow: hidden; transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
-  .quarto:hover { transform: translateY(-6px); box-shadow: 0 30px 40px -30px rgb(26 21 17 / .45); }
-  .quarto__img { aspect-ratio: 4 / 3; display: grid; place-items: end start; padding: 1rem; }
-  .tom-areia .quarto__img { background: linear-gradient(160deg, #e8dfcf, #cdb894); }
-  .tom-brasa .quarto__img { background: linear-gradient(160deg, #ee9d78, #b9482a); } .tom-brasa .quarto__img .label { color: #fff; }
-  .tom-mata .quarto__img { background: linear-gradient(160deg, #4a6b57, #17261d); } .tom-mata .quarto__img .label { color: var(--areia-200); }
-  .quarto__body { padding: 1.5rem; display: grid; gap: .6rem; flex: 1; align-content: start; }
-  .quarto__body p { margin: 0; color: var(--tinta-700); }
-  .quarto__body .label { color: var(--tinta-500); }
-  .quarto__itens { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .35rem; font-size: .95rem; color: var(--tinta-700); }
-  .quarto__itens li::before { content: '—'; color: var(--brasa-500); margin-right: .6rem; }
-  .quarto__rod { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--areia-300); }
-  .quarto__preco { font: 400 1.15rem var(--f-display); font-style: italic; color: var(--tinta-500); }
-  @media (min-width: 60rem) { .quartos { grid-template-columns: repeat(3, 1fr); } .quarto:nth-child(2) { margin-top: 3rem; } }
-
-  /* ---------- reserva direta ---------- */
-  .direto { background: var(--areia-200); }
+  .direto { background: var(--asfalto); color: var(--cal); }
   .direto__grid { display: grid; gap: 3rem; }
-  .vantagens { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
-  .vant { display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; padding-block: 2rem; border-top: 1px solid var(--areia-300); }
-  .vant:last-child { border-bottom: 1px solid var(--areia-300); }
-  .vant__n { font: 500 var(--t-label) var(--f-mono); letter-spacing: .14em; color: var(--brasa-500); padding-top: .6rem; }
-  .vant h3 { margin-bottom: .6rem; } .vant p { margin: 0; color: var(--tinta-700); }
-  @media (min-width: 60rem) { .direto__grid { grid-template-columns: .9fr 1.1fr; gap: 6rem; } .sec-hd--stick { position: sticky; top: 7rem; } }
+  .direto h2 { max-width: 14ch; }
+  .comp { margin: 0; display: grid; }
+  .comp__i { padding-block: 1.75rem; border-top: 4px dashed var(--amarelo); }
+  .comp__i:last-child { border-bottom: 4px dashed var(--amarelo); }
+  .comp dt { font: 700 var(--t-h3)/1 var(--f-sinal); text-transform: uppercase; color: var(--amarelo); margin-bottom: .6rem; }
+  .comp dd { margin: 0; max-width: 46ch; }
+  @media (min-width: 60rem) { .direto__grid { grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; } }
 
-  /* ---------- noite ---------- */
-  .noite { background: var(--tinta-900); color: var(--areia-100); padding-block: var(--sec); position: relative; overflow: hidden; }
-  .noite::before { content: ''; position: absolute; inset: auto -20% -40% auto; width: 60vw; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(238 138 99 / .22), transparent 65%); pointer-events: none; }
-  .noite h2 em { color: var(--brasa-300); }
-  .noite__lead { color: var(--areia-300); font-size: .95rem; margin: 0; }
-  .caps { list-style: none; margin: 0; padding: 0; position: relative; }
-  .cap { display: grid; grid-template-columns: clamp(4rem, 10vw, 8rem) 1fr; gap: clamp(1.25rem, 4vw, 3.5rem); padding-block: 2.25rem; border-top: 1px solid rgb(243 238 228 / .16); }
-  .cap:last-child { border-bottom: 1px solid rgb(243 238 228 / .16); }
-  .cap__n { font: 300 clamp(3.2rem, 8vw, 7rem) / .85 var(--f-display); font-variation-settings: 'opsz' 144; color: transparent; -webkit-text-stroke: 1px var(--brasa-300); }
-  .cap__corpo { display: grid; gap: .6rem; max-width: 52ch; }
-  .cap__corpo p { margin: 0; color: var(--areia-200); }
-  .cap h3 { font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.6rem); }
-
-  /* ---------- contato ---------- */
-  .contato { display: grid; gap: 3rem; align-items: end; }
-  .contato__dados { font-style: normal; display: grid; gap: 1.1rem; }
-  .contato__dados p { margin: 0; } .contato__dados .btn { justify-self: start; margin-top: .5rem; }
-  @media (min-width: 52rem) { .contato { grid-template-columns: 1.2fr .8fr; gap: 6rem; } }
+  .contato { background: var(--cal-2); padding-block: var(--sec); }
+  .contato__grid { display: grid; gap: 2.5rem; align-items: end; }
+  address { font-style: normal; display: grid; gap: 1.1rem; justify-items: start; }
+  address p { margin: 0; }
+  .contato__tel { font: 800 clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem)/1 var(--f-sinal); }
+  @media (min-width: 52rem) { .contato__grid { grid-template-columns: 1.2fr .8fr; gap: 6rem; } }
 </style>

@@ -1,0 +1,54 @@
+---
+import { motivos, quartos } from '../data/hotel';
+const nomeQuarto = (id: string) => quartos.find((q) => q.id === id)!.nome;
+---
+<div class="tabs">
+  <div class="tabs__lista" role="tablist" aria-label="Motivo da viagem">
+    {motivos.map((m, i) => (
+      <button role="tab" id={`tab-${m.id}`} aria-controls={`pn-${m.id}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1} type="button">{m.aba}</button>
+    ))}
+  </div>
+  {motivos.map((m, i) => (
+    <div class="painel" role="tabpanel" id={`pn-${m.id}`} aria-labelledby={`tab-${m.id}`} hidden={i !== 0} tabindex="0">
+      <h3>{m.titulo}</h3>
+      <div class="painel__col">
+        <p>{m.texto}</p>
+        <ul>{m.dicas.map((d) => <li>{d}</li>)}</ul>
+        <a class="btn btn--acao" href="#reserva" data-pedir={m.quarto}>Pedir o quarto {nomeQuarto(m.quarto)}</a>
+      </div>
+    </div>
+  ))}
+</div>
+<script>
+  const root = document.querySelector<HTMLElement>('.tabs')!;
+  const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+  const panel = (t: HTMLElement) => document.getElementById(t.getAttribute('aria-controls')!)!;
+  function ativar(t: HTMLButtonElement, foco = true) {
+    tabs.forEach((x) => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; panel(x).hidden = !on; });
+    if (foco) t.focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => ativar(t, false));
+    t.addEventListener('keydown', (e) => {
+      const k = e.key;
+      const prox = k === 'ArrowRight' ? (i + 1) % tabs.length : k === 'ArrowLeft' ? (i - 1 + tabs.length) % tabs.length : k === 'Home' ? 0 : k === 'End' ? tabs.length - 1 : -1;
+      if (prox >= 0) { e.preventDefault(); ativar(tabs[prox]); }
+    });
+  });
+</script>
+<style>
+  .tabs__lista { display: flex; flex-wrap: wrap; gap: .5rem 2rem; border-bottom: 3px solid var(--asfalto); }
+  [role=tab] { appearance: none; background: none; border: 0; border-bottom: 8px solid transparent; margin-bottom: -3px; padding: .5rem .1rem .35rem; cursor: pointer; font: 700 clamp(1.9rem, 1.3rem + 2vw, 3rem)/1 var(--f-sinal); text-transform: uppercase; color: var(--texto-2); transition: color .2s, border-color .2s; min-height: 3rem; }
+  @media (hover: hover) { [role=tab]:hover { color: var(--asfalto); } }
+  [role=tab][aria-selected='true'] { color: var(--asfalto); border-bottom-color: var(--amarelo); }
+  .painel { display: grid; gap: 1.75rem; padding-top: 2.5rem; animation: troca .35s var(--ease); }
+  .painel[hidden] { display: none; }
+  .painel h3 { max-width: 16ch; font-size: clamp(2.4rem, 1.5rem + 3.6vw, 4.6rem); }
+  .painel__col { display: grid; gap: 1.25rem; align-content: start; justify-items: start; }
+  .painel__col p { margin: 0; font-size: var(--t-lead); max-width: 44ch; }
+  .painel__col ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .5rem; }
+  .painel__col li { padding-left: 1.5rem; position: relative; font-weight: 700; }
+  .painel__col li::before { content: ''; position: absolute; left: 0; top: .72em; width: .8rem; height: 3px; background: var(--asfalto); }
+  @keyframes troca { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
+  @media (min-width: 60rem) { .painel { grid-template-columns: 1.1fr .9fr; gap: 4rem; align-items: start; } }
+</style>
