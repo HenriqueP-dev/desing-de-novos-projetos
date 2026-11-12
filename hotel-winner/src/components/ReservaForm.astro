@@ -1,0 +1,121 @@
+---
+import { hotel, quartos } from '../data/hotel';
+const maxPorQuarto = Object.fromEntries(quartos.map((q) => [q.id, q.max]));
+interface Props { rotulo?: string }
+const { rotulo = 'Pedido de reserva' } = Astro.props;
+---
+<form class="rb" id="reserva" novalidate aria-label={rotulo}
+  data-wa={hotel.whatsapp} data-max={JSON.stringify(maxPorQuarto)}
+  data-abre={hotel.checkInAbre} data-fecha={hotel.checkInFecha} data-fuso={hotel.fuso}>
+  <div class="rb__campos">
+    <div class="campo"><label for="f-in">Chegada</label><input id="f-in" name="in" type="date" required aria-describedby="e-in" /><p class="erro" id="e-in" hidden></p></div>
+    <div class="campo"><label for="f-out">Saída</label><input id="f-out" name="out" type="date" required aria-describedby="e-out" /><p class="erro" id="e-out" hidden></p></div>
+    <div class="campo"><label for="f-g">Hóspedes</label>
+      <select id="f-g" name="guests" aria-describedby="e-g"><option>1</option><option selected>2</option><option>3</option><option>4</option></select><p class="erro" id="e-g" hidden></p></div>
+    <div class="campo"><label for="f-r">Quarto</label>
+      <select id="f-r" name="room"><option value="">Qualquer um</option>{quartos.map((q) => <option value={q.id}>{q.nome}</option>)}</select></div>
+  </div>
+  <button class="btn rb__ok" type="submit">Pedir reserva</button>
+  <p class="rb__nota" data-situacao>Check-in das 13h às 24h.</p>
+  <p class="rb__msg" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#reserva')!;
+  const d = form.dataset;
+  const abre = Number(d.abre), fecha = Number(d.fecha), fuso = d.fuso!;
+  const sitEl = form.querySelector<HTMLElement>('[data-situacao]')!;
+
+  /* ---------- situação do check-in, no horário de Barretos ---------- */
+  const fmt = new Intl.DateTimeFormat('pt-BR', { timeZone: fuso, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const dur = (min: number) => (min >= 60 ? `${Math.floor(min / 60)}h${min % 60 ? String(min % 60).padStart(2, '0') : ''}` : `${min} min`);
+  function atualizar(agora = new Date()) {
+    const p = Object.fromEntries(fmt.formatToParts(agora).map((x) => [x.type, x.value]));
+    const min = Number(p.hour) * 60 + Number(p.minute);
+    sitEl.textContent = min >= abre
+      ? `Agora são ${p.hour}:${p.minute} em Barretos. Faltam ${dur(fecha - min)} para o check-in encerrar, à meia-noite.`
+      : `Agora são ${p.hour}:${p.minute} em Barretos. O check-in abre às 13h, em ${dur(abre - min)}.`;
+  }
+  atualizar(); setInterval(() => atualizar(), 20_000);
+  (window as any).__relogio = atualizar; // gancho para testes
+
+  /* ---------- validação por campo ---------- */
+  const $ = <T extends HTMLElement>(n: string) => form.elements.namedItem(n) as unknown as T;
+  const inEl = $<HTMLInputElement>('in'), outEl = $<HTMLInputElement>('out');
+  const gEl = $<HTMLSelectElement>('guests'), rEl = $<HTMLSelectElement>('room');
+  const msg = form.querySelector<HTMLElement>('.rb__msg')!;
+  const max: Record<string, number> = JSON.parse(d.max!);
+  const nomes: Record<string, string> = Object.fromEntries([...rEl.options].map((o) => [o.value, o.text]));
+  const iso = (x: Date) => new Date(x.getTime() - x.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+  inEl.min = outEl.min = iso(new Date());
+  const br = (s: string) => s.split('-').reverse().join('/');
+
+  function erro(el: HTMLElement, id: string, texto: string | null) {
+    const p = form.querySelector<HTMLElement>('#' + id)!;
+    p.hidden = !texto; p.textContent = texto ?? '';
+    texto ? el.setAttribute('aria-invalid', 'true') : el.removeAttribute('aria-invalid');
+  }
+  const limpar = () => { erro(inEl, 'e-in', null); erro(outEl, 'e-out', null); erro(gEl, 'e-g', null); };
+
+  inEl.addEventListener('change', () => {
+    if (!inEl.value) return;
+    const prox = new Date(inEl.value + 'T12:00'); prox.setDate(prox.getDate() + 1);
+    outEl.min = iso(prox);
+    if (outEl.value && outEl.value < outEl.min) outEl.value = '';
+  });
+  [inEl, outEl, gEl, rEl].forEach((el) => el.addEventListener('input', () => { limpar(); msg.textContent = ''; }));
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault(); limpar(); msg.textContent = '';
+    const falhas: HTMLElement[] = [];
+    if (!inEl.value) { erro(inEl, 'e-in', 'Escolha a data de chegada.'); falhas.push(inEl); }
+    else if (inEl.value < inEl.min) { erro(inEl, 'e-in', 'A chegada não pode ser antes de hoje. Escolha hoje ou uma data futura.'); falhas.push(inEl); }
+    if (!outEl.value) { erro(outEl, 'e-out', 'Escolha a data de saída.'); falhas.push(outEl); }
+    else if (inEl.value && outEl.value <= inEl.value) { erro(outEl, 'e-out', 'A saída precisa ser depois da chegada.'); falhas.push(outEl); }
+    const g = Number(gEl.value), lim = max[rEl.value];
+    if (lim && g > lim) { erro(gEl, 'e-g', `O quarto ${nomes[rEl.value]} recebe até ${lim}. Escolha outro quarto ou menos hóspedes.`); falhas.push(gEl); }
+    if (falhas.length) { falhas[0].focus(); return; }
+
+    const noites = Math.round((+new Date(outEl.value) - +new Date(inEl.value)) / 864e5);
+    const quarto = rEl.value ? `, quarto ${nomes[rEl.value]}` : '';
+    const texto = `Olá! Gostaria de reservar de ${br(inEl.value)} a ${br(outEl.value)} (${noites} ${noites === 1 ? 'noite' : 'noites'}) para ${g} ${g === 1 ? 'hóspede' : 'hóspedes'}${quarto}.`;
+    if (!d.wa) { msg.textContent = `Modo conceitual: aqui abriria o WhatsApp do hotel com a mensagem “${texto}”`; return; }
+    window.open(`https://wa.me/${d.wa}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+    msg.textContent = 'Abrimos o WhatsApp do hotel com o seu pedido pronto. Falta só enviar a mensagem.';
+  });
+
+  /* ---------- "Pedir este quarto" em qualquer parte da página ---------- */
+  document.addEventListener('click', (e) => {
+    const alvo = (e.target as HTMLElement).closest<HTMLElement>('[data-pedir]');
+    if (!alvo) return;
+    e.preventDefault();
+    rEl.value = alvo.dataset.pedir!; limpar();
+    msg.textContent = `Quarto ${nomes[rEl.value]} selecionado. Escolha as datas.`;
+    form.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    (inEl.value ? outEl : inEl).focus({ preventScroll: true });
+  });
+</script>
+
+<style>
+  .rb { background: #fff; color: var(--tinta); padding: 1.25rem 1.5rem 1rem; border: 1px solid var(--nevoa-2); }
+  .rb__campos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.25rem; }
+  .campo { display: grid; gap: .3rem; align-content: start; min-width: 0; }
+  .campo label { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); }
+  .campo input, .campo select { appearance: none; width: 100%; min-height: 2.9rem; padding: .4rem 0; background: transparent; border: 0; border-bottom: 1px solid var(--tinta-2); border-radius: 0; color: var(--tinta); font: 400 1.0625rem var(--f); }
+  .campo select { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%230d1820' stroke-width='1.5'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right .25rem center; padding-right: 1.5rem; }
+  .campo input:focus, .campo select:focus { outline: none; border-bottom: 2px solid var(--tinta); }
+  .campo input[aria-invalid='true'], .campo select[aria-invalid='true'] { border-bottom: 2px solid #9a2a1c; }
+  .erro { margin: 0; font-size: .875rem; line-height: 1.35; color: #8a2417; font-weight: 500; max-width: none; }
+  .erro::before { content: 'Atenção: '; font-weight: 500; }
+  .erro[hidden] { display: none; }
+  .rb__ok { width: 100%; margin-top: 1.25rem; }
+  .rb__nota { margin: .9rem 0 0; font-size: .9rem; color: var(--tinta-2); max-width: none; }
+  .rb__msg { margin: 0; max-width: none; }
+  .rb__msg:not(:empty) { margin-top: .9rem; padding: .8rem 1rem; background: var(--nevoa); border-left: 3px solid var(--noite); font-size: .95rem; }
+  @media (min-width: 62rem) {
+    .rb { display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem; align-items: end; padding: 1.1rem 1.25rem 1rem 1.5rem; }
+    .rb__campos { grid-template-columns: repeat(4, 1fr); }
+    .rb__ok { width: auto; margin: 0 0 .1rem; padding-inline: 2.75rem; align-self: start; margin-top: 1.4rem; }
+    .rb__nota, .rb__msg { grid-column: 1 / -1; }
+  }
+</style>

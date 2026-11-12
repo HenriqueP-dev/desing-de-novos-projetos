@@ -4,10 +4,11 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { hotel } from '../data/hotel';
 
-interface Props { title?: string; description?: string }
+interface Props { title?: string; description?: string; sobre?: boolean }
 const {
   title = `${hotel.nome} · Hospedagem em ${hotel.cidade}, ${hotel.uf}`,
   description = `Hospedagem em ${hotel.cidade} com check-in até meia-noite, café da manhã e reserva direta. Projeto conceitual.`,
+  sobre = false,
 } = Astro.props;
 ---
 <!doctype html>
@@ -17,18 +18,18 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#22262b" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="robots" content="noindex" /> <!-- protótipo conceitual: não indexar -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
     <aside class="aviso" aria-label="Aviso do projeto">Projeto conceitual de design. Este não é o site oficial do {hotel.nome}.</aside>
-    <Header />
+    <Header sobre={sobre} />
     <main id="conteudo"><slot /></main>
     <Footer />
   </body>
 </html>
 <style is:global>
-  .aviso { background: var(--amarelo); color: var(--asfalto); font: 700 .85rem/1.2 var(--f-texto); text-align: center; padding: .55rem var(--gutter); }
+  .aviso { min-height: var(--aviso-h); display: grid; place-items: center; background: var(--noite); color: #fff; font-size: .78rem; line-height: 1.2; text-align: center; padding-inline: var(--gutter); }
 </style>

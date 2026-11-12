@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import ReservaForm from '../../components/ReservaForm.astro';
+import { hotel } from '../../data/hotel';
+---
+<Base title="Contato · Hotel Winner" description="Fale com a recepção do Hotel Winner, em Barretos. Projeto conceitual.">
+  <section class="section" aria-labelledby="h-c">
+    <div class="container topo">
+      <h1 id="h-c">Contato</h1>
+      <address>
+        <div><span class="r">Telefone</span><p class="tel">{hotel.telefone}</p></div>
+        <div><span class="r">E-mail</span><p>{hotel.email}</p></div>
+        <div><span class="r">Endereço</span><p>{hotel.endereco}</p></div>
+        <div><span class="r">Recepção</span><p>Check-in das {hotel.checkIn}. Check-out {hotel.checkOut}.</p></div>
+      </address>
+    </div>
+  </section>
+  <section class="section sec--nevoa" aria-labelledby="h-r">
+    <div class="container reserva"><h2 id="h-r">Peça a sua reserva</h2><ReservaForm /></div>
+  </section>
+</Base>
+<style>
+  h1 { font-size: clamp(3rem, 1.2rem + 7vw, 7rem); }
+  .topo { display: grid; gap: 3rem; align-items: end; }
+  address { font-style: normal; display: grid; gap: 1.5rem; } address p { margin: 0; } .tel { font-size: clamp(2rem, 1.4rem + 2.2vw, 3.2rem); font-weight: 250; line-height: 1.1; }
+  .r { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); }
+  .sec--nevoa { background: var(--nevoa); } .reserva { display: grid; gap: 2.5rem; }
+  @media (min-width: 62rem) { .topo { grid-template-columns: 1.2fr .8fr; gap: 7rem; } }
+</style>

@@ -8,16 +8,18 @@
 import Alvorada from './cenas/Alvorada.astro';
 import Campo from './cenas/Campo.astro';
 import Estrada from './cenas/Estrada.astro';
+import Quarto from './cenas/Quarto.astro';
 
-interface Props { cena: 'alvorada' | 'campo' | 'estrada'; alt: string; foto?: string; class?: string }
-const { cena, alt, foto, class: cls } = Astro.props;
+interface Props { cena: 'alvorada' | 'campo' | 'estrada' | 'quarto'; alt: string; foto?: string; variante?: 'standard' | 'superior' | 'familia'; carregar?: 'eager' | 'lazy'; class?: string }
+const { cena, alt, foto, variante, carregar = 'lazy', class: cls } = Astro.props;
 ---
 {foto
-  ? <img class={cls} src={foto} alt={alt} loading="eager" decoding="async" style="width:100%;height:100%;object-fit:cover" />
+  ? <img class={cls} src={foto} alt={alt} loading={carregar} decoding="async" style="width:100%;height:100%;object-fit:cover" />
   : <div class={cls} role="img" aria-label={`${alt} (imagem ilustrativa)`} style="width:100%;height:100%">
       {cena === 'alvorada' && <Alvorada />}
       {cena === 'campo' && <Campo />}
       {cena === 'estrada' && <Estrada />}
+      {cena === 'quarto' && <Quarto variante={variante} />}
     </div>}
 <style is:global>
   .cena { display: block; width: 100%; height: 100%; }

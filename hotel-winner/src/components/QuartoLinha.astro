@@ -1,0 +1,42 @@
+---
+import Imagem from './Imagem.astro';
+interface Props { q: { id: string; nome: string; max: number; cama: string; variante: 'standard' | 'superior' | 'familia'; foto: string; resumo: string; itens: readonly string[] }; inverter?: boolean; detalhe?: boolean }
+const { q, inverter = false, detalhe = false } = Astro.props;
+// Na página de quartos o título do bloco é h2 (logo abaixo do h1); na home é h3 (dentro da seção Quartos).
+const Titulo = detalhe ? 'h2' : 'h3';
+---
+<article class={`ql ${inverter ? 'ql--inv' : ''}`} id={q.id}>
+  <div class="ql__img"><Imagem cena="quarto" variante={q.variante} foto={q.foto || undefined} alt={`Quarto ${q.nome}`} /></div>
+  <div class="ql__txt">
+    <Titulo class="ql__nome">{q.nome}</Titulo>
+    <dl class="ql__meta">
+      <div><dt>Hóspedes</dt><dd>Até {q.max}</dd></div>
+      <div><dt>Cama</dt><dd>{q.cama}</dd></div>
+    </dl>
+    <p>{q.resumo}</p>
+    {detalhe && <ul class="ql__itens">{q.itens.map((i) => <li>{i}</li>)}</ul>}
+    <div class="ql__acoes">
+      {detalhe
+        ? <a class="btn" href="#reserva" data-pedir={q.id}>Pedir o quarto {q.nome}</a>
+        : <a class="ql__link tracado" href={`/quartos/#${q.id}`}>Ver o quarto</a>}
+    </div>
+    {detalhe && <p class="ql__nota">Valor e fotos a definir com o hotel.</p>}
+  </div>
+</article>
+<style>
+  .ql { display: grid; gap: 2rem; align-items: center; }
+  .ql__img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--nevoa); }
+  .ql__img :global(.cena), .ql__img :global(img) { transition: transform 1.2s var(--ease); }
+  @media (hover: hover) { .ql:hover .ql__img :global(.cena) { transform: scale(1.03); } }
+  .ql__txt { display: grid; gap: 1.1rem; justify-items: start; }
+  .ql__txt p { margin: 0; color: var(--tinta-2); max-width: 40ch; }
+  .ql__meta { display: grid; gap: .35rem; }
+  .ql__meta div { display: grid; grid-template-columns: 6.5rem 1fr; }
+  .ql__meta dt { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); padding-top: .3rem; }
+  .ql__itens { display: grid; gap: .3rem; color: var(--tinta-2); }
+  .ql__itens li { padding-left: 1.25rem; position: relative; } .ql__itens li::before { content: ''; position: absolute; left: 0; top: .85em; width: .6rem; height: 1px; background: var(--tinta); }
+  .ql__nome { font-size: var(--t-h3); line-height: 1.1; letter-spacing: -.01em; }
+  .ql__link { display: inline-flex; align-items: center; min-height: 2.75rem; padding: .6rem 0; border-bottom: 1px solid currentColor; text-decoration: none; }
+  .ql__nota { font-size: .875rem !important; }
+  @media (min-width: 62rem) { .ql { grid-template-columns: 1.2fr .8fr; gap: clamp(3rem, 7vw, 7rem); } .ql--inv .ql__img { order: 2; } }
+</style>

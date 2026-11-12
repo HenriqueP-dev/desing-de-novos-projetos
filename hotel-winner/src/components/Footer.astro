@@ -2,16 +2,21 @@
 import Logo from './Logo.astro';
 import { hotel } from '../data/hotel';
 ---
-<footer class="ft escuro">
+<footer class="ft">
   <div class="container ft__in">
     <div class="ft__logo"><Logo /></div>
-    <p class="ft__nota">Projeto conceitual de design e desenvolvimento. Textos, preços e imagens são ilustrativos e não representam o {hotel.nome} real. Horários vieram de listagens públicas e precisam de confirmação com o hotel.</p>
+    <address class="ft__dados">
+      <p>{hotel.endereco}</p>
+      <p>{hotel.telefone}<br />{hotel.email}</p>
+    </address>
+    <p class="ft__nota">Projeto conceitual de design e desenvolvimento. Textos, preços e imagens são ilustrativos e não representam o {hotel.nome} real. Os horários vieram de listagens públicas e precisam de confirmação com o hotel.</p>
   </div>
 </footer>
 <style>
-  .ft { background: var(--asfalto); color: var(--cal); padding-block: 3rem; border-top: 6px solid var(--amarelo); }
-  .ft__in { display: grid; gap: 1.5rem; }
-  .ft__logo { color: #fff; } .ft :global(.logo__loc) { color: var(--cal-2); }
-  .ft__nota { margin: 0; font-size: .9rem; color: var(--cal-2); max-width: 60ch; }
-  @media (min-width: 52rem) { .ft__in { grid-template-columns: auto 1fr; gap: 4rem; align-items: center; } }
+  .ft { background: var(--nevoa); padding-block: 4rem; }
+  .ft__in { display: grid; gap: 2.5rem; align-items: start; }
+  .ft__logo { justify-self: start; } .ft__logo :global(.logo) { justify-items: start; }
+  .ft__dados { font-style: normal; } .ft__dados p { margin: 0 0 1rem; }
+  .ft__nota { margin: 0; font-size: .9rem; color: var(--tinta-2); max-width: 48ch; }
+  @media (min-width: 62rem) { .ft__in { grid-template-columns: 1fr 1fr 1.3fr; gap: 4rem; } }
 </style>

@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import ReservaForm from '../../components/ReservaForm.astro';
+import QuartoLinha from '../../components/QuartoLinha.astro';
+import { quartos } from '../../data/hotel';
+---
+<Base title="Quartos · Hotel Winner" description="Quartos Standard, Superior e Família do Hotel Winner, em Barretos. Projeto conceitual.">
+  <section class="section" aria-labelledby="h-q">
+    <div class="container">
+      <header class="topo"><h1 id="h-q">Quartos</h1><p>Valores e fotos serão definidos com o hotel. Escolha um quarto e peça a reserva já com ele selecionado.</p></header>
+      <div class="lista">{quartos.map((q, i) => <QuartoLinha q={q} inverter={i % 2 === 1} detalhe />)}</div>
+    </div>
+  </section>
+  <section class="section sec--nevoa" aria-labelledby="h-r">
+    <div class="container reserva"><h2 id="h-r">Peça a sua reserva</h2><ReservaForm /></div>
+  </section>
+</Base>
+<style>
+  h1 { font-size: clamp(3rem, 1.2rem + 7vw, 7rem); }
+  .topo { display: grid; gap: 1.25rem; margin-bottom: clamp(3rem, 6vw, 5.5rem); } .topo p { margin: 0; font-size: var(--t-lead); font-weight: 300; color: var(--tinta-2); }
+  .lista { display: grid; gap: clamp(4rem, 8vw, 8rem); }
+  .sec--nevoa { background: var(--nevoa); }
+  .reserva { display: grid; gap: 2.5rem; }
+</style>
