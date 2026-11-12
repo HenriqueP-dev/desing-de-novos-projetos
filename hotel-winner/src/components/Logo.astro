@@ -1,0 +1,20 @@
+---
+// Monograma "W" dentro de uma fivela redonda: referência discreta às fivelas de campeão do rodeio.
+---
+<span class="logo">
+  <svg viewBox="0 0 40 40" width="38" height="38" aria-hidden="true">
+    <circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+    <circle cx="20" cy="20" r="14.5" fill="none" stroke="currentColor" stroke-width=".7" stroke-dasharray="1.2 2.2" />
+    <path d="M10.5 14.5 L15 26 L20 17.5 L25 26 L29.5 14.5" fill="none" stroke="var(--brasa-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+  <span class="logo__txt">
+    <span class="logo__nome">Hotel Winner</span>
+    <span class="logo__loc">Barretos · SP</span>
+  </span>
+</span>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: .7rem; }
+  .logo__txt { display: grid; line-height: 1; }
+  .logo__nome { font: 400 1.35rem/1 var(--f-display); font-variation-settings: 'opsz' 72; letter-spacing: -.01em; }
+  .logo__loc { font: 500 .62rem/1 var(--f-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-500); margin-top: .35rem; }
+</style>

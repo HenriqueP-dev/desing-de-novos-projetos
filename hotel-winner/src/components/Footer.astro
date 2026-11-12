@@ -1,0 +1,15 @@
+---
+import Logo from './Logo.astro';
+import { hotel } from '../data/hotel';
+---
+<footer class="ft">
+  <div class="container ft__in">
+    <div><Logo /><p class="ft__nota">Projeto conceitual de design e desenvolvimento. Textos, preços e imagens são ilustrativos e não representam o {hotel.nome} real.</p></div>
+    <p class="label">© {new Date().getFullYear()} · Conceito</p>
+  </div>
+</footer>
+<style>
+  .ft { background: var(--areia-200); padding-block: 3rem; }
+  .ft__in { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: flex-end; }
+  .ft__nota { margin: 1rem 0 0; font-size: .875rem; color: var(--tinta-500); max-width: 44ch; }
+</style>
