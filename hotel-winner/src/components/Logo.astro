@@ -1,14 +1,11 @@
 ---
-// Marca tipográfica: nome em Bodoni com marcador amarelo sob "Winner" e cidade espaçada.
+// Logo oficial do hotel (PNG com fundo transparente, 171 x 100 px).
+// O arquivo é pequeno: exibido em até ~90 px de largura fica nítido; para tamanhos maiores, pedir o vetor (SVG) ao hotel.
+interface Props { altura?: number }
+const { altura = 52 } = Astro.props;
+const largura = Math.round(altura * 1.71);
 ---
-<span class="logo">
-  <span class="logo__n">Hotel <span class="logo__w">Winner</span></span>
-  <span class="logo__l"><span class="logo__f" aria-hidden="true"></span>Barretos<span class="logo__f" aria-hidden="true"></span></span>
-</span>
+<img class="logo" src="/logo-winner.png" alt="Hotel Winner, Barretos" width={largura} height={altura} decoding="async" />
 <style>
-  .logo { display: inline-grid; justify-items: center; gap: .3rem; line-height: 1; color: var(--grafite); }
-  .logo__n { font: 400 1.45rem/1 var(--f-titulo); letter-spacing: .01em; }
-  .logo__l { display: inline-flex; align-items: center; gap: .55rem; font: 500 .72rem/1 var(--f-texto); letter-spacing: .34em; text-transform: uppercase; padding-left: .34em; color: var(--marrom); }
-  .logo__w { background: linear-gradient(transparent 70%, var(--ouro) 70%, var(--ouro) 94%, transparent 94%); padding-inline: .06em; }
-  .logo__f { width: .9rem; height: 2px; background: var(--vermelho); }
+  .logo { display: block; height: auto; max-width: 100%; }
 </style>

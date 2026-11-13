@@ -125,3 +125,7 @@ do título quando aparecem erros e página 404.
 axe-core sem violações (home, acomodações, contato e 404, desktop e celular, incluindo erros do formulário);
 varredura de todas as páginas publicadas contra afirmações não confirmadas; sem rolagem horizontal.
 Não testado com leitor de tela real.
+
+## Logo
+
+A logo oficial do hotel está em `public/logo-winner.png` (PNG com fundo transparente, 171 x 100 px) e é usada pelo componente `src/components/Logo.astro`. O arquivo é pequeno: fica nítido até cerca de 90 px de largura. Para tamanhos maiores, pedir ao hotel o vetor (SVG) ou um PNG de alta resolução.
