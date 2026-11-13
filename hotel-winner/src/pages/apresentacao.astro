@@ -1,0 +1,121 @@
+---
+import '../styles/global.css';
+import { hotel, avaliacao, apartamentos, pontosTuristicos, cartoes } from '../data/hotel';
+const site = 'hotel-winner-conceito.vercel.app';
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Hotel Winner · apresentação do site conceitual</title>
+  <meta name="description" content="Apresentação de uma página do projeto conceitual do novo site do Hotel Winner." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <main class="folha">
+    <header class="topo">
+      <img src="/logo-winner.png" alt="Hotel Winner" width="86" height="50" />
+      <div class="topo__txt">
+        <p class="selo">Projeto conceitual · não é o site oficial</p>
+        <h1>Uma proposta de site para o Hotel Winner</h1>
+      </div>
+    </header>
+
+    <p class="abre">Um site próprio, claro e fácil no celular, feito <strong>só com o que o hotel já informa</strong>: apartamentos, comodidades, localização, pontos turísticos e contato. Nada de preço, serviço ou característica inventada.</p>
+
+    <section class="telas" aria-label="Capturas do projeto">
+      <figure class="telas__d"><img src="/apresentacao/home-d.jpg" alt="Página inicial no computador: vídeo em tela cheia com o título Chegue, estacione, descanse e o botão Ligar para o hotel." /><figcaption>Página inicial: o vídeo ocupa a primeira tela e o telefone fica a um toque.</figcaption></figure>
+      <figure class="telas__m"><img src="/apresentacao/home-m.jpg" alt="Página inicial no celular, com o mesmo título e a barra fixa de ligar." /><figcaption>No celular</figcaption></figure>
+      <figure class="telas__a"><img src="/apresentacao/aco-d.jpg" alt="Cartões dos apartamentos Duplo, Triplo, Quádruplo e Quíntuplo, com fotos." /><figcaption>Apartamentos, com as fotos recebidas</figcaption></figure>
+    </section>
+
+    <div class="colunas">
+      <section aria-labelledby="h-feito">
+        <h2 id="h-feito">O que já está pronto</h2>
+        <ul class="lista">
+          <li><b>Vídeo na primeira tela</b> e botão “Ligar para o hotel” sempre à vista, também numa barra fixa no celular.</li>
+          <li><b>Apartamentos:</b> {apartamentos.map((a) => a.nome).join(', ')}, com cama box, ar-condicionado, TV de LED com parabólica, frigobar, banheiro amplo com box blindex, ducha higiênica e secador (texto do site do hotel).</li>
+          <li><b>Localização e pontos turísticos:</b> {pontosTuristicos.slice(0, 4).map((p) => p.nome.split(',')[0]).join(', ')} e a Catedral, com mapa.</li>
+          <li><b>Avaliações:</b> {avaliacao.total} no Google, nota média {avaliacao.nota}, resumidas em grupos.</li>
+          <li><b>Contato:</b> telefone {hotel.telefone}, endereço, check-in e check-out, cartões aceitos ({cartoes.join(', ')}).</li>
+          <li><b>Identidade do hotel:</b> logo, preto, amarelo e vermelho originais, com texto legível (contraste medido).</li>
+          <li><b>Qualidade:</b> mais de 60 testes automáticos, sem rolagem lateral no celular e com leitura por leitor de tela.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="h-falta">
+        <h2 id="h-falta">O que precisamos do hotel</h2>
+        <ul class="lista lista--falta">
+          <li><b>Fotos oficiais</b> em boa resolução e com autorização: fachada, recepção, banheiros, café da manhã, estacionamento.</li>
+          <li><b>Confirmar</b> capacidade e camas de cada apartamento, e se existe o individual.</li>
+          <li><b>WhatsApp</b> do hotel, para a reserva sair pronta.</li>
+          <li><b>Vídeo do hotel</b> (o atual é ilustrativo, de campo).</li>
+          <li><b>Valores e regras</b> (diárias, cancelamento, crianças, animais), se quiserem exibir.</li>
+          <li><b>Logo em vetor</b> (SVG) para uso em tamanhos maiores.</li>
+        </ul>
+        <h2 class="h2--prox" id="h-prox">Próximos passos</h2>
+        <ol class="passos">
+          <li>Ver a demonstração no celular.</li>
+          <li>O hotel envia o material e confirma os dados.</li>
+          <li>Ajustes e revisão com vocês.</li>
+          <li>Publicação. <span class="mute">Valores e prazos: a combinar.</span></li>
+        </ol>
+      </section>
+    </div>
+
+    <footer class="rodape">
+      <p class="rodape__link">Ver a demonstração: <a href={`https://${site}`}>{site}</a></p>
+      <p class="rodape__nota">Informações do site oficial do hotel (página de apartamentos e de pontos turísticos) e do documento de conteúdo enviado ao projeto. Fotos dos apartamentos recebidas para o projeto, com origem e autorização a confirmar. O vídeo do topo é ilustrativo e não mostra o hotel. A lista completa do que falta confirmar está com quem preparou o projeto.</p>
+    </footer>
+  </main>
+</body>
+</html>
+<style is:global>
+  body { background: #e9e6df; padding: 1.5rem 1rem 3rem; }
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+<style>
+  .folha { width: 210mm; max-width: 100%; margin: 0 auto; background: #fff; padding: 11mm 12mm 9mm; display: grid; gap: 4.5mm; box-shadow: var(--sombra); }
+  .topo { display: flex; align-items: center; gap: 5mm; padding-bottom: 4mm; border-bottom: 3px solid var(--ouro); }
+  .topo img { width: 22mm; height: auto; }
+  .selo { margin: 0 0 1mm; font: 500 .62rem/1.2 var(--f-texto); letter-spacing: .08em; color: var(--ouro-texto); }
+  h1 { font-size: 1.7rem; line-height: 1.05; letter-spacing: -.02em; }
+  .abre { margin: 0; max-width: none; font-size: .88rem; line-height: 1.5; color: var(--corpo); }
+
+  .telas { display: grid; grid-template-columns: 1.55fr .5fr 1fr; gap: 3mm; align-items: end; }
+  .telas figure { margin: 0; }
+  .telas img { width: 100%; height: auto; border: 1px solid var(--areia); border-radius: 2px; }
+  .telas figcaption { margin-top: 1.2mm; font-size: .6rem; line-height: 1.3; color: var(--marrom); }
+  .telas__m img { aspect-ratio: 390 / 844; object-fit: cover; }
+
+  .colunas { display: grid; grid-template-columns: 1.1fr .9fr; gap: 7mm; }
+  h2 { font: 500 .66rem/1 var(--f-texto); letter-spacing: .16em; text-transform: uppercase; color: var(--grafite); padding-bottom: 2mm; border-bottom: 1px solid var(--grafite); margin-bottom: 2mm; }
+  .h2--prox { margin-top: 4mm; }
+  .lista { display: grid; gap: 1.6mm; }
+  .lista li { position: relative; padding-left: 4mm; font-size: .74rem; line-height: 1.42; color: var(--corpo); }
+  .lista li::before { content: ''; position: absolute; left: 0; top: .5em; width: 1.6mm; height: 1.6mm; background: var(--ouro); border: 1px solid var(--grafite); border-radius: 50%; box-sizing: content-box; }
+  .lista b { font-weight: 500; color: var(--grafite); }
+  .passos { display: grid; gap: 1.2mm; counter-reset: p; }
+  .passos li { counter-increment: p; position: relative; padding-left: 5mm; font-size: .74rem; line-height: 1.4; }
+  .passos li::before { content: counter(p); position: absolute; left: 0; font-weight: 500; color: var(--ouro-texto); }
+  .mute { color: var(--marrom); }
+
+  .rodape { display: grid; gap: 1.5mm; padding-top: 3mm; border-top: 3px solid var(--ouro); }
+  .rodape__link { margin: 0; font-size: .82rem; max-width: none; }
+  .rodape__link a { font-weight: 500; }
+  .rodape__nota { margin: 0; font-size: .58rem; line-height: 1.4; color: var(--marrom); max-width: none; }
+
+  @media (max-width: 40rem) {
+    .folha { padding: 1.25rem; }
+    .telas { grid-template-columns: 1fr 1fr; }
+    .telas__d { grid-column: 1 / -1; }
+    .colunas { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .folha { box-shadow: none; width: 210mm; padding: 11mm 12mm 9mm; }
+    @page { size: A4 portrait; margin: 0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
