@@ -6,7 +6,7 @@ import ReservaForm from '../../components/ReservaForm.astro';
 import { hotel, apartamentos, equipamentosApto } from '../../data/hotel';
 
 const emDefinicao = [
-  'Confirmação de cada categoria (a categoria "individual" não apareceu no texto do site antigo)',
+  'Categoria "individual": a página de apartamentos do hotel não a cita',
   'Capacidade e camas de cada categoria, e quantos apartamentos há de cada tipo',
   'Fotos de todas as categorias e a que categoria cada foto corresponde',
   'Valores das diárias',
@@ -27,7 +27,7 @@ const emDefinicao = [
     <div class="container eq">
       <div>
         <h2 id="h-eq">Em todos os apartamentos</h2>
-        <p class="sec-txt eq__fonte">Conforme a página de apartamentos do site antigo do hotel. A confirmação final é do hotel.</p>
+        <p class="sec-txt eq__fonte">Conforme a página de apartamentos do site do hotel.</p>
       </div>
       <ul class="eq__lista" data-revelar>{equipamentosApto.map((e) => <li>{e}</li>)}</ul>
     </div>
@@ -37,7 +37,7 @@ const emDefinicao = [
   <section class="section" aria-labelledby="h-cat">
     <div class="container">
       <h2 id="h-cat" class="sr-only">Categorias de apartamento</h2>
-      <p class="sec-txt nota">A capacidade segue o nome de cada categoria e as legendas descrevem só o que aparece na foto. O hotel ainda vai confirmar capacidade, camas e a categoria de cada foto.</p>
+      <p class="sec-txt nota">A página do hotel reúne todas as fotos num só carrossel, sem dizer a que categoria cada uma pertence. Aqui, a capacidade segue o nome da categoria e cada foto foi posta junto da categoria pelo número de camas que aparece nela; o hotel ainda vai confirmar essa associação. As legendas descrevem só o que se vê.</p>
       {apartamentos.map((a, i) => (
         <article class:list={['cat', i % 2 === 1 && 'cat--inv']} id={a.id} aria-labelledby={`h-${a.id}`}>
           <div class="cat__fotos">

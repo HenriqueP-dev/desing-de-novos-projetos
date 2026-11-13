@@ -70,9 +70,8 @@ export const pendencias = [
 
 /**
  * Equipamentos dos apartamentos.
- * Origem: texto da página "Apartamentos" do site antigo do hotel (hotelwinner.com.br/hw/?page_id=18),
- * lido por meio de um resumo de busca, e a lista que o cliente passou. NÃO foi aberto direto no site oficial:
- * confirmar com o hotel antes de publicar de verdade (ver PENDENCIAS.md).
+ * Origem: texto da página "Apartamentos" do site do hotel, colado pelo cliente (e igual ao resumo de busca).
+ * O site em si não pôde ser aberto direto nesta sessão (ver PENDENCIAS.md).
  */
 export const equipamentosApto = [
   'Cama box',
@@ -87,8 +86,8 @@ export const equipamentosApto = [
 type FotoApto = { src: string; alt: string; legenda: string };
 
 /**
- * Categorias de apartamento citadas no texto do site antigo: Duplos, Triplos, Quádruplos e Quíntuplos.
- * "Individual" foi citado pelo cliente, mas não apareceu nesse texto: fica em PENDENCIAS.md.
+ * Categorias de apartamento citadas no texto da página de apartamentos do hotel: Duplos, Triplos, Quádruplos e Quíntuplos.
+ * "Individual" foi citado pelo cliente, mas a página não o cita: fica em PENDENCIAS.md.
  * A capacidade vem do NOME da categoria (duplo = 2 pessoas etc.) e ainda precisa ser confirmada.
  * As legendas descrevem só o que aparece em cada foto. A foto de cada categoria foi escolhida pelo número de camas
  * visíveis, e o hotel precisa confirmar a correspondência.

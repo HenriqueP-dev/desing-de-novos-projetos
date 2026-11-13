@@ -4,13 +4,15 @@ Documento para conferir com o hotel antes de qualquer uso público. O site **nã
 
 ## Como as informações foram obtidas
 
-O site oficial (hotelwinner.com.br) **não pôde ser aberto diretamente** nesta rodada: a rede do ambiente não resolveu o domínio. O texto da página antiga de apartamentos (hotelwinner.com.br/hw/?page_id=18) chegou por um resumo de resultado de busca, não pela leitura da página. As fotos vieram enviadas pelo cliente, não baixadas do site.
+O site oficial (hotelwinner.com.br) **não pôde ser aberto diretamente** nesta sessão: a rede do ambiente não resolveu o domínio. O cliente colou o texto da página "Apartamentos" do site (que bate com o resumo que a busca já tinha trazido) e enviou fotos.
 
-## 1. Encontrado no site oficial (via resumo de busca da página antiga de apartamentos)
+## 1. Encontrado no site oficial (página "Apartamentos", texto colado pelo cliente)
 
-- Apartamentos **Duplos, Triplos, Quádruplos e Quíntuplos**, amplos.
-- Cama box, ar-condicionado, TV de LED com parabólica, frigobar.
-- Banheiro amplo com box blindex, ducha higiênica e secador de cabelo.
+> Apartamentos Duplos, Triplos, Quádruplos e Quíntuplos, amplos com cama box, ar condicionado, TV de led com parabólica, frigobar, banheiro amplo com box blindex, ducha higiênica e secador de cabelo.
+
+- A página tem um carrossel ("slideshow") de **13 fotos**, todas juntas: photoaction-0035, 0041, 0074, 0087, 0099, 0104, 0110, 0112, 0122, 0135, 0147, 0155 e 9985. **Não diz a que categoria cada foto pertence.**
+- A página não cita capacidade, camas, nem a categoria "individual".
+- Aparece a palavra "Master" acima do texto, sem explicação. Pode ser título da página ou de uma categoria: **não usada**.
 
 Também veio do documento de conteúdo original: endereço, telefone, check-in a partir das 13h, check-out até as 12h, Wi-Fi gratuito, café da manhã incluído, estacionamento, acessibilidade, piscina, ar-condicionado, distâncias e as 7 avaliações resumidas.
 
@@ -24,12 +26,14 @@ Também veio do documento de conteúdo original: endereço, telefone, check-in a
 
 | Item | Situação no site |
 |---|---|
-| Categoria "Individual" (citada pelo cliente) | Não aparece no texto do site antigo: **não exibida** |
-| Quíntuplo | Exibida (texto do site antigo), sem foto; Booking/Planet of Hotels não citam |
+| Categoria "Individual" (citada pelo cliente) | A página de apartamentos não a cita: **não exibida** |
+| "Master" (aparece na página, sem explicação) | Não exibido |
+| Quíntuplo | Exibida (texto da página do hotel), sem foto; Booking/Planet of Hotels não citam |
 | Capacidade de cada categoria | Deduzida do nome (duplo = 2 etc.): marcada como "a confirmar" |
 | Configuração das camas | Não afirmada; só o que aparece em cada foto, em legenda |
 | Quantos apartamentos de cada tipo; total de unidades (~20 em listagem externa) | Não exibido |
-| A que categoria cada foto corresponde | Associação feita pelo número de camas visíveis: **a confirmar** |
+| A que categoria cada foto corresponde | A página do hotel não associa: a associação do site é nossa, pelo número de camas visíveis: **a confirmar** |
+| Fotos recebidas: 5 de 13 do carrossel oficial | Faltam 8 (ver seção acima); não se sabe quais das 5 são as oficiais |
 | Autor, origem e direitos das 5 fotos | Desconhecidos (ver CREDITOS.md) |
 | Fotos de fachada, recepção, banheiros, café da manhã, estacionamento, áreas internas, jardim, vista aérea | **A fornecer pelo hotel**: a galeria só terá fotos reais |
 | Lan house | Citada pelo cliente; **não exibida** até confirmar |
