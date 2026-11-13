@@ -6,24 +6,31 @@ const { rotulo = 'Pedido de reserva' } = Astro.props;
 ---
 <form class="rb" id="reserva" novalidate aria-label={rotulo}
   data-wa={hotel.whatsapp} data-max={JSON.stringify(maxPorQuarto)}
-  data-abre={hotel.checkInAbre} data-fecha={hotel.checkInFecha} data-fuso={hotel.fuso}>
+  data-abre={hotel.checkInAbre} data-fecha={hotel.checkInFecha} data-fuso={hotel.fuso}
+  data-confirmado={String(hotel.horariosConfirmados)}>
+  <!-- form.errorSummary: aparece no envio com erro, recebe o foco e leva a cada campo -->
+  <div class="rb__resumo" tabindex="-1" hidden aria-labelledby="rb-resumo-t">
+    <p id="rb-resumo-t" class="rb__resumo-t"></p>
+    <ul></ul>
+  </div>
   <div class="rb__campos">
     <div class="campo"><label for="f-in">Chegada</label><input id="f-in" name="in" type="date" required aria-describedby="e-in" /><p class="erro" id="e-in" hidden></p></div>
     <div class="campo"><label for="f-out">Saída</label><input id="f-out" name="out" type="date" required aria-describedby="e-out" /><p class="erro" id="e-out" hidden></p></div>
     <div class="campo"><label for="f-g">Hóspedes</label>
       <select id="f-g" name="guests" aria-describedby="e-g"><option>1</option><option selected>2</option><option>3</option><option>4</option></select><p class="erro" id="e-g" hidden></p></div>
     <div class="campo"><label for="f-r">Quarto</label>
-      <select id="f-r" name="room"><option value="">Qualquer um</option>{quartos.map((q) => <option value={q.id}>{q.nome}</option>)}</select></div>
+      <select id="f-r" name="room" aria-describedby="e-g"><option value="">Qualquer um</option>{quartos.map((q) => <option value={q.id}>{q.nome}</option>)}</select></div>
   </div>
   <button class="btn rb__ok" type="submit">Pedir reserva</button>
-  <p class="rb__nota" data-situacao>Check-in das 13h às 24h.</p>
-  <p class="rb__msg" role="status" aria-live="polite"></p>
+  <p class="rb__nota"><span data-situacao>Check-in das 13h às 24h.</span> O hotel responde pelo WhatsApp com disponibilidade e valor; nada fica reservado antes dessa confirmação.</p>
+  <div class="rb__msg" role="status" aria-live="polite"></div>
 </form>
 
 <script>
   const form = document.querySelector<HTMLFormElement>('#reserva')!;
   const d = form.dataset;
   const abre = Number(d.abre), fecha = Number(d.fecha), fuso = d.fuso!;
+  const confirmado = d.confirmado === 'true';
   const sitEl = form.querySelector<HTMLElement>('[data-situacao]')!;
 
   /* ---------- situação do check-in, no horário de Barretos ---------- */
@@ -32,18 +39,21 @@ const { rotulo = 'Pedido de reserva' } = Astro.props;
   function atualizar(agora = new Date()) {
     const p = Object.fromEntries(fmt.formatToParts(agora).map((x) => [x.type, x.value]));
     const min = Number(p.hour) * 60 + Number(p.minute);
-    sitEl.textContent = min >= abre
-      ? `Agora são ${p.hour}:${p.minute} em Barretos. Faltam ${dur(fecha - min)} para o check-in encerrar, à meia-noite.`
-      : `Agora são ${p.hour}:${p.minute} em Barretos. O check-in abre às 13h, em ${dur(abre - min)}.`;
+    const base = min >= abre
+      ? `Agora são ${p.hour}:${p.minute} em Barretos. Faltam ${dur(fecha - min)} para o check-in encerrar, à meia-noite`
+      : `Agora são ${p.hour}:${p.minute} em Barretos. O check-in abre às 13h, em ${dur(abre - min)}`;
+    // Enquanto o hotel não confirmar os horários, o site não afirma como certo o que veio de terceiros.
+    sitEl.textContent = confirmado ? `${base}.` : `${base} (horário a confirmar).`;
   }
   atualizar(); setInterval(() => atualizar(), 20_000);
-  (window as any).__relogio = atualizar; // gancho para testes
+  (window as any).__relogio = atualizar; // gancho usado nos testes
 
-  /* ---------- validação por campo ---------- */
+  /* ---------- campos ---------- */
   const $ = <T extends HTMLElement>(n: string) => form.elements.namedItem(n) as unknown as T;
   const inEl = $<HTMLInputElement>('in'), outEl = $<HTMLInputElement>('out');
   const gEl = $<HTMLSelectElement>('guests'), rEl = $<HTMLSelectElement>('room');
   const msg = form.querySelector<HTMLElement>('.rb__msg')!;
+  const resumo = form.querySelector<HTMLElement>('.rb__resumo')!;
   const max: Record<string, number> = JSON.parse(d.max!);
   const nomes: Record<string, string> = Object.fromEntries([...rEl.options].map((o) => [o.value, o.text]));
   const iso = (x: Date) => new Date(x.getTime() - x.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
@@ -55,33 +65,81 @@ const { rotulo = 'Pedido de reserva' } = Astro.props;
     p.hidden = !texto; p.textContent = texto ?? '';
     texto ? el.setAttribute('aria-invalid', 'true') : el.removeAttribute('aria-invalid');
   }
-  const limpar = () => { erro(inEl, 'e-in', null); erro(outEl, 'e-out', null); erro(gEl, 'e-g', null); };
+
+  // Regras de cada campo, usadas ao mudar o campo e no envio (validar tarde, avisar perto).
+  const regraChegada = (exigir: boolean) =>
+    !inEl.value ? (exigir ? 'Escolha a data de chegada.' : null)
+    : inEl.value < inEl.min ? 'A chegada não pode ser antes de hoje. Escolha hoje ou uma data futura.' : null;
+  const regraSaida = (exigir: boolean) =>
+    !outEl.value ? (exigir ? 'Escolha a data de saída.' : null)
+    : inEl.value && outEl.value <= inEl.value ? 'A saída precisa ser depois da chegada. Escolha pelo menos o dia seguinte.' : null;
+  const regraHospedes = () => {
+    const g = Number(gEl.value), lim = max[rEl.value];
+    return lim && g > lim ? `O quarto ${nomes[rEl.value]} recebe até ${lim} hóspedes. Escolha outro quarto ou menos hóspedes.` : null;
+  };
+
+  function esconderResumo() { resumo.hidden = true; }
 
   inEl.addEventListener('change', () => {
-    if (!inEl.value) return;
-    const prox = new Date(inEl.value + 'T12:00'); prox.setDate(prox.getDate() + 1);
-    outEl.min = iso(prox);
-    if (outEl.value && outEl.value < outEl.min) outEl.value = '';
+    if (inEl.value) {
+      const prox = new Date(inEl.value + 'T12:00'); prox.setDate(prox.getDate() + 1);
+      outEl.min = iso(prox);
+      if (outEl.value && outEl.value < outEl.min) outEl.value = '';
+    }
+    erro(inEl, 'e-in', regraChegada(false));
+    if (outEl.value) erro(outEl, 'e-out', regraSaida(false));
   });
-  [inEl, outEl, gEl, rEl].forEach((el) => el.addEventListener('input', () => { limpar(); msg.textContent = ''; }));
+  outEl.addEventListener('change', () => erro(outEl, 'e-out', regraSaida(false)));
+  // Conflito quarto x hóspedes aparece na hora, não só no envio (prevenção de erro).
+  [gEl, rEl].forEach((el) => el.addEventListener('change', () => erro(gEl, 'e-g', regraHospedes())));
+  [inEl, outEl, gEl, rEl].forEach((el) => el.addEventListener('input', () => { esconderResumo(); msg.textContent = ''; }));
+
+  function mostrarResumo(falhas: { el: HTMLElement; texto: string }[]) {
+    const titulo = resumo.querySelector('p')!, lista = resumo.querySelector('ul')!;
+    titulo.textContent = falhas.length === 1 ? 'Falta corrigir 1 campo:' : `Faltam corrigir ${falhas.length} campos:`;
+    lista.replaceChildren(...falhas.map(({ el, texto }) => {
+      const li = document.createElement('li'), a = document.createElement('a');
+      a.href = '#' + el.id; a.textContent = texto;
+      a.addEventListener('click', (e) => { e.preventDefault(); el.focus(); });
+      li.append(a); return li;
+    }));
+    resumo.hidden = false; resumo.focus();
+  }
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault(); limpar(); msg.textContent = '';
-    const falhas: HTMLElement[] = [];
-    if (!inEl.value) { erro(inEl, 'e-in', 'Escolha a data de chegada.'); falhas.push(inEl); }
-    else if (inEl.value < inEl.min) { erro(inEl, 'e-in', 'A chegada não pode ser antes de hoje. Escolha hoje ou uma data futura.'); falhas.push(inEl); }
-    if (!outEl.value) { erro(outEl, 'e-out', 'Escolha a data de saída.'); falhas.push(outEl); }
-    else if (inEl.value && outEl.value <= inEl.value) { erro(outEl, 'e-out', 'A saída precisa ser depois da chegada.'); falhas.push(outEl); }
-    const g = Number(gEl.value), lim = max[rEl.value];
-    if (lim && g > lim) { erro(gEl, 'e-g', `O quarto ${nomes[rEl.value]} recebe até ${lim}. Escolha outro quarto ou menos hóspedes.`); falhas.push(gEl); }
-    if (falhas.length) { falhas[0].focus(); return; }
+    e.preventDefault(); msg.textContent = ''; esconderResumo();
+    const checagens: [HTMLElement, string, string | null][] = [
+      [inEl, 'e-in', regraChegada(true)], [outEl, 'e-out', regraSaida(true)], [gEl, 'e-g', regraHospedes()],
+    ];
+    checagens.forEach(([el, id, t]) => erro(el, id, t));
+    const falhas = checagens.filter(([, , t]) => t).map(([el, , t]) => ({ el, texto: t! }));
+    if (falhas.length) { mostrarResumo(falhas); return; }
 
+    const g = Number(gEl.value);
     const noites = Math.round((+new Date(outEl.value) - +new Date(inEl.value)) / 864e5);
     const quarto = rEl.value ? `, quarto ${nomes[rEl.value]}` : '';
     const texto = `Olá! Gostaria de reservar de ${br(inEl.value)} a ${br(outEl.value)} (${noites} ${noites === 1 ? 'noite' : 'noites'}) para ${g} ${g === 1 ? 'hóspede' : 'hóspedes'}${quarto}.`;
     if (!d.wa) { msg.textContent = `Modo conceitual: aqui abriria o WhatsApp do hotel com a mensagem “${texto}”`; return; }
-    window.open(`https://wa.me/${d.wa}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
-    msg.textContent = 'Abrimos o WhatsApp do hotel com o seu pedido pronto. Falta só enviar a mensagem.';
+
+    const url = `https://wa.me/${d.wa}?text=${encodeURIComponent(texto)}`;
+    // Sem "noopener" no window.open: com ele o navegador sempre devolve null e não daria para saber se abriu.
+    const aba = window.open(url, '_blank');
+    if (aba) {
+      aba.opener = null; // mesma proteção do noopener, aplicada depois
+      msg.textContent = 'O WhatsApp do hotel abriu em outra aba com o seu pedido pronto. Falta só enviar a mensagem.';
+      return;
+    }
+    // form.submitFailed: os dados continuam no formulário e há duas saídas.
+    msg.replaceChildren();
+    const p = document.createElement('p'); p.textContent = 'O navegador bloqueou a abertura do WhatsApp. Abra pelo link abaixo ou copie a mensagem e envie para o hotel.';
+    const acoes = document.createElement('div'); acoes.className = 'rb__acoes';
+    const link = document.createElement('a'); link.href = url; link.target = '_blank'; link.rel = 'noopener'; link.className = 'btn'; link.textContent = 'Abrir o WhatsApp';
+    const copiar = document.createElement('button'); copiar.type = 'button'; copiar.className = 'btn btn--linha'; copiar.textContent = 'Copiar mensagem';
+    copiar.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(texto); copiar.textContent = 'Mensagem copiada'; }
+      catch { copiar.textContent = 'Não foi possível copiar'; }
+    });
+    acoes.append(link, copiar); msg.append(p, acoes);
   });
 
   /* ---------- "Pedir este quarto" em qualquer parte da página ---------- */
@@ -89,7 +147,8 @@ const { rotulo = 'Pedido de reserva' } = Astro.props;
     const alvo = (e.target as HTMLElement).closest<HTMLElement>('[data-pedir]');
     if (!alvo) return;
     e.preventDefault();
-    rEl.value = alvo.dataset.pedir!; limpar();
+    rEl.value = alvo.dataset.pedir!; esconderResumo();
+    erro(gEl, 'e-g', regraHospedes());
     msg.textContent = `Quarto ${nomes[rEl.value]} selecionado. Escolha as datas.`;
     form.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
     (inEl.value ? outEl : inEl).focus({ preventScroll: true });
@@ -98,6 +157,13 @@ const { rotulo = 'Pedido de reserva' } = Astro.props;
 
 <style>
   .rb { background: #fff; color: var(--tinta); padding: 1.25rem 1.5rem 1rem; border: 1px solid var(--nevoa-2); }
+  .rb__resumo { margin-bottom: 1.25rem; padding: .9rem 1rem; border-left: 3px solid #8a2417; background: #fbf3f1; }
+  .rb__resumo[hidden] { display: none; }
+  .rb__resumo:focus { outline: 2px solid var(--tinta); outline-offset: 2px; }
+  .rb__resumo-t { margin: 0 0 .4rem; font-weight: 500; color: #8a2417; }
+  .rb__resumo ul { display: grid; gap: .2rem; }
+  /* os links do resumo são criados por JS, então o estilo precisa ser global ao componente */
+  .rb__resumo :global(a) { color: #8a2417; }
   .rb__campos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.25rem; }
   .campo { display: grid; gap: .3rem; align-content: start; min-width: 0; }
   .campo label { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); }
@@ -112,10 +178,13 @@ const { rotulo = 'Pedido de reserva' } = Astro.props;
   .rb__nota { margin: .9rem 0 0; font-size: .9rem; color: var(--tinta-2); max-width: none; }
   .rb__msg { margin: 0; max-width: none; }
   .rb__msg:not(:empty) { margin-top: .9rem; padding: .8rem 1rem; background: var(--nevoa); border-left: 3px solid var(--noite); font-size: .95rem; }
+  .rb__msg :global(p) { margin: 0; max-width: none; }
+  .rb__msg :global(.rb__acoes) { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .75rem; }
   @media (min-width: 62rem) {
-    .rb { display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem; align-items: end; padding: 1.1rem 1.25rem 1rem 1.5rem; }
+    .rb { display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem; align-items: start; padding: 1.1rem 1.25rem 1rem 1.5rem; }
+    .rb__resumo { grid-column: 1 / -1; }
     .rb__campos { grid-template-columns: repeat(4, 1fr); }
-    .rb__ok { width: auto; margin: 0 0 .1rem; padding-inline: 2.75rem; align-self: start; margin-top: 1.4rem; }
+    .rb__ok { width: auto; margin: 1.4rem 0 0; padding-inline: 2.75rem; }
     .rb__nota, .rb__msg { grid-column: 1 / -1; }
   }
 </style>

@@ -40,6 +40,10 @@ Enquanto estiver vazio, o formulário mostra só a prévia da mensagem.
 
 ## Dados a confirmar com o hotel
 
+Quando o hotel confirmar os horários, troque `horariosConfirmados` para `true` em `src/data/hotel.ts`:
+o relógio da barra de reserva deixa de mostrar "(horário a confirmar)".
+
+
 Check-in 13h às 24h, check-out até 12h e café da manhã continental vieram de listagens de terceiros.
 Todo o resto (preços, categorias, capacidades, contatos, "a confirmar") é fictício.
 
@@ -49,6 +53,11 @@ Todo o resto (preços, categorias, capacidades, contatos, "a confirmar") é fict
 - A primeira versão do site (identidade de placa de rodovia) está no histórico do git: commit `592d929`.
 
 ## Verificações feitas
+
+Revisão com o plugin UI/UX Behaves aplicada: resumo de erros com foco, aviso imediato de quarto x hóspedes,
+saída para pop-up bloqueado (link e copiar mensagem), menu com foco preso no painel, sem deslocamento
+do título quando aparecem erros e página 404.
+
 
 axe-core sem violações (home, quartos e contato, desktop e celular, incluindo erros do formulário);
 contraste do texto sobre a imagem do topo medido no pior caso (mínimo 8,5:1); sem rolagem horizontal.

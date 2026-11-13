@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Página não encontrada · Hotel Winner" temReserva={false}>
+  <section class="section">
+    <div class="container nf">
+      <h1>Página não encontrada</h1>
+      <p>O endereço pode ter mudado ou ter sido digitado errado. Siga por um destes caminhos:</p>
+      <div class="nf__acoes"><a class="btn" href="/">Voltar ao início</a><a class="btn btn--linha" href="/quartos/">Ver os quartos</a></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { display: grid; gap: 1.5rem; justify-items: start; min-height: 50vh; align-content: center; }
+  h1 { font-size: clamp(2.6rem, 1.2rem + 5vw, 5.5rem); }
+  .nf p { margin: 0; font-size: var(--t-lead); font-weight: 300; color: var(--tinta-2); }
+  .nf__acoes { display: flex; flex-wrap: wrap; gap: 1rem; }
+</style>

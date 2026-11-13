@@ -23,6 +23,8 @@ export const hotel = {
   checkOut: 'até 12h',
   cafe: 'Continental',
   fuso: 'America/Sao_Paulo',
+  // Troque para true quando o hotel confirmar check-in, check-out e café da manhã.
+  horariosConfirmados: false,
 } as const;
 
 /**
@@ -42,7 +44,7 @@ export const quartos = [
   },
   {
     id: 'familia', nome: 'Família', max: 4, cama: 'Casal e solteiros', variante: 'familia', foto: '',
-    resumo: 'Todo mundo no mesmo quarto, com lugar para a bagagem de todo mundo.',
+    resumo: 'Todos juntos, com espaço de sobra para as malas.',
     itens: ['Até quatro hóspedes', 'Banheiro privativo', 'Pergunte por berço ao reservar'],
   },
 ] as const;
@@ -55,12 +57,12 @@ export const experiencias = [
   },
   {
     id: 'trabalho', titulo: 'Para quem viaja a trabalho', cena: 'estrada', foto: '', quarto: 'standard',
-    texto: 'Quem viaja a trabalho precisa de horário flexível na chegada e de saída sem fila na manhã seguinte.',
+    texto: 'Horário flexível na chegada e saída sem fila na manhã seguinte fazem diferença para quem está na estrada a negócios.',
     dicas: ['Check-in das 13h às 24h', 'Check-out até 12h', 'Avise a chegada tardia ao reservar'],
   },
   {
     id: 'familia', titulo: 'Para ficar em família', cena: 'alvorada', foto: '', quarto: 'familia',
-    texto: 'Para fins de semana e visitas a parentes, o quarto Família junta todo mundo e mantém a bagagem fora do caminho.',
+    texto: 'Fins de semana e visitas a parentes pedem um quarto que junte todo mundo e deixe a bagagem fora do caminho.',
     dicas: ['Quarto para até quatro hóspedes', 'Café da manhã para todos', 'Peça berço ou cama extra na hora da reserva'],
   },
 ] as const;

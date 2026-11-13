@@ -1,7 +1,9 @@
 ---
 import Logo from './Logo.astro';
-interface Props { sobre?: boolean }
-const { sobre = false } = Astro.props;
+interface Props { sobre?: boolean; temReserva?: boolean }
+const { sobre = false, temReserva = true } = Astro.props;
+// Em páginas sem formulário (ex.: 404) o botão leva ao formulário da home.
+const alvoReserva = temReserva ? '#reserva' : '/#reserva';
 const esq = [{ href: '/quartos/', t: 'Quartos' }, { href: '/#experiencias', t: 'Experiências' }];
 const dir = [{ href: '/#direto', t: 'Reserva direta' }, { href: '/contato/', t: 'Contato' }];
 ---
@@ -11,24 +13,33 @@ const dir = [{ href: '/#direto', t: 'Reserva direta' }, { href: '/contato/', t: 
     <a href="/" class="hd__logo"><Logo /></a>
     <div class="hd__r">
       <nav class="tracado hd__links" aria-label="Secundário">{dir.map((l) => <a href={l.href}>{l.t}</a>)}</nav>
-      <a class="hd__cta tracado" href="#reserva">Reservar</a>
+      <a class="hd__cta tracado" href={alvoReserva}>Pedir reserva</a>
       <button class="hd__menu tracado" type="button" aria-expanded="false" aria-controls="painel">Menu</button>
     </div>
   </div>
   <div id="painel" class="hd__painel" hidden>
     <nav aria-label="Menu">
       {[...esq, ...dir].map((l) => <a href={l.href}>{l.t}</a>)}
-      <a href="#reserva">Reservar</a>
+      <a href={alvoReserva}>Pedir reserva</a>
     </nav>
   </div>
 </header>
 <script>
   const btn = document.querySelector<HTMLButtonElement>('.hd__menu')!;
   const painel = document.getElementById('painel')!;
-  function abrir(o: boolean) { btn.setAttribute('aria-expanded', String(o)); btn.textContent = o ? 'Fechar' : 'Menu'; painel.hidden = !o; document.body.style.overflow = o ? 'hidden' : ''; }
+  // Com o painel aberto, o resto da página fica inerte: o Tab circula só entre o botão e os links do painel.
+  const fundo = () => [...document.querySelectorAll<HTMLElement>('.skip, .aviso, .hd__logo, main, footer')];
+  function abrir(o: boolean, focar = true) {
+    btn.setAttribute('aria-expanded', String(o)); btn.textContent = o ? 'Fechar' : 'Menu';
+    painel.hidden = !o; document.body.style.overflow = o ? 'hidden' : '';
+    fundo().forEach((el) => (el.inert = o));
+    if (o && focar) painel.querySelector<HTMLElement>('a')?.focus();
+  }
   btn.addEventListener('click', () => abrir(btn.getAttribute('aria-expanded') !== 'true'));
   painel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => abrir(false)));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !painel.hidden) { abrir(false); btn.focus(); } });
+  // Se a janela crescer até o layout de desktop com o painel aberto, fecha e devolve a página.
+  matchMedia('(min-width: 62.01rem)').addEventListener('change', (m) => { if (m.matches && !painel.hidden) abrir(false, false); });
 </script>
 <style>
   .hd { position: relative; z-index: 30; height: var(--hd-h); }

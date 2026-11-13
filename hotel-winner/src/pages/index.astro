@@ -25,12 +25,22 @@ const compromissos = [
     <div class="hero__barra"><ReservaForm /></div>
   </section>
 
+  <script>
+    // Mede a barra de reserva sem mensagens e fixa a altura da 1ª linha da hero.
+    // Assim, quando erros aparecem, a barra cresce para baixo e nada acima dela se desloca.
+    const hero = document.querySelector<HTMLElement>('.hero');
+    const barra = document.querySelector<HTMLElement>('.hero__barra');
+    const semMensagens = () => !document.querySelector('.rb .erro:not([hidden]), .rb__resumo:not([hidden])') && !document.querySelector('.rb__msg')?.textContent;
+    const medir = () => { if (hero && barra && semMensagens()) hero.style.setProperty('--barra-base', `${barra.offsetHeight}px`); };
+    medir(); document.fonts?.ready.then(medir); addEventListener('resize', medir);
+  </script>
+
   <!-- APRESENTAÇÃO -->
   <section class="section" aria-labelledby="h-intro">
     <div class="container intro">
       <h2 id="h-intro">Um hotel para quem chega depois da estrada e quer acordar sem pressa.</h2>
       <div class="intro__col">
-        <p>O {hotel.nome} fica em {hotel.cidade}, no interior de São Paulo. A recepção recebe hóspedes até meia-noite, o café da manhã é continental e a reserva é feita direto com a equipe.</p>
+        <p>Fica em {hotel.cidade}, no interior de São Paulo. A recepção recebe hóspedes até meia-noite, o café da manhã é continental e a reserva é feita direto com a equipe.</p>
         <dl class="fatos">
           <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
           <div><dt>Check-out</dt><dd>{hotel.checkOut}</dd></div>
@@ -92,7 +102,7 @@ const compromissos = [
 
 <style>
   /* hero: sobe por baixo do cabeçalho transparente */
-  .hero { position: relative; margin-top: calc(-1 * var(--hd-h)); min-height: calc(100svh - var(--aviso-h)); padding-top: var(--hd-h); display: grid; grid-template-rows: 1fr auto; overflow: hidden; color: var(--tinta); }
+  .hero { position: relative; margin-top: calc(-1 * var(--hd-h)); padding-top: var(--hd-h); display: grid; grid-template-rows: minmax(calc(100svh - var(--aviso-h) - var(--hd-h) - var(--barra-base, 10rem)), auto) auto; overflow: hidden; color: var(--tinta); }
   .hero__bg { position: absolute; inset: 0; }
   .hero__veu { position: absolute; inset: 0; background: linear-gradient(to bottom, rgb(255 255 255 / .22), transparent 30%); }
   .hero__txt { position: relative; z-index: 2; align-self: end; width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; padding: 3rem 0 clamp(2rem, 5vw, 4rem); animation: surge 1.4s var(--ease) both; }

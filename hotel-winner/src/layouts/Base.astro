@@ -4,11 +4,12 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { hotel } from '../data/hotel';
 
-interface Props { title?: string; description?: string; sobre?: boolean }
+interface Props { title?: string; description?: string; sobre?: boolean; temReserva?: boolean }
 const {
   title = `${hotel.nome} · Hospedagem em ${hotel.cidade}, ${hotel.uf}`,
   description = `Hospedagem em ${hotel.cidade} com check-in até meia-noite, café da manhã e reserva direta. Projeto conceitual.`,
   sobre = false,
+  temReserva = true,
 } = Astro.props;
 ---
 <!doctype html>
@@ -25,7 +26,7 @@ const {
   <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
     <aside class="aviso" aria-label="Aviso do projeto">Projeto conceitual de design. Este não é o site oficial do {hotel.nome}.</aside>
-    <Header sobre={sobre} />
+    <Header sobre={sobre} temReserva={temReserva} />
     <main id="conteudo"><slot /></main>
     <Footer />
   </body>
