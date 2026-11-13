@@ -1,0 +1,54 @@
+---
+/**
+ * Fundo do topo da home: vídeo quando existir, ilustração quando não existir.
+ *
+ * Regras de acessibilidade e desempenho:
+ *  - vídeo mudo, em repetição, decorativo (aria-hidden), com botão de pausa visível (WCAG 2.2.2);
+ *  - quem pede "reduzir movimento" no sistema, ou usa economia de dados / conexão lenta,
+ *    vê só a imagem de capa e pode tocar pelo botão;
+ *  - o vídeo só começa por script, então sem JavaScript fica a imagem de capa.
+ */
+import Imagem from './Imagem.astro';
+import { temWebm, temMp4, temVideoHero, temPosterHero } from '../lib/midia';
+
+interface Props { alt: string }
+const { alt } = Astro.props;
+---
+{temVideoHero ? (
+  <div class="hv">
+    <video class="hv__v" muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"
+      poster={temPosterHero ? '/videos/hero-poster.jpg' : undefined} data-hero-video>
+      {temWebm && <source src="/videos/hero.webm" type="video/webm" />}
+      {temMp4 && <source src="/videos/hero.mp4" type="video/mp4" />}
+    </video>
+    <button class="hv__btn" type="button" data-hero-btn>Pausar vídeo</button>
+  </div>
+) : (
+  <Imagem cena="alvorada" alt={alt} carregar="eager" />
+)}
+
+<script>
+  const v = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-hero-btn]');
+  if (v && btn) {
+    const reduzMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const con = (navigator as any).connection;
+    const poupar = !!con && (con.saveData === true || /(^|-)(2g|3g)$/.test(con.effectiveType ?? ''));
+    const rotulo = (tocando: boolean) => { btn.textContent = tocando ? 'Pausar vídeo' : 'Reproduzir vídeo'; };
+    const tocar = () => v.play().then(() => rotulo(true)).catch(() => rotulo(false));
+    if (reduzMovimento || poupar) rotulo(false); else tocar();
+    btn.addEventListener('click', () => { if (v.paused) tocar(); else { v.pause(); rotulo(false); } });
+  }
+</script>
+
+<style>
+  .hv { position: absolute; inset: 0; background: var(--nevoa-2); }
+  .hv__v { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hv__btn {
+    position: absolute; z-index: 3; right: max(var(--gutter), calc((100% - var(--max)) / 2)); top: calc(var(--hd-h) + 2.4rem);
+    min-height: 2.75rem; padding: .5rem 1rem; cursor: pointer;
+    background: rgb(255 255 255 / .9); color: var(--tinta); border: 1px solid var(--tinta);
+    font: 400 .72rem / 1 var(--f); letter-spacing: .18em; text-transform: uppercase;
+  }
+  @media (hover: hover) { .hv__btn:hover { background: var(--tinta); color: #fff; } }
+</style>

@@ -1,15 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
 import Imagem from '../components/Imagem.astro';
+import HeroVideo from '../components/HeroVideo.astro';
+import { temVideoHero } from '../lib/midia';
 import ReservaForm from '../components/ReservaForm.astro';
 import { hotel, avaliacao, comodidades, distancias } from '../data/hotel';
 ---
 <Base sobre>
   <!-- HERO -->
   <section class="hero" aria-labelledby="h-hero">
-    <div class="hero__bg"><Imagem cena="alvorada" alt="Colinas suaves ao amanhecer no interior paulista" carregar="eager" /></div>
+    <div class="hero__bg"><HeroVideo alt="Colinas suaves ao amanhecer no interior paulista" /></div>
     <div class="hero__veu" aria-hidden="true"></div>
-    <p class="legenda-ilus">Imagem ilustrativa</p>
+    <p class="legenda-ilus">{temVideoHero ? 'Vídeo ilustrativo' : 'Imagem ilustrativa'}</p>
     <div class="hero__txt">
       <h1 id="h-hero">Barretos, sem pressa.</h1>
       <p>Café da manhã incluído, Wi-Fi gratuito, estacionamento e piscina.</p>

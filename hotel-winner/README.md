@@ -31,6 +31,19 @@ ilustração; com foto, usa a foto. Para trocar:
 Escreva sempre um `alt` descritivo. Depois de trocar, revise o contraste do texto sobre a foto do topo
 (o texto é escuro; fotos escuras exigem trocá-lo para branco).
 
+## Vídeo no topo da home
+
+O topo da home usa a ilustração. Para usar um vídeo:
+
+1. Guarde o original em `videos-originais/` (essa pasta não vai para o GitHub).
+2. Rode `scripts/preparar-video.sh videos-originais/seu-video.mp4 3 10` (começa no segundo 3 e usa 10 segundos).
+   O script gera `public/videos/hero.mp4`, `hero.webm` e `hero-poster.jpg`, sem áudio e com até 4 MB.
+3. Rode o build. O site detecta os arquivos sozinho e passa a mostrar o vídeo, com botão de pausa.
+4. Preencha `CREDITOS.md` com a origem e a licença.
+
+Para voltar à ilustração, apague os três arquivos de `public/videos/`.
+O vídeo não toca sozinho para quem pede "reduzir movimento" no sistema nem com economia de dados.
+
 ## WhatsApp
 
 O WhatsApp do hotel **não foi informado**. Sem ele, o formulário prepara o pedido e oferece "Ligar para o hotel" e "Copiar mensagem".
