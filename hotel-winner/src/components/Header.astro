@@ -34,7 +34,7 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
   addEventListener('scroll', () => { if (!pedido) { pedido = true; requestAnimationFrame(marcar); } }, { passive: true });
   marcar();
   // Com o painel aberto, o resto da página fica inerte: o Tab circula só entre o botão e os links.
-  const fundo = () => [...document.querySelectorAll<HTMLElement>('.skip, .aviso, .hd__logo, main, footer')];
+  const fundo = () => [...document.querySelectorAll<HTMLElement>('.skip, .aviso, .hd__logo, main, footer, .ligar')];
   function abrir(o: boolean, focar = true) {
     btn.setAttribute('aria-expanded', String(o)); btn.textContent = o ? 'Fechar' : 'Menu';
     painel.hidden = !o; document.body.style.overflow = o ? 'hidden' : '';

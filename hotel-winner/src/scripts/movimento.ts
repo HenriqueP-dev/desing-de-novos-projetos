@@ -1,6 +1,6 @@
 /**
  * Movimento do site (GSAP + ScrollTrigger).
- * Regra: um momento marcante (a moldura do vídeo se abre ao rolar) e revelações discretas.
+ * Regra: entrada do hero, revelações discretas e um leve respiro no vídeo.
  * Usa opacity (nunca autoAlpha/visibility): o conteúdo segue legível para leitores de tela antes de aparecer.
  * Tudo dentro de gsap.matchMedia: com "reduzir movimento", nada disso roda e o conteúdo já está visível.
  */
@@ -24,17 +24,11 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       .from('[data-hero-barra]', { opacity: 0, y: 20, duration: 1.1 }, '-=1.15');
   }
 
-  // 2. O momento: a moldura do vídeo vai da largura do conteúdo até a borda da tela.
+  // 2. Só um respiro no vídeo ao rolar (sem moldura que se abre: gesto clichê de sites de hotel).
   const quadro = document.querySelector<HTMLElement>('[data-hero-quadro]');
-  const trilho = document.querySelector<HTMLElement>('.hero .container');
-  if (quadro && trilho) {
-    const lado = () => Math.max(0, (quadro.clientWidth - trilho.clientWidth) / 2);
-    const st = { trigger: quadro, start: 'top 70%', end: 'bottom 30%', scrub: 0.6, invalidateOnRefresh: true };
-    gsap.fromTo(quadro,
-      { clipPath: () => `inset(0px ${lado()}px 0px ${lado()}px round 2px)` },
-      { clipPath: 'inset(0px 0px 0px 0px round 0px)', ease: 'none', scrollTrigger: st });
-    const midia = quadro.querySelector('video, .hv__vazio');
-    if (midia) gsap.fromTo(midia, { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { ...st } });
+  const midia = quadro?.querySelector('video, .hv__vazio');
+  if (quadro && midia) {
+    gsap.fromTo(midia, { scale: 1.06 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: quadro, start: 'top 85%', end: 'bottom 30%', scrub: 0.6 } });
   }
 
   // 3. Revelações discretas: blocos marcados sobem e aparecem; fotos se abrem por máscara.

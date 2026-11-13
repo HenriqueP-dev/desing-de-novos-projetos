@@ -1,10 +1,10 @@
 ---
 import Icone from './Icone.astro';
 import { comodidades } from '../data/hotel';
-interface Props { compacta?: boolean }
-const { compacta = false } = Astro.props;
+interface Props { compacta?: boolean; linha?: boolean }
+const { compacta = false, linha = false } = Astro.props;
 ---
-<ul class:list={['com', { 'com--compacta': compacta }]}>
+<ul class:list={['com', { 'com--compacta': compacta, 'com--linha': linha }]}>
   {comodidades.map((c) => <li><Icone nome={c} class="com__i" /><span>{c}</span></li>)}
 </ul>
 <style>
@@ -13,6 +13,12 @@ const { compacta = false } = Astro.props;
   .com :global(.com__i) { width: 2rem; height: 2rem; color: var(--ouro-texto); }
   .com--compacta li { padding: 1rem 0; font: 400 1.0625rem/1.4 var(--f-texto); gap: 1rem; }
   .com--compacta :global(.com__i) { width: 1.5rem; height: 1.5rem; }
-  @media (min-width: 44rem) { .com:not(.com--compacta) { grid-template-columns: 1fr 1fr; column-gap: 3rem; } }
-  @media (min-width: 70rem) { .com:not(.com--compacta) { grid-template-columns: repeat(3, 1fr); } }
+  /* linha: faixa compacta de ícones, sem peso de seção */
+  .com--linha { grid-template-columns: repeat(2, 1fr); column-gap: 1.5rem; border-top: 1px solid var(--areia); }
+  .com--linha li { grid-template-columns: 1fr; justify-items: start; gap: .65rem; padding: 1.25rem 0; border-bottom: 0; font: 400 .95rem/1.35 var(--f-texto); }
+  .com--linha :global(.com__i) { width: 1.6rem; height: 1.6rem; }
+  @media (min-width: 40rem) { .com--linha { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 70rem) { .com--linha { grid-template-columns: repeat(6, 1fr); } }
+  @media (min-width: 44rem) { .com:not(.com--compacta):not(.com--linha) { grid-template-columns: 1fr 1fr; column-gap: 3rem; } }
+  @media (min-width: 70rem) { .com:not(.com--compacta):not(.com--linha) { grid-template-columns: repeat(3, 1fr); } }
 </style>

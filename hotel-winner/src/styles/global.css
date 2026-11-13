@@ -41,6 +41,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--hd-h) + 1rem); }
+@media (max-width: 62rem) { html { scroll-padding-bottom: 5rem; } body { padding-bottom: 3.75rem; } }
 body {
   margin: 0; background: var(--off); color: var(--grafite);
   font: 400 var(--t-corpo) / 1.7 var(--f-texto);
@@ -50,7 +51,7 @@ body {
 ::selection { background: var(--areia); color: var(--grafite); }
 img, svg, video { display: block; max-width: 100%; }
 a { color: inherit; text-underline-offset: .22em; text-decoration-thickness: 1px; text-decoration-color: var(--ouro); }
-p { margin: 0 0 1em; max-width: 68ch; }
+p { margin: 0 0 1em; max-width: 68ch; text-wrap: pretty; }
 ul, ol, dl { margin: 0; padding: 0; } li { list-style: none; } dd { margin: 0; }
 h1, h2, h3 { margin: 0; font-family: var(--f-titulo); font-weight: 400; line-height: 1.04; letter-spacing: -.02em; text-wrap: balance; }
 h1 { font-size: var(--t-display); line-height: .98; letter-spacing: -.03em; }

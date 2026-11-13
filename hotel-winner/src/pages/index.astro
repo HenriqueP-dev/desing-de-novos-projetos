@@ -7,81 +7,54 @@ import ReservaForm from '../components/ReservaForm.astro';
 import { temVideoHero } from '../lib/midia';
 import { hotel, avaliacao, distancias } from '../data/hotel';
 
-// 4,3 de 5 = 86% das estrelas preenchidas (visualização exata da nota, não arredondada).
-const preenchido = (parseFloat(avaliacao.nota.replace(',', '.')) / 5) * 100;
+// A ideia do site: o hotel é uma base prática para quem chega a Barretos.
+// Cada passo usa só fatos do documento do hotel (ou o que os hóspedes elogiam nas avaliações).
+const passos = [
+  { n: '1', t: 'Chegar', d: `Check-in ${hotel.checkIn}.` },
+  { n: '2', t: 'Estacionar', d: 'Estacionamento para os hóspedes.' },
+  { n: '3', t: 'Descansar', d: 'Camas confortáveis e bons chuveiros, segundo os hóspedes.' },
+  { n: '4', t: 'Tomar café', d: 'Café da manhã incluído.' },
+  { n: '5', t: 'Seguir', d: `Check-out ${hotel.checkOut}.` },
+];
 ---
 <Base>
-  <!-- HERO: título editorial sobre o off-white e o vídeo numa moldura que se abre ao rolar -->
+  <!-- HERO: a ação (ligar ou pedir reserva) aparece na primeira tela; o vídeo fica logo abaixo -->
   <section class="hero" aria-labelledby="h-hero">
     <div class="container hero__topo">
-      <h1 id="h-hero"><span class="linha"><span data-hero-linha>Barretos,</span></span> <span class="linha"><span data-hero-linha>sem pressa.</span></span></h1>
-      <div class="hero__sub" data-hero-sub>
-        <span class="filete" aria-hidden="true"></span>
-        <p class="lead">Café da manhã incluído, Wi-Fi gratuito, estacionamento e piscina, a {distancias[1].km} do centro de {hotel.cidade}.</p>
+      <div class="hero__tit">
+      <p class="hero__selo">{hotel.categoria} · {hotel.cidade}, {hotel.uf}</p>
+      <h1 id="h-hero"><span class="linha"><span data-hero-linha>Chegue, estacione,</span></span> <span class="linha"><span data-hero-linha>descanse.</span></span></h1>
+      </div>
+      <div class="hero__lado" data-hero-sub>
+        <p class="lead">A {distancias[1].km} do centro de {hotel.cidade}, com estacionamento e café da manhã incluído.</p>
+        <div class="hero__acoes">
+          <a class="btn" href={hotel.telefoneLink}>Ligar para o hotel</a>
+          <a class="btn btn--linha" href="#reserva">Pedir reserva</a>
+        </div>
       </div>
     </div>
-    <div class="quadro" data-hero-quadro>
-      <HeroVideo />
-    </div>
-    <div class="container hero__base">
+    <div class="container hero__barra" data-hero-barra><ReservaForm /></div>
+    <div class="container hero__midia">
+      <div class="quadro" data-hero-quadro><HeroVideo /></div>
       <p class="hero__leg">{temVideoHero ? 'Vídeo ilustrativo, não mostra o hotel' : 'Espaço reservado para o vídeo do hotel'}</p>
-      <div class="hero__barra" data-hero-barra><ReservaForm /></div>
     </div>
   </section>
 
-  <!-- SOBRE: declaração em serifa e fatos em lista fina -->
-  <section class="section" aria-labelledby="h-sobre">
-    <div class="container sobre">
-      <h2 id="h-sobre">Um hotel 2 estrelas em Barretos, bem avaliado por quem já se hospedou.</h2>
-      <div class="sobre__col">
-        <p class="lead">O {hotel.nome} fica na {hotel.endereco}, em {hotel.cidade}, no interior de São Paulo. O café da manhã é incluído, o Wi-Fi é gratuito e há estacionamento para os hóspedes.</p>
-        <dl class="fatos num">
-          <div><dt>Categoria</dt><dd>2 estrelas</dd></div>
-          <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
-          <div><dt>Check-out</dt><dd>{hotel.checkOut}</dd></div>
-          <div><dt>Café da manhã</dt><dd>{hotel.cafe}</dd></div>
-        </dl>
+  <!-- DO CHECK-IN AO CHECK-OUT: seção densa, em sequência, com as seis comodidades numa faixa -->
+  <section class="section sec--champ sec--densa" id="roteiro" aria-labelledby="h-rot">
+    <div class="container">
+      <h2 id="h-rot">Do check-in ao check-out</h2>
+      <ol class="passos num" data-revelar>
+        {passos.map((p) => <li><span class="passo__n" aria-hidden="true">{p.n}</span><h3 class="passo__t">{p.t}</h3><p>{p.d}</p></li>)}
+      </ol>
+      <div id="comodidades" class="com-wrap" data-revelar>
+        <h3 class="sr-only">Comodidades</h3>
+        <Comodidades linha />
       </div>
     </div>
   </section>
 
-  <!-- ACOMODAÇÕES: foto grande deslocada e texto ao lado -->
-  <section class="section sec--champ" id="acomodacoes" aria-labelledby="h-aco">
-    <div class="container aco">
-      <FotoSlot rotulo="Foto do quarto" proporcao="4 / 5" class="aco__foto" />
-      <div class="aco__txt">
-        <h2 id="h-aco">Acomodações</h2>
-        <p class="lead">Nas avaliações do Google, os hóspedes elogiam a limpeza dos quartos, o conforto das camas e os bons chuveiros.</p>
-        <p class="sec-txt aco__nota">Categorias de quarto, capacidades e fotos oficiais serão publicadas depois da confirmação com o hotel.</p>
-        <a class="btn btn--linha" href="/acomodacoes/">Ver acomodações</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- COMODIDADES: lista com ícones desenhados, em colunas -->
-  <section class="section" id="comodidades" aria-labelledby="h-com">
-    <div class="container com-wrap">
-      <h2 id="h-com">Comodidades</h2>
-      <Comodidades />
-    </div>
-  </section>
-
-  <!-- EXPERIÊNCIA DOS HÓSPEDES: o que é elogiado vira texto corrido em serifa -->
-  <section class="section sec--champ" id="avaliacoes" aria-labelledby="h-av">
-    <div class="container av">
-      <div class="av__topo">
-        <h2 id="h-av">O que os hóspedes destacam</h2>
-        <p class="av__nota num">
-          <span class="estrelas" aria-hidden="true"><span class="estrelas__cheias" style={`width:${preenchido}%`}></span></span>
-          <span>{avaliacao.nota} de 5 no {avaliacao.fonte}, em {avaliacao.total} avaliações</span>
-        </p>
-      </div>
-      <ul class="elogios" data-revelar>{avaliacao.elogios.map((e) => <li>{e}</li>)}</ul>
-      <p class="sec-txt av__fonte">Resumo das avaliações públicas do {avaliacao.fonte}, não são citações literais. Notas e comentários mudam com o tempo.</p>
-    </div>
-  </section>
-
-  <!-- LOCALIZAÇÃO: endereço e o caminho até os principais pontos, por distância -->
+  <!-- LOCALIZAÇÃO: a régua de distâncias, a ideia gráfica nascida do conteúdo -->
   <section class="section" id="localizacao" aria-labelledby="h-loc">
     <div class="container loc">
       <div class="loc__txt">
@@ -101,7 +74,34 @@ const preenchido = (parseFloat(avaliacao.nota.replace(',', '.')) / 5) * 100;
     </div>
   </section>
 
-  <!-- RESERVAS E CONTATO: só o canal que existe, o telefone -->
+  <!-- AVALIAÇÕES: uma frase em escala enorme; abaixo, o que os hóspedes elogiam, por assunto -->
+  <section class="section sec--champ sec--grande" id="avaliacoes" aria-labelledby="h-av">
+    <div class="container av">
+      <h2 id="h-av" class="sr-only">Experiência dos hóspedes</h2>
+      <p class="mega num" data-revelar>Em {avaliacao.total} avaliações no {avaliacao.fonte}, a nota média é {avaliacao.nota}.</p>
+      <div class="temas" data-revelar>
+        {avaliacao.temas.map((t) => (
+          <div class="tema"><h3 class="tema__t">{t.titulo}</h3><ul>{t.itens.map((i) => <li>{i}</li>)}</ul></div>
+        ))}
+      </div>
+      <p class="sec-txt av__fonte">Resumo das avaliações públicas do {avaliacao.fonte}, não são citações literais. Notas e comentários mudam com o tempo.</p>
+    </div>
+  </section>
+
+  <!-- ACOMODAÇÕES: compacta, até haver fotos e categorias confirmadas -->
+  <section class="section" id="acomodacoes" aria-labelledby="h-aco">
+    <div class="container aco">
+      <FotoSlot rotulo="Foto do quarto" proporcao="4 / 3" class="aco__foto" />
+      <div class="aco__txt">
+        <h2 id="h-aco">Acomodações</h2>
+        <p class="lead">Os hóspedes elogiam a limpeza dos quartos, o conforto das camas e os bons chuveiros.</p>
+        <p class="sec-txt aco__nota">Categorias, capacidades e fotos oficiais serão publicadas depois da confirmação com o hotel.</p>
+        <a class="btn btn--linha" href="/acomodacoes/">Ver acomodações</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO: só o canal que existe, o telefone -->
   <section class="section sec--champ contato" aria-labelledby="h-contato">
     <div class="container contato__g">
       <div>
@@ -122,57 +122,40 @@ const preenchido = (parseFloat(avaliacao.nota.replace(',', '.')) / 5) * 100;
 
 <style>
   /* ---------- hero ---------- */
-  .hero { padding-top: clamp(2.5rem, 6vw, 5.5rem); }
-  .hero__topo { display: grid; gap: 2rem; align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .hero { padding-top: clamp(2.25rem, 5vw, 4.5rem); }
+  .hero__topo { display: grid; gap: 1.75rem; align-items: end; margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem); }
   .linha { display: block; overflow: hidden; padding-bottom: .06em; }
   .linha > span { display: block; }
-  .hero__sub { display: grid; gap: 1.25rem; max-width: 30rem; }
-  .hero__sub .lead { margin: 0; }
-  @media (min-width: 62rem) { .hero__topo { grid-template-columns: 1.35fr .65fr; gap: 4rem; } }
+  .hero__selo { margin: 0 0 1.1rem; font: 500 var(--t-mini)/1 var(--f-texto); letter-spacing: .12em; color: var(--ouro-texto); }
+  .hero__lado { display: grid; gap: 1.5rem; max-width: 30rem; }
+  .hero__lado .lead { margin: 0; }
+  .hero__acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .hero__acoes .btn { flex: 1 1 11rem; }
+  @media (min-width: 62rem) { .hero__topo { grid-template-columns: 1.4fr .6fr; gap: 4rem; } }
+  .hero__barra { margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .quadro { position: relative; height: clamp(15rem, 36vw, 30rem); overflow: hidden; background: var(--areia); border-radius: var(--raio); }
+  .hero__leg { margin: .8rem 0 0; font-size: .8rem; color: var(--marrom); text-align: right; max-width: none; }
 
-  /* moldura em largura total, recolhida ao trilho do conteúdo; o movimento a abre ao rolar */
-  .quadro { position: relative; height: clamp(22rem, 62vw, 46rem); overflow: hidden; background: var(--areia);
-    clip-path: inset(0 max(var(--gutter), calc((100% - var(--max)) / 2)) round var(--raio)); }
-  .hero__leg { margin: .9rem 0 0; font-size: .8rem; color: var(--marrom); text-align: right; max-width: none; }
-  .hero__barra { margin-top: 1.5rem; }
-  /* desktop: a barra sobe sobre a borda da moldura; a legenda fica na coluna ao lado, fora do vídeo */
+  /* ---------- seções com densidades diferentes ---------- */
+  .sec--densa { padding-block: clamp(3.5rem, 6vw, 5.5rem); }
+  .sec--grande { padding-block: clamp(6rem, 13vw, 12rem); }
+
+  /* ---------- do check-in ao check-out ---------- */
+  .passos { position: relative; display: grid; gap: 0; margin-top: clamp(2rem, 4vw, 3rem); }
+  .passos li { position: relative; display: grid; gap: .35rem; padding: 0 0 1.75rem 2.25rem; }
+  .passos::before { content: ''; position: absolute; left: .32rem; top: .55rem; bottom: 1.5rem; width: 1px; background: var(--ouro); }
+  .passos li::before { content: ''; position: absolute; left: 0; top: .5rem; width: .65rem; height: .65rem; border-radius: 50%; background: var(--champ); border: 1px solid var(--ouro-texto); }
+  .passo__n { font: 400 .8rem var(--f-texto); letter-spacing: .15em; color: var(--ouro-texto); }
+  .passo__t { font: 400 clamp(1.6rem, 1.3rem + 1vw, 2.1rem)/1.1 var(--f-titulo); }
+  .passos p { margin: 0; color: var(--marrom); max-width: 24ch; }
+  .com-wrap { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
   @media (min-width: 62rem) {
-    .hero__base { display: grid; grid-template-columns: minmax(0, 64rem) 1fr; gap: 2rem; align-items: start; }
-    .hero__barra { grid-column: 1; grid-row: 1; margin-top: -4.5rem; position: relative; z-index: 2; }
-    .hero__leg { grid-column: 2; grid-row: 1; }
+    .passos { grid-template-columns: repeat(5, 1fr); column-gap: 2rem; }
+    .passos::before { left: .32rem; right: 0; top: .32rem; bottom: auto; width: auto; height: 1px; }
+    .passos li { padding: 2rem 0 0 0; }
+    .passos li::before { top: 0; }
+    .passos li:first-child::before { background: var(--ouro); }
   }
-
-  /* ---------- sobre ---------- */
-  .sobre { display: grid; gap: 3rem; }
-  .sobre h2 { max-width: 16ch; }
-  .fatos { margin-top: 2.5rem; border-top: 1px solid var(--grafite); }
-  .fatos div { display: grid; grid-template-columns: 9.5rem 1fr; align-items: baseline; padding: 1.05rem 0; border-bottom: 1px solid var(--areia); }
-  .fatos dt { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--marrom); }
-  .fatos dd { font: 400 1.3rem/1.2 var(--f-titulo); }
-  @media (min-width: 62rem) { .sobre { grid-template-columns: 1.1fr .9fr; gap: 7rem; } .sobre__col { padding-top: .6rem; } }
-
-  /* ---------- acomodações ---------- */
-  .aco { display: grid; gap: 3rem; align-items: center; }
-  .aco__txt { display: grid; gap: 1.5rem; justify-items: start; }
-  .aco__txt .lead, .aco__nota { margin: 0; max-width: 40ch; }
-  @media (min-width: 62rem) { .aco { grid-template-columns: .95fr 1.05fr; gap: 7rem; } :global(.aco__foto) { margin-block: -9rem 0; } }
-
-  /* ---------- comodidades ---------- */
-  .com-wrap { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
-
-  /* ---------- avaliações ---------- */
-  .av { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
-  .av__topo { display: grid; gap: 1.5rem; }
-  .av__nota { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem 1.25rem; margin: 0; color: var(--grafite); }
-  .estrelas { position: relative; display: inline-block; width: 7.2rem; height: 1.25rem;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z' fill='none' stroke='%237a6338' stroke-width='1.1'/%3E%3C/svg%3E") repeat-x left center / 1.44rem 1.25rem; }
-  .estrelas__cheias { position: absolute; inset: 0 auto 0 0; overflow: hidden;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z' fill='%23b89a62' stroke='%237a6338' stroke-width='1.1'/%3E%3C/svg%3E") repeat-x left center / 1.44rem 1.25rem; }
-  .elogios { display: flex; flex-wrap: wrap; gap: .35rem 0; font: 400 clamp(1.6rem, 1.15rem + 1.9vw, 2.75rem)/1.25 var(--f-titulo); letter-spacing: -.015em; max-width: 64rem; }
-  .elogios li { display: inline-flex; align-items: center; }
-  .elogios li:not(:last-child)::after { content: ''; width: .42em; height: .42em; margin-inline: .55em; transform: rotate(45deg); border: 1px solid var(--ouro); flex: none; }
-  .av__fonte { margin: 0; font-size: .875rem; }
-  @media (min-width: 62rem) { .av__topo { grid-template-columns: 1fr auto; align-items: end; } }
 
   /* ---------- localização ---------- */
   .loc { display: grid; gap: 3rem; align-items: start; }
@@ -182,12 +165,27 @@ const preenchido = (parseFloat(avaliacao.nota.replace(',', '.')) / 5) * 100;
   .rota::before { content: ''; position: absolute; left: .4rem; top: 1.9rem; bottom: 1.9rem; width: 1px; background: var(--ouro); }
   .rota li { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 1rem; padding: 1.25rem 0 1.25rem 2.25rem; border-bottom: 1px solid var(--areia); }
   .rota li::before { content: ''; position: absolute; left: .1rem; top: 50%; width: .62rem; height: .62rem; margin-top: -.31rem; border-radius: 50%; background: var(--off); border: 1px solid var(--ouro-texto); }
-  .rota .rota__inicio::before { background: var(--ouro); border-color: var(--ouro-texto); }
+  .rota .rota__inicio::before { background: var(--ouro); }
   .rota__lugar { font-size: 1.0625rem; }
   .rota__km { font: 400 clamp(1.5rem, 1.2rem + 1vw, 2rem)/1 var(--f-titulo); }
   .rota__inicio .rota__km { font: 400 .875rem var(--f-texto); color: var(--marrom); }
   .rota__nota { margin: 1rem 0 0; font-size: .875rem; }
   @media (min-width: 62rem) { .loc { grid-template-columns: .9fr 1.1fr; gap: 7rem; } }
+
+  /* ---------- avaliações: uma frase enorme, sem rótulo e sem bloco de estatística ---------- */
+  .av { display: grid; gap: clamp(3rem, 6vw, 5rem); }
+  .mega { margin: 0; max-width: 20ch; font: 400 clamp(2.6rem, 1.1rem + 6.4vw, 6.75rem)/1.02 var(--f-titulo); font-variation-settings: 'opsz' 28; letter-spacing: -.03em; text-wrap: balance; }
+  .temas { display: grid; gap: 2rem; border-top: 1px solid var(--grafite); padding-top: 1.75rem; }
+  .tema__t { font: 500 .7rem/1 var(--f-texto); letter-spacing: .2em; text-transform: uppercase; color: var(--marrom); margin-bottom: .9rem; }
+  .tema li { padding: .5rem 0; font: 400 1.3rem/1.25 var(--f-titulo); }
+  .av__fonte { margin: 0; font-size: .875rem; }
+  @media (min-width: 52rem) { .temas { grid-template-columns: repeat(3, 1fr); gap: 3rem; } }
+
+  /* ---------- acomodações (compacta) ---------- */
+  .aco { display: grid; gap: 2.5rem; align-items: center; }
+  .aco__txt { display: grid; gap: 1.25rem; justify-items: start; }
+  .aco__txt .lead, .aco__nota { margin: 0; max-width: 40ch; }
+  @media (min-width: 62rem) { .aco { grid-template-columns: .85fr 1.15fr; gap: 6rem; } }
 
   /* ---------- contato ---------- */
   .contato__g { display: grid; gap: 3rem; align-items: end; }

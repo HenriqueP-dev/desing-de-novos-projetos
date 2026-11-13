@@ -27,14 +27,11 @@ export const avaliacao = {
   nota: '4,3',
   total: 353,
   fonte: 'Google',
-  elogios: [
-    'Quartos limpos e bem cuidados',
-    'Camas confortáveis',
-    'Bons chuveiros',
-    'Estacionamento conveniente',
-    'Bom custo-benefício',
-    'Café da manhã saboroso',
-    'Equipe educada e atenciosa',
+  // Os mesmos 7 elogios do documento, apenas agrupados por assunto.
+  temas: [
+    { titulo: 'No quarto', itens: ['Quartos limpos e bem cuidados', 'Camas confortáveis', 'Bons chuveiros'] },
+    { titulo: 'Na chegada', itens: ['Estacionamento conveniente', 'Equipe educada e atenciosa'] },
+    { titulo: 'Na conta e no café', itens: ['Bom custo-benefício', 'Café da manhã saboroso'] },
   ],
 } as const;
 

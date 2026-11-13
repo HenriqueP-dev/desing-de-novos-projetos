@@ -62,7 +62,7 @@ test.describe('conteúdo fiel ao documento do hotel', () => {
     const t = await page.locator('body').innerText();
     for (const esperado of ['Av. do Ébano, 1415', '14784-383', '(17) 3325-7186', '2 estrelas', 'a partir das 13h', 'até as 12h', '353 avaliações', '3,7 km', '11 km']) expect(t).toContain(esperado);
     await expect(page.locator('#comodidades li')).toHaveCount(6);
-    await expect(page.locator('.elogios li')).toHaveCount(7);
+    await expect(page.locator('.temas li')).toHaveCount(7);
     await expect(page.locator('.contato__tel')).toHaveAttribute('href', 'tel:+551733257186');
   });
 });
@@ -170,5 +170,25 @@ test.describe('vídeo e movimento', () => {
     await page.waitForTimeout(1600);
     const ocultos = await page.evaluate(() => [...document.querySelectorAll('[data-revelar]')].filter((e) => getComputedStyle(e).opacity !== '1').length);
     expect(ocultos).toBe(0);
+  });
+});
+
+test.describe('ação na primeira tela e barra de ligar', () => {
+  test('desktop: ligar e formulário aparecem sem rolar', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const ligar = page.locator('.hero__acoes').getByRole('link', { name: 'Ligar para o hotel' });
+    await expect(ligar).toHaveAttribute('href', 'tel:+551733257186');
+    await expect(ligar).toBeInViewport();
+    await expect(page.locator('.hero__barra form')).toBeInViewport({ ratio: 0.5 });
+    await expect(page.locator('.ligar')).toBeHidden();
+  });
+  test('celular: botão de ligar na primeira tela e barra fixa', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+    await expect(page.locator('.hero__acoes').getByRole('link', { name: 'Ligar para o hotel' })).toBeInViewport();
+    const barra = page.locator('.ligar');
+    await expect(barra).toBeVisible();
+    await expect(barra).toHaveAttribute('href', 'tel:+551733257186');
   });
 });
