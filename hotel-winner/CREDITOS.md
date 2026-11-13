@@ -6,6 +6,7 @@ Sem autor, link e licença, o arquivo não deve ir para o site público.
 | Arquivo | Onde aparece | Origem (link) | Autor | Licença | Provisório? |
 |---|---|---|---|---|---|
 | `public/videos/hero.mp4`, `hero.webm`, `hero-poster.jpg` | Fundo do topo da home | https://mixkit.co/free-stock-video/a-road-between-a-big-green-agriculture-field-827/ (clipe 827, "A road between a big green agriculture field") | Não informado na página do clipe | Mixkit Stock Video Free License: uso comercial e não comercial, cópia e modificação permitidas, crédito não obrigatório (a Mixkit agradece). Licença lida em 13/11/2026. | **Sim**, até o vídeo profissional |
+| `public/fotos/apto-*.webp` (5 arquivos: duplo, triplo x3, quádruplo) | Home (cartões) e página Acomodações | **Não informada**: enviadas pelo cliente, sem link de origem | Não informado | **Não confirmada** | **Sim**: confirmar origem, autor e autorização de uso com o hotel antes de publicar |
 
 Observações:
 - Foto ou vídeo de banco continua marcado no site como "ilustrativo".

@@ -52,8 +52,10 @@ export const distancias = [
 
 /** Ainda precisa ser confirmado com o hotel. O site não afirma nenhum destes itens. */
 export const pendencias = [
-  'Quantidade e categorias de quartos',
-  'Fotos oficiais dos quartos e das instalações',
+  'Categorias de apartamento: o texto do site antigo cita duplo, triplo, quádruplo e quíntuplo; "individual" não apareceu',
+  'Capacidade e camas de cada categoria, e quantos apartamentos há de cada tipo',
+  'Origem e direitos das fotos dos apartamentos, e a que categoria cada uma corresponde',
+  'Fotos da fachada, recepção, banheiros, café da manhã, estacionamento e áreas internas',
   'Descrição dos tipos de acomodação',
   'Valores atualizados das diárias',
   'Formas de pagamento',
@@ -65,3 +67,48 @@ export const pendencias = [
   'O que "Acessibilidade" inclui',
   'Bairro: o documento cita "Dr. Paulo Prata" e "Jardim Campo Redondo"',
 ] as const;
+
+/**
+ * Equipamentos dos apartamentos.
+ * Origem: texto da página "Apartamentos" do site antigo do hotel (hotelwinner.com.br/hw/?page_id=18),
+ * lido por meio de um resumo de busca, e a lista que o cliente passou. NÃO foi aberto direto no site oficial:
+ * confirmar com o hotel antes de publicar de verdade (ver PENDENCIAS.md).
+ */
+export const equipamentosApto = [
+  'Cama box',
+  'Ar-condicionado',
+  'TV de LED com parabólica',
+  'Frigobar',
+  'Banheiro amplo com box blindex',
+  'Ducha higiênica',
+  'Secador de cabelo',
+] as const;
+
+type FotoApto = { src: string; alt: string; legenda: string };
+
+/**
+ * Categorias de apartamento citadas no texto do site antigo: Duplos, Triplos, Quádruplos e Quíntuplos.
+ * "Individual" foi citado pelo cliente, mas não apareceu nesse texto: fica em PENDENCIAS.md.
+ * A capacidade vem do NOME da categoria (duplo = 2 pessoas etc.) e ainda precisa ser confirmada.
+ * As legendas descrevem só o que aparece em cada foto. A foto de cada categoria foi escolhida pelo número de camas
+ * visíveis, e o hotel precisa confirmar a correspondência.
+ */
+export const apartamentos: readonly { id: string; nome: string; pessoas: number; fotos: readonly FotoApto[] }[] = [
+  {
+    id: 'duplo', nome: 'Duplo', pessoas: 2,
+    fotos: [{ src: '/fotos/apto-duplo-cama-casal.webp', alt: 'Apartamento com cama de casal, mesa redonda com duas cadeiras, TV na parede, ar-condicionado e armário de madeira.', legenda: 'Na foto: cama de casal, mesa com duas cadeiras, TV na parede e ar-condicionado.' }],
+  },
+  {
+    id: 'triplo', nome: 'Triplo', pessoas: 3,
+    fotos: [
+      { src: '/fotos/apto-triplo-casal-e-solteiro.webp', alt: 'Apartamento com uma cama de casal e uma de solteiro, criados-mudos de madeira e um quadro na parede.', legenda: 'Na foto: uma cama de casal e uma de solteiro.' },
+      { src: '/fotos/apto-triplo-tres-solteiros.webp', alt: 'Apartamento com três camas de solteiro, ar-condicionado, TV na parede, armário de madeira e frigobar.', legenda: 'Na foto: três camas de solteiro, ar-condicionado, TV, armário e frigobar.' },
+      { src: '/fotos/apto-triplo-tres-solteiros-frigobar.webp', alt: 'Três camas de solteiro lado a lado, com criados-mudos e um frigobar no canto.', legenda: 'Na foto: três camas de solteiro e frigobar.' },
+    ],
+  },
+  {
+    id: 'quadruplo', nome: 'Quádruplo', pessoas: 4,
+    fotos: [{ src: '/fotos/apto-quadruplo-tres-camas.webp', alt: 'Apartamento com três camas lado a lado, uma delas mais larga, criados-mudos de madeira e quadro na parede.', legenda: 'Na foto: três camas lado a lado, uma delas mais larga.' }],
+  },
+  { id: 'quintuplo', nome: 'Quíntuplo', pessoas: 5, fotos: [] },
+];

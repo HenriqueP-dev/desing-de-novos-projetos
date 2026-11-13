@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import HeroVideo from '../components/HeroVideo.astro';
+import FotoSlot from '../components/FotoSlot.astro';
 import Comodidades from '../components/Comodidades.astro';
 import ReservaForm from '../components/ReservaForm.astro';
 import { temVideoHero } from '../lib/midia';
-import { hotel, avaliacao, distancias } from '../data/hotel';
+import { hotel, avaliacao, distancias, apartamentos } from '../data/hotel';
 
 // A ideia do site: o hotel é uma base prática para quem chega a Barretos.
 // Cada passo usa só fatos do documento do hotel (ou o que os hóspedes elogiam nas avaliações).
@@ -47,6 +48,31 @@ const passos = [
         <h3 class="sr-only">Comodidades</h3>
         <Comodidades linha />
       </div>
+    </div>
+  </section>
+
+  <!-- ACOMODAÇÕES: as categorias citadas no site antigo do hotel, com as fotos reais recebidas -->
+  <section class="section" id="acomodacoes" aria-labelledby="h-aco">
+    <div class="container">
+      <div class="aco__topo">
+        <h2 id="h-aco">Acomodações</h2>
+        <p class="lead">Apartamentos duplos, triplos, quádruplos e quíntuplos, com cama box, ar-condicionado, TV de LED com parabólica e frigobar.</p>
+      </div>
+      <ul class="aco__grade" data-revelar>
+        {apartamentos.map((a) => (
+          <li>
+            <a class="aco__card" href={`/acomodacoes/#${a.id}`}>
+              {a.fotos.length > 0
+                ? <img src={a.fotos[0].src} alt={a.fotos[0].alt} width="600" height="400" loading="lazy" decoding="async" />
+                : <FotoSlot rotulo="" proporcao="3 / 2" aviso="Foto a ser fornecida pelo hotel" />}
+              <span class="aco__nome">{a.nome}</span>
+              <span class="aco__cap num">Para {a.pessoas} pessoas</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="sec-txt aco__nota">Capacidade pelo nome da categoria e fotos enviadas para o projeto; o hotel ainda vai confirmar capacidade, camas e a categoria de cada foto.</p>
+      <a class="btn btn--linha" href="/acomodacoes/">Ver os apartamentos</a>
     </div>
   </section>
 
@@ -142,6 +168,20 @@ const passos = [
     .passos li::before { top: 0; }
     .passos li:first-child::before { background: var(--ouro); }
   }
+
+  /* ---------- acomodações ---------- */
+  .aco__topo { display: grid; gap: 1.25rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .aco__topo .lead { margin: 0; max-width: 46ch; }
+  @media (min-width: 62rem) { .aco__topo { grid-template-columns: 1fr 1fr; align-items: end; gap: 6rem; } }
+  .aco__grade { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1rem; margin-bottom: 1.5rem; }
+  @media (min-width: 62rem) { .aco__grade { grid-template-columns: repeat(4, 1fr); gap: 1.5rem; } }
+  .aco__card { display: grid; gap: .35rem; text-decoration: none; }
+  .aco__card img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--raio); background: var(--areia); }
+  .aco__card :global(.fs) { width: 100%; }
+  .aco__nome { margin-top: .5rem; font: 400 clamp(1.5rem, 1.2rem + 1vw, 2rem)/1.1 var(--f-titulo); }
+  .aco__cap { font-size: .95rem; color: var(--marrom); }
+  .aco__nota { margin: 0 0 1.75rem; font-size: .9rem; max-width: 62ch; }
+  @media (hover: hover) { .aco__card img { transition: filter .5s var(--ease); } .aco__card:hover img { filter: brightness(.94); } .aco__card:hover .aco__nome { text-decoration: underline; text-decoration-color: var(--ouro); text-decoration-thickness: 3px; text-underline-offset: .2em; } }
 
   /* ---------- localização ---------- */
   .loc { display: grid; gap: 3rem; align-items: start; }

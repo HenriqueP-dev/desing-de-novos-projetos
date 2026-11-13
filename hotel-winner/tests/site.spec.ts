@@ -197,3 +197,31 @@ test.describe('ação na primeira tela e barra de ligar', () => {
     await expect(barra).toHaveAttribute('href', 'tel:+551733257186');
   });
 });
+
+test.describe('acomodações', () => {
+  test('mostra as quatro categorias do texto do hotel e não inventa "individual"', async ({ page }) => {
+    await page.goto('/acomodacoes/');
+    await expect(page.locator('article.cat h3')).toHaveText(['Apartamento Duplo', 'Apartamento Triplo', 'Apartamento Quádruplo', 'Apartamento Quíntuplo']);
+    const t = await page.locator('main, body').first().innerText();
+    expect(t).not.toMatch(/Apartamento Individual/);
+  });
+  test('as 5 fotos reais carregam e o quíntuplo assume que falta a foto', async ({ page }) => {
+    await page.goto('/acomodacoes/');
+    const imgs = page.locator('article.cat img');
+    await expect(imgs).toHaveCount(5);
+    for (let i = 0; i < 5; i++) {
+      await imgs.nth(i).scrollIntoViewIfNeeded();
+      await expect.poll(() => imgs.nth(i).evaluate((e: HTMLImageElement) => e.complete && e.naturalWidth > 0)).toBe(true);
+      expect(((await imgs.nth(i).getAttribute('alt')) ?? '').length).toBeGreaterThan(20);
+    }
+    await expect(page.locator('#quintuplo')).toContainText('Foto a ser fornecida pelo hotel');
+  });
+  test('equipamentos em todos os apartamentos e cartões na home levam à categoria', async ({ page }) => {
+    await page.goto('/acomodacoes/');
+    await expect(page.locator('.eq__lista li')).toHaveCount(7);
+    await page.goto('/');
+    await expect(page.locator('.aco__card')).toHaveCount(4);
+    await page.locator('.aco__card').nth(1).click();
+    await expect(page).toHaveURL(/\/acomodacoes\/#triplo$/);
+  });
+});

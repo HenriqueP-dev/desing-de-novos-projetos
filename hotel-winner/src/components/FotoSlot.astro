@@ -4,13 +4,13 @@
  * assumido como tal (moldura dourada fina + legenda), em vez de inventar uma imagem.
  * Para trocar: passe foto="/fotos/arquivo.jpg" (arquivo em public/fotos/) e um alt descritivo.
  */
-interface Props { rotulo: string; foto?: string; alt?: string; proporcao?: string; class?: string }
-const { rotulo, foto, alt = '', proporcao = '4 / 5', class: cls } = Astro.props;
+interface Props { rotulo: string; foto?: string; alt?: string; proporcao?: string; class?: string; aviso?: string }
+const { rotulo, foto, alt = '', proporcao = '4 / 5', class: cls, aviso = 'Espaço reservado para a foto oficial' } = Astro.props;
 ---
 <figure class:list={['fs', cls]} style={`aspect-ratio:${proporcao}`} data-revelar-foto>
   {foto
     ? <img src={foto} alt={alt} loading="lazy" decoding="async" data-parallax />
-    : <div class="fs__vazio"><span class="fs__t">{rotulo}</span><span class="fs__s">Espaço reservado para a foto oficial</span></div>}
+    : <div class="fs__vazio"><span class="fs__t">{rotulo}</span><span class="fs__s">{aviso}</span></div>}
 </figure>
 <style>
   .fs { position: relative; margin: 0; overflow: hidden; background: var(--areia); border-radius: var(--raio); }
