@@ -28,6 +28,20 @@ export const cartoes = ['Mastercard', 'Visa', 'American Express', 'Diners Club',
 /** Lema que aparece no topo do site do hotel. */
 export const lema = 'Excelência em servi-lo!';
 
+/**
+ * Pontos turísticos. A página "Pontos Turísticos" do site do hotel diz: "Região dos Lagos, Parque do Peão,
+ * Estação Cultura, Museu Histórico, Artístico e Folclórico "Rui Menezes", são alguns dos pontos turísticos de Barretos."
+ * A Catedral e as distâncias (3,7 km e 11 km) vêm do documento de conteúdo. As demais distâncias não foram informadas.
+ * A página oficial tem 12 fotos sem legenda; não foram usadas (resolução baixa, sem identificação, sem autorização).
+ */
+export const pontosTuristicos = [
+  { nome: 'Região dos Lagos', distancia: '' },
+  { nome: 'Parque do Peão', distancia: '11 km do hotel' },
+  { nome: 'Estação Cultura', distancia: '' },
+  { nome: 'Museu Histórico, Artístico e Folclórico “Rui Menezes”', distancia: '' },
+  { nome: 'Catedral do Divino Espírito Santo', distancia: '3,7 km do hotel' },
+] as const;
+
 export const avaliacao = {
   nota: '4,3',
   total: 353,

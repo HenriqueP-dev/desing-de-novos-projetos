@@ -14,6 +14,7 @@ O site oficial (hotelwinner.com.br) **não pôde ser aberto diretamente** nesta 
 - A página não cita capacidade, camas, nem a categoria "individual".
 - Aparece o título "Master" acima do texto e das fotos, sem explicação. Pode ser o nome do álbum ou de uma categoria: **não usado**.
 - Segundo a captura da página enviada pelo cliente, os 13 miniaturas se repetem bastante (mesmas camas e cômodos); o cliente decidiu que **não é preciso usar todas**. Entre elas há uma foto de banheiro (toalhas e pia) e uma da fechadura eletrônica da porta, que não foram recebidas em boa resolução.
+- Página "Pontos Turísticos" (hotelwinner.com.br/hw/?page_id=27), vista numa captura enviada pelo cliente: "Região dos Lagos, Parque do Peão, Estação Cultura, Museu Histórico, Artístico e Folclórico “Rui Menezes”, são alguns dos pontos turísticos de Barretos." A página tem 12 fotos sem legenda. **Usado:** os 4 nomes (página `/pontos-turisticos/` e seção na home), mais a Catedral e as distâncias de 11 km e 3,7 km do documento de conteúdo. **Não usado:** as 12 fotos (miniaturas, sem identificação nem autorização); as demais distâncias (não informadas).
 - Menu do site: Apartamentos, Estacionamento, Como Chegar, Galeria, Contato. As páginas Estacionamento, Como Chegar e Galeria ainda não foram lidas.
 - Ícone do Facebook no topo do site (o endereço do perfil não foi informado).
 - Lema no topo: "Excelência em servi-lo!" (usado no rodapé).

@@ -5,7 +5,7 @@ import FotoSlot from '../components/FotoSlot.astro';
 import Comodidades from '../components/Comodidades.astro';
 import ReservaForm from '../components/ReservaForm.astro';
 import { temVideoHero } from '../lib/midia';
-import { hotel, avaliacao, distancias, apartamentos, cartoes } from '../data/hotel';
+import { hotel, avaliacao, distancias, apartamentos, cartoes, pontosTuristicos } from '../data/hotel';
 
 // A ideia do site: o hotel é uma base prática para quem chega a Barretos.
 // Cada passo usa só fatos do documento do hotel (ou o que os hóspedes elogiam nas avaliações).
@@ -93,6 +93,19 @@ const passos = [
         </ol>
         <p class="sec-txt rota__nota">Distâncias aproximadas a partir do hotel.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- PONTOS TURÍSTICOS: os nomes da página do hotel, em tipografia grande; o detalhe fica numa página própria -->
+  <section class="section sec--champ sec--densa" id="pontos" aria-labelledby="h-pt">
+    <div class="container pt">
+      <div class="pt__txt">
+        <h2 id="h-pt">Para conhecer em Barretos</h2>
+        <a class="btn btn--linha" href="/pontos-turisticos/">Ver pontos turísticos</a>
+      </div>
+      <ul class="pt__lista" data-revelar>
+        {pontosTuristicos.map((p) => <li>{p.nome}</li>)}
+      </ul>
     </div>
   </section>
 
@@ -200,6 +213,13 @@ const passos = [
   @media (min-width: 62rem) { .loc { grid-template-columns: .9fr 1.1fr; gap: 7rem; } }
 
   .sec--preto { background: #000; color: #fff; }
+  /* ---------- pontos turísticos ---------- */
+  .pt { display: grid; gap: 2rem; align-items: start; }
+  .pt__txt { display: grid; gap: 1.5rem; justify-items: start; }
+  .pt__lista { display: grid; border-top: 3px solid var(--ouro); }
+  .pt__lista li { padding: .9rem 0; border-bottom: 1px solid var(--areia); font: 400 clamp(1.4rem, 1.1rem + 1.2vw, 2.1rem)/1.15 var(--f-titulo); }
+  @media (min-width: 62rem) { .pt { grid-template-columns: .8fr 1.2fr; gap: 6rem; } }
+
   /* ---------- avaliações: uma frase enorme, sem rótulo e sem bloco de estatística ---------- */
   .av { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
   .mega { margin: 0; max-width: 20ch; font: 400 clamp(2.6rem, 1.1rem + 6.4vw, 6.75rem)/1.02 var(--f-titulo); font-variation-settings: 'opsz' 28; letter-spacing: -.03em; text-wrap: balance; }

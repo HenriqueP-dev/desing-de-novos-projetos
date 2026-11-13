@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const PAGINAS = ['/', '/acomodacoes/', '/contato/'];
+const PAGINAS = ['/', '/acomodacoes/', '/pontos-turisticos/', '/contato/'];
 
 test.describe('páginas', () => {
   for (const rota of PAGINAS) {
@@ -224,4 +224,33 @@ test.describe('acomodações', () => {
     await page.locator('.aco__card').nth(1).click();
     await expect(page).toHaveURL(/\/acomodacoes\/#triplo$/);
   });
+});
+
+test.describe('pontos turísticos', () => {
+  test('página com os nomes do site do hotel, sem inventar distâncias', async ({ page }) => {
+    await page.goto('/pontos-turisticos/');
+    await expect(page.locator('h1')).toHaveText('Pontos turísticos');
+    await expect(page.locator('.pts__nome')).toHaveText(['Região dos Lagos', 'Parque do Peão', 'Estação Cultura', 'Museu Histórico, Artístico e Folclórico “Rui Menezes”', 'Catedral do Divino Espírito Santo']);
+    await expect(page.locator('.pts li').nth(1)).toContainText('11 km');
+    await expect(page.locator('.pts li').nth(0)).toContainText('a confirmar');
+  });
+  test('home tem a seção e o menu leva à página', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('.pt__lista li')).toHaveCount(5);
+    await page.locator('header .hd__l').getByRole('link', { name: 'Pontos turísticos' }).click();
+    await expect(page).toHaveURL(/\/pontos-turisticos\/$/);
+  });
+  for (const largura of [1000, 1201, 1280, 1440]) {
+    test(`cabeçalho não estoura nem quebra linha em ${largura}px`, async ({ page }) => {
+      await page.setViewportSize({ width: largura, height: 800 });
+      await page.goto('/');
+      const sobra = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(sobra).toBeLessThanOrEqual(0);
+      const caixas = await page.locator('header .hd__a:visible, header .hd__cta:visible, header .hd__logo').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [r.left, r.right]; }).sort((p, q) => p[0] - q[0]));
+      for (let i = 1; i < caixas.length; i++) expect(caixas[i][0]).toBeGreaterThanOrEqual(caixas[i - 1][1] + 8);
+      const alturas = await page.locator('header .hd__a:visible, header .hd__cta:visible').evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+      for (const a of alturas) expect(a).toBeLessThan(60);
+    });
+  }
 });

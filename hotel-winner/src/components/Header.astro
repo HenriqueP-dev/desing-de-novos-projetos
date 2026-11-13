@@ -5,8 +5,9 @@ interface Props { temReserva?: boolean }
 const { temReserva = true } = Astro.props;
 // Em páginas sem formulário (ex.: 404) o botão leva ao formulário da home.
 const alvoReserva = temReserva ? '#reserva' : '/#reserva';
-const esq = [{ href: '/acomodacoes/', t: 'Acomodações' }, { href: '/#comodidades', t: 'Comodidades' }];
+const esq = [{ href: '/acomodacoes/', t: 'Acomodações' }, { href: '/pontos-turisticos/', t: 'Pontos turísticos' }];
 const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/', t: 'Contato' }];
+const extra = [{ href: '/#comodidades', t: 'Comodidades' }];
 ---
 <header class="hd" data-hd>
   <div class="hd__in">
@@ -20,7 +21,7 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
   </div>
   <div id="painel" class="hd__painel" hidden>
     <nav aria-label="Menu">
-      {[...esq, ...dir].map((l) => <a href={l.href}>{l.t}</a>)}
+      {[...esq, ...extra, ...dir].map((l) => <a href={l.href}>{l.t}</a>)}
       <a href={alvoReserva}>Pedir reserva</a>
       <a href={hotel.telefoneLink}>Ligar para o hotel</a>
     </nav>
@@ -46,7 +47,7 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
   btn.addEventListener('click', () => abrir(btn.getAttribute('aria-expanded') !== 'true'));
   painel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => abrir(false)));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !painel.hidden) { abrir(false); btn.focus(); } });
-  matchMedia('(min-width: 62.01rem)').addEventListener('change', (m) => { if (m.matches && !painel.hidden) abrir(false, false); });
+  matchMedia('(min-width: 75.01rem)').addEventListener('change', (m) => { if (m.matches && !painel.hidden) abrir(false, false); });
 </script>
 <style>
   .hd { position: sticky; top: 0; z-index: 30; height: var(--hd-h); background: var(--off); transition: box-shadow .4s var(--ease), background-color .4s var(--ease); }
@@ -55,7 +56,8 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
   .hd.is-rolado::after { opacity: 1; }
   .hd__in { height: 100%; width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
   .hd__logo { text-decoration: none; display: inline-flex; align-items: center; min-height: 2.75rem; }
-  .hd__l, .hd__links { display: flex; gap: 2.2rem; }
+  .hd__l, .hd__links { display: flex; gap: clamp(1.1rem, 2.2vw, 2.2rem); }
+  .hd__a, .hd__cta { white-space: nowrap; }
   .hd__r { display: flex; justify-content: flex-end; align-items: center; gap: 2.2rem; }
   .hd__a { position: relative; display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; color: var(--grafite); }
   .hd__a::after { content: ''; position: absolute; left: 0; right: 0; bottom: .6rem; height: 2px; background: var(--ouro); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-out); }
@@ -67,10 +69,10 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
   .hd__painel nav { display: grid; }
   .hd__painel a { padding: 1rem 0; border-bottom: 1px solid var(--areia); font: 400 clamp(2rem, 8vw, 2.8rem)/1.1 var(--f-titulo); color: var(--grafite); text-decoration: none; }
   @keyframes painel { from { opacity: 0; transform: translateY(-.75rem); } to { opacity: 1; transform: none; } }
-  @media (max-width: 62rem) {
+  @media (max-width: 75rem) {
     .hd__in { grid-template-columns: 1fr auto; } .hd__l, .hd__links, .hd__cta { display: none; }
     .hd__logo { grid-column: 1; grid-row: 1; justify-self: start; } .hd__logo :global(.logo) { justify-items: start; }
     .hd__r { grid-column: 2; grid-row: 1; } .hd__menu { display: block; }
   }
-  @media (min-width: 62.01rem) { .hd__painel { display: none !important; } }
+  @media (min-width: 75.01rem) { .hd__painel { display: none !important; } }
 </style>
