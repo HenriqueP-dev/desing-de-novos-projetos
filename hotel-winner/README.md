@@ -33,14 +33,17 @@ Escreva sempre um `alt` descritivo. Depois de trocar, revise o contraste do text
 
 ## Vídeo no topo da home
 
-O topo da home usa a ilustração. Para usar um vídeo:
+Hoje o topo da home usa um vídeo provisório do Mixkit (veja `CREDITOS.md`). Sem os arquivos de `public/videos/`, ele volta à ilustração. Para trocar o vídeo:
 
 1. Guarde o original em `videos-originais/` (essa pasta não vai para o GitHub).
-2. Rode `scripts/preparar-video.sh videos-originais/seu-video.mp4 3 10` (começa no segundo 3 e usa 10 segundos).
-   O script gera `public/videos/hero.mp4`, `hero.webm` e `hero-poster.jpg`, sem áudio e com até 4 MB.
+2. Rode `scripts/preparar-video.sh videos-originais/seu-video.mp4 1 13` (começa no segundo 1 e usa 13 segundos).
+   O script gera `public/videos/hero.mp4`, `hero.webm` e `hero-poster.jpg`, sem áudio, e dissolve o final no começo para a repetição não dar salto.
+   Se passar de 4 MB, aumente a compressão: `CRF_MP4=33 CRF_WEBM=45 scripts/preparar-video.sh ...`.
 3. Rode o build. O site detecta os arquivos sozinho e passa a mostrar o vídeo, com botão de pausa.
 4. Preencha `CREDITOS.md` com a origem e a licença.
 
+Com vídeo, o texto do topo fica branco sobre um véu escuro leve. Se o novo vídeo for claro, ajuste `hero--video` em `src/pages/index.astro`
+e **meça o contraste do título em vários momentos do vídeo**.
 Para voltar à ilustração, apague os três arquivos de `public/videos/`.
 O vídeo não toca sozinho para quem pede "reduzir movimento" no sistema nem com economia de dados.
 

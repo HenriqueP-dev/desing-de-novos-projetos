@@ -1,13 +1,13 @@
 ---
 import Logo from './Logo.astro';
-interface Props { sobre?: boolean; temReserva?: boolean }
-const { sobre = false, temReserva = true } = Astro.props;
+interface Props { sobre?: boolean; temReserva?: boolean; textoClaro?: boolean }
+const { sobre = false, temReserva = true, textoClaro = false } = Astro.props;
 // Em páginas sem formulário (ex.: 404) o botão leva ao formulário da home.
 const alvoReserva = temReserva ? '#reserva' : '/#reserva';
 const esq = [{ href: '/acomodacoes/', t: 'Acomodações' }, { href: '/#comodidades', t: 'Comodidades' }];
 const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/', t: 'Contato' }];
 ---
-<header class={`hd ${sobre ? 'hd--sobre' : 'hd--solido'}`}>
+<header class={`hd ${sobre ? 'hd--sobre' : 'hd--solido'} ${textoClaro ? 'hd--claro' : ''}`}>
   <div class="hd__in">
     <nav class="hd__l tracado" aria-label="Principal">{esq.map((l) => <a href={l.href}>{l.t}</a>)}</nav>
     <a href="/" class="hd__logo"><Logo /></a>
@@ -44,6 +44,10 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
 <style>
   .hd { position: relative; z-index: 30; height: var(--hd-h); }
   .hd--solido { background: #fff; border-bottom: 1px solid var(--nevoa-2); }
+  /* sobre foto ou vídeo escuro: texto branco. O painel do menu continua branco, então volta ao texto escuro. */
+  .hd--claro { color: #fff; }
+  .hd--claro .hd__painel { color: var(--tinta); }
+  .hd--claro .hd__menu[aria-expanded='true'] { color: var(--tinta); }
   .hd__in { height: 100%; width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
   .hd a, .hd__menu { text-decoration: none; padding: .6rem 0; }
   .hd__l { display: flex; gap: 2rem; }
