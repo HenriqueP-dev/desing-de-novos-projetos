@@ -49,14 +49,14 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
 <style>
   .hd { position: sticky; top: 0; z-index: 30; height: var(--hd-h); background: var(--off); transition: box-shadow .4s var(--ease), background-color .4s var(--ease); }
   .hd::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--areia); opacity: 0; transition: opacity .4s var(--ease); }
-  .hd.is-rolado { box-shadow: 0 10px 30px -24px rgb(41 39 37 / .45); }
+  .hd.is-rolado { box-shadow: 0 10px 30px -24px rgb(0 0 0 / .45); }
   .hd.is-rolado::after { opacity: 1; }
   .hd__in { height: 100%; width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
-  .hd__logo { text-decoration: none; }
+  .hd__logo { text-decoration: none; display: inline-flex; align-items: center; min-height: 2.75rem; }
   .hd__l, .hd__links { display: flex; gap: 2.2rem; }
   .hd__r { display: flex; justify-content: flex-end; align-items: center; gap: 2.2rem; }
   .hd__a { position: relative; display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; color: var(--grafite); }
-  .hd__a::after { content: ''; position: absolute; left: 0; right: 0; bottom: .6rem; height: 1px; background: var(--ouro); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-out); }
+  .hd__a::after { content: ''; position: absolute; left: 0; right: 0; bottom: .6rem; height: 2px; background: var(--ouro); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-out); }
   @media (hover: hover) { .hd__a:hover::after { transform: scaleX(1); } }
   .hd__cta { min-height: 2.75rem; padding: .6rem 1.4rem; }
   .hd__menu { display: none; position: relative; z-index: 40; min-height: 2.75rem; padding: .5rem 0; background: none; border: 0; color: var(--grafite); font-family: var(--f-texto); cursor: pointer; }

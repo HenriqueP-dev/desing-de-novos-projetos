@@ -1,7 +1,7 @@
 # Hotel Winner (projeto conceitual)
 
 Site conceitual para o Hotel Winner, de Barretos (SP). **Não é o site oficial** e nada aqui foi
-confirmado com o hotel. Identidade clara de hotel boutique: off-white, champagne e dourado suave; Bodoni Moda nos títulos e Jost no texto.
+confirmado com o hotel. Identidade clara de hotel boutique: paleta original do hotel (preto, amarelo, vermelho, branco); Bodoni Moda nos títulos e Jost no texto.
 
 ## Rodar
 
@@ -14,17 +14,21 @@ npm run test:e2e # testes no navegador (1ª vez: npx playwright install chromium
 
 ## Identidade visual
 
+Paleta original do hotel (preto, amarelo, vermelho, laranja, branco e grafite), aplicada com contraste medido.
+
 | Cor | Código | Uso | Contraste |
 |---|---|---|---|
-| Off-white | `#FAF9F6` | Fundo principal | — |
-| Champagne | `#EDE5D7` | Seções alternadas | — |
-| Dourado suave | `#B89A62` | Só filetes e detalhes | 2,55:1: **nunca** texto nem borda de campo |
-| Dourado escuro | `#7A6338` | Ícones e destaques em texto | 5,4:1 no off-white |
-| Bege areia | `#D6C7B2` | Linhas divisórias, fundo de foto | — |
-| Marrom elegante | `#65564A` | Texto secundário, borda dos campos | 6,7:1 off-white, 5,6:1 champagne |
-| Grafite | `#292725` | Títulos e texto | 14,1:1 |
+| Branco | `#FFFFFF` | Fundo principal | — |
+| Amarelo claro | `#FFF6D6` | Faixas de seção (separam do branco) | — |
+| Amarelo Winner | `#FFCC00` | Fundo de botão, marcadores, destaques sobre preto | 1,4:1 no branco: **nunca** texto nem borda de campo; 14,3:1 com texto preto |
+| Preto | `#000000` | Títulos, botões escuros, seção de avaliações | 21:1 |
+| Grafite | `#292929` | Texto corrido | 14,7:1 |
+| Cinza | `#555555` | Texto secundário | 7,5:1 |
+| Vermelho | `#FF0000` | Só detalhes gráficos (traços da logo) | 4,0:1: não usar em texto |
+| Vermelho escuro | `#B30000` | Texto pequeno de destaque | 6,7:1 |
+| Laranja | `#FF9934` | Reservado (ainda sem uso) | — |
 
-Movimento: um momento principal (a moldura do vídeo se abre ao rolar) e revelações discretas.
+Movimento: entrada do título, revelações discretas e um leve zoom no vídeo ao rolar.
 Tudo desliga com "reduzir movimento". As animações usam só `opacity` e transformações; o conteúdo
 continua legível para leitores de tela antes de aparecer.
 

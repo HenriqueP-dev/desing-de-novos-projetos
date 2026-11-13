@@ -75,10 +75,10 @@ const passos = [
   </section>
 
   <!-- AVALIAÇÕES: uma frase em escala enorme; abaixo, o que os hóspedes elogiam, por assunto -->
-  <section class="section sec--champ sec--grande" id="avaliacoes" aria-labelledby="h-av">
+  <section class="section sec--preto sec--grande" id="avaliacoes" aria-labelledby="h-av">
     <div class="container av">
       <h2 id="h-av" class="sr-only">Experiência dos hóspedes</h2>
-      <p class="mega num" data-revelar>Em {avaliacao.total} avaliações no {avaliacao.fonte}, a nota média é {avaliacao.nota}.</p>
+      <p class="mega num" data-revelar>Em {avaliacao.total} avaliações no {avaliacao.fonte}, a nota média é <span class="mega__nota">{avaliacao.nota}</span>.</p>
       <div class="temas" data-revelar>
         {avaliacao.temas.map((t) => (
           <div class="tema"><h3 class="tema__t">{t.titulo}</h3><ul>{t.itens.map((i) => <li>{i}</li>)}</ul></div>
@@ -126,11 +126,11 @@ const passos = [
   .hero__topo { display: grid; gap: 1.75rem; align-items: end; margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem); }
   .linha { display: block; overflow: hidden; padding-bottom: .06em; }
   .linha > span { display: block; }
-  .hero__selo { margin: 0 0 1.1rem; font: 500 var(--t-mini)/1 var(--f-texto); letter-spacing: .12em; color: var(--ouro-texto); }
-  .hero__lado { display: grid; gap: 1.5rem; max-width: 30rem; }
+  .hero__selo { margin: 0 0 1.1rem; font: 500 var(--t-mini)/1 var(--f-texto); letter-spacing: .04em; color: var(--ouro-texto); }
+  .hero__lado { display: grid; gap: 1.5rem; max-width: 34rem; }
   .hero__lado .lead { margin: 0; }
   .hero__acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
-  .hero__acoes .btn { flex: 1 1 11rem; }
+  .hero__acoes .btn { flex: 0 0 auto; white-space: nowrap; }
   @media (min-width: 62rem) { .hero__topo { grid-template-columns: 1.4fr .6fr; gap: 4rem; } }
   .hero__barra { margin-bottom: clamp(2rem, 4vw, 3rem); }
   .quadro { position: relative; height: clamp(15rem, 36vw, 30rem); overflow: hidden; background: var(--areia); border-radius: var(--raio); }
@@ -143,15 +143,15 @@ const passos = [
   /* ---------- do check-in ao check-out ---------- */
   .passos { position: relative; display: grid; gap: 0; margin-top: clamp(2rem, 4vw, 3rem); }
   .passos li { position: relative; display: grid; gap: .35rem; padding: 0 0 1.75rem 2.25rem; }
-  .passos::before { content: ''; position: absolute; left: .32rem; top: .55rem; bottom: 1.5rem; width: 1px; background: var(--ouro); }
-  .passos li::before { content: ''; position: absolute; left: 0; top: .5rem; width: .65rem; height: .65rem; border-radius: 50%; background: var(--champ); border: 1px solid var(--ouro-texto); }
+  .passos::before { content: ''; position: absolute; left: .27rem; top: .55rem; bottom: 1.5rem; width: 3px; background: var(--ouro); }
+  .passos li::before { content: ''; position: absolute; left: 0; top: .5rem; width: .65rem; height: .65rem; border-radius: 50%; background: var(--champ); border: 2px solid var(--grafite); }
   .passo__n { font: 400 .8rem var(--f-texto); letter-spacing: .15em; color: var(--ouro-texto); }
   .passo__t { font: 400 clamp(1.6rem, 1.3rem + 1vw, 2.1rem)/1.1 var(--f-titulo); }
   .passos p { margin: 0; color: var(--marrom); max-width: 24ch; }
   .com-wrap { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
   @media (min-width: 62rem) {
     .passos { grid-template-columns: repeat(5, 1fr); column-gap: 2rem; }
-    .passos::before { left: .32rem; right: 0; top: .32rem; bottom: auto; width: auto; height: 1px; }
+    .passos::before { left: .32rem; right: 0; top: .26rem; bottom: auto; width: auto; height: 3px; }
     .passos li { padding: 2rem 0 0 0; }
     .passos li::before { top: 0; }
     .passos li:first-child::before { background: var(--ouro); }
@@ -162,9 +162,9 @@ const passos = [
   .loc address { font-style: normal; display: grid; gap: 1.5rem; justify-items: start; margin-top: 1.75rem; }
   .loc address .lead { margin: 0; }
   .rota { position: relative; display: grid; }
-  .rota::before { content: ''; position: absolute; left: .4rem; top: 1.9rem; bottom: 1.9rem; width: 1px; background: var(--ouro); }
+  .rota::before { content: ''; position: absolute; left: .36rem; top: 1.9rem; bottom: 1.9rem; width: 3px; background: var(--ouro); }
   .rota li { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 1rem; padding: 1.25rem 0 1.25rem 2.25rem; border-bottom: 1px solid var(--areia); }
-  .rota li::before { content: ''; position: absolute; left: .1rem; top: 50%; width: .62rem; height: .62rem; margin-top: -.31rem; border-radius: 50%; background: var(--off); border: 1px solid var(--ouro-texto); }
+  .rota li::before { content: ''; position: absolute; left: .1rem; top: 50%; width: .62rem; height: .62rem; margin-top: -.31rem; border-radius: 50%; background: var(--off); border: 2px solid var(--grafite); }
   .rota .rota__inicio::before { background: var(--ouro); }
   .rota__lugar { font-size: 1.0625rem; }
   .rota__km { font: 400 clamp(1.5rem, 1.2rem + 1vw, 2rem)/1 var(--f-titulo); }
@@ -172,13 +172,15 @@ const passos = [
   .rota__nota { margin: 1rem 0 0; font-size: .875rem; }
   @media (min-width: 62rem) { .loc { grid-template-columns: .9fr 1.1fr; gap: 7rem; } }
 
+  .sec--preto { background: #000; color: #fff; }
   /* ---------- avaliações: uma frase enorme, sem rótulo e sem bloco de estatística ---------- */
   .av { display: grid; gap: clamp(3rem, 6vw, 5rem); }
   .mega { margin: 0; max-width: 20ch; font: 400 clamp(2.6rem, 1.1rem + 6.4vw, 6.75rem)/1.02 var(--f-titulo); font-variation-settings: 'opsz' 28; letter-spacing: -.03em; text-wrap: balance; }
-  .temas { display: grid; gap: 2rem; border-top: 1px solid var(--grafite); padding-top: 1.75rem; }
-  .tema__t { font: 500 .7rem/1 var(--f-texto); letter-spacing: .2em; text-transform: uppercase; color: var(--marrom); margin-bottom: .9rem; }
+  .mega__nota { color: var(--ouro); }
+  .temas { display: grid; gap: 2rem; border-top: 3px solid var(--ouro); padding-top: 1.75rem; }
+  .tema__t { font: 500 .7rem/1 var(--f-texto); letter-spacing: .2em; text-transform: uppercase; color: var(--ouro); margin-bottom: .9rem; }
   .tema li { padding: .5rem 0; font: 400 1.3rem/1.25 var(--f-titulo); }
-  .av__fonte { margin: 0; font-size: .875rem; }
+  .av__fonte { margin: 0; font-size: .875rem; color: #c4c4c4; }
   @media (min-width: 52rem) { .temas { grid-template-columns: repeat(3, 1fr); gap: 3rem; } }
 
   /* ---------- acomodações (compacta) ---------- */
