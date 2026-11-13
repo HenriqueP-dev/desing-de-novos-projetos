@@ -85,17 +85,6 @@ const passos = [
     </div>
   </section>
 
-  <!-- ACOMODAÇÕES: só uma linha honesta até haver fotos e categorias confirmadas -->
-  <section class="section sec--fina" id="acomodacoes" aria-labelledby="h-aco">
-    <div class="container aco">
-      <h2 id="h-aco">Acomodações</h2>
-      <div class="aco__txt">
-        <p class="lead">Fotos, categorias e capacidades dos quartos entram aqui depois da confirmação com o hotel.</p>
-        <a class="btn btn--linha" href="/acomodacoes/">Ver acomodações</a>
-      </div>
-    </div>
-  </section>
-
   <!-- CONTATO: só o canal que existe, o telefone -->
   <section class="section sec--champ contato" aria-labelledby="h-contato">
     <div class="container contato__g">
@@ -134,7 +123,7 @@ const passos = [
 
   /* ---------- seções com densidades diferentes ---------- */
   .sec--densa { padding-block: clamp(3.5rem, 6vw, 5.5rem); }
-  .sec--grande { padding-block: clamp(6rem, 13vw, 12rem); }
+  .sec--grande { padding-block: clamp(4.5rem, 9vw, 8rem); }
 
   /* ---------- do check-in ao check-out ---------- */
   .passos { position: relative; display: grid; gap: 0; margin-top: clamp(2rem, 4vw, 3rem); }
@@ -170,21 +159,14 @@ const passos = [
 
   .sec--preto { background: #000; color: #fff; }
   /* ---------- avaliações: uma frase enorme, sem rótulo e sem bloco de estatística ---------- */
-  .av { display: grid; gap: clamp(3rem, 6vw, 5rem); }
+  .av { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
   .mega { margin: 0; max-width: 20ch; font: 400 clamp(2.6rem, 1.1rem + 6.4vw, 6.75rem)/1.02 var(--f-titulo); font-variation-settings: 'opsz' 28; letter-spacing: -.03em; text-wrap: balance; }
   .mega__nota { color: var(--ouro); }
   .temas { display: grid; gap: 2rem; border-top: 3px solid var(--ouro); padding-top: 1.75rem; }
   .tema__t { font: 500 .7rem/1 var(--f-texto); letter-spacing: .2em; text-transform: uppercase; color: var(--ouro); margin-bottom: .9rem; }
   .tema li { padding: .5rem 0; font: 400 1.3rem/1.25 var(--f-titulo); }
-  .av__fonte { margin: 0; font-size: .875rem; color: #c4c4c4; }
+  .av__fonte { margin: -1rem 0 0; font-size: .875rem; color: #c4c4c4; }
   @media (min-width: 52rem) { .temas { grid-template-columns: repeat(3, 1fr); gap: 3rem; } }
-
-  /* ---------- acomodações (enxuta) ---------- */
-  .sec--fina { padding-block: clamp(3.5rem, 7vw, 6rem); border-top: 3px solid var(--ouro); }
-  .aco { display: grid; gap: 1.5rem; align-items: center; }
-  .aco__txt { display: grid; gap: 1.25rem; justify-items: start; }
-  .aco__txt .lead { margin: 0; max-width: 42ch; }
-  @media (min-width: 62rem) { .aco { grid-template-columns: .8fr 1.2fr; gap: 5rem; } }
 
   /* ---------- contato ---------- */
   .contato__g { display: grid; gap: 3rem; align-items: end; }

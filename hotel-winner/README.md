@@ -20,7 +20,7 @@ Paleta original do hotel (preto, amarelo, vermelho, laranja, branco e grafite), 
 |---|---|---|---|
 | Branco | `#FFFFFF` | Fundo principal | — |
 | Amarelo claro | `#FFF6D6` | Faixas de seção (separam do branco) | — |
-| Amarelo Winner | `#FFCC00` | Fundo de botão, marcadores, destaques sobre preto | 1,4:1 no branco: **nunca** texto nem borda de campo; 14,3:1 com texto preto |
+| Amarelo Winner | `#FFCC00` | Fundo de botão, marcadores, destaques sobre preto | 1,4:1 no branco: **nunca** texto nem borda sobre branco; 14,3:1 com texto preto e 14,3:1 como texto sobre preto |
 | Preto | `#000000` | Títulos, botões escuros, seção de avaliações | 21:1 |
 | Grafite | `#292929` | Texto corrido | 14,7:1 |
 | Cinza | `#555555` | Texto secundário | 7,5:1 |

@@ -4,7 +4,7 @@
    destaques, vermelho só em detalhes. Bodoni Moda nos títulos, Jost no texto.
    Contrastes medidos: preto/branco 21:1 · preto/amarelo 14,3:1 ·
      #555/branco 7,5:1 · #b30000/branco 6,7:1 · amarelo/branco 1,4:1
-     -> amarelo nunca vira texto nem borda de controle; só fundo de botão e marcador
+     -> amarelo nunca vira texto nem borda sobre branco; vale como texto só sobre preto (14,3:1)
    ============================================================ */
 @import '@fontsource-variable/bodoni-moda/opsz.css';
 @import '@fontsource-variable/jost';
