@@ -3,22 +3,15 @@ import Base from '../../layouts/Base.astro';
 import FotoSlot from '../../components/FotoSlot.astro';
 import Comodidades from '../../components/Comodidades.astro';
 import ReservaForm from '../../components/ReservaForm.astro';
-import { hotel, apartamentos, equipamentosApto, cartoes } from '../../data/hotel';
+import { hotel, apartamentos, equipamentosApto, cartoes, textos } from '../../conteudo/ativo';
+const t = textos.acomodacoes;
 
-const emDefinicao = [
-  'Categoria "individual": a página de apartamentos do hotel não a cita',
-  'Capacidade e camas de cada categoria, e quantos apartamentos há de cada tipo',
-  'Fotos de todas as categorias e a que categoria cada foto corresponde',
-  'Valores das diárias',
-  'Política de cancelamento',
-  'Regras para crianças e animais de estimação',
-];
 ---
-<Base title="Acomodações · Hotel Winner" description="Apartamentos duplos, triplos, quádruplos e quíntuplos do Hotel Winner, em Barretos, com cama box, ar-condicionado, TV de LED com parabólica e frigobar. Projeto conceitual.">
+<Base title={`${t.titulo} · ${hotel.nome}`} description={t.paginaDescricao}>
   <section class="section topo" aria-labelledby="h-a">
     <div class="container topo__g">
-      <h1 id="h-a">Acomodações</h1>
-      <p class="lead">Apartamentos duplos, triplos, quádruplos e quíntuplos, com cama box, ar-condicionado, TV de LED com parabólica e frigobar.</p>
+      <h1 id="h-a">{t.titulo}</h1>
+      <p class="lead">{t.lead}</p>
     </div>
   </section>
 
@@ -26,8 +19,8 @@ const emDefinicao = [
   <section class="sec--champ sec--densa" aria-labelledby="h-eq">
     <div class="container eq">
       <div>
-        <h2 id="h-eq">Em todos os apartamentos</h2>
-        <p class="sec-txt eq__fonte">Conforme a página de apartamentos do site do hotel.</p>
+        <h2 id="h-eq">{t.equipTitulo}</h2>
+        <p class="sec-txt eq__fonte">{t.equipFonte}</p>
       </div>
       <ul class="eq__lista" data-revelar>{equipamentosApto.map((e) => <li>{e}</li>)}</ul>
     </div>
@@ -37,7 +30,7 @@ const emDefinicao = [
   <section class="section" aria-labelledby="h-cat">
     <div class="container">
       <h2 id="h-cat" class="sr-only">Categorias de apartamento</h2>
-      <p class="sec-txt nota">A página do hotel reúne todas as fotos num só carrossel, sem dizer a que categoria cada uma pertence. Aqui, a capacidade segue o nome da categoria e cada foto foi posta junto da categoria pelo número de camas que aparece nela; o hotel ainda vai confirmar essa associação. As legendas descrevem só o que se vê.</p>
+      <p class="sec-txt nota">{t.notaPagina}</p>
       {apartamentos.map((a, i) => (
         <article class:list={['cat', i % 2 === 1 && 'cat--inv']} id={a.id} aria-labelledby={`h-${a.id}`}>
           <div class="cat__fotos">
@@ -59,14 +52,14 @@ const emDefinicao = [
                 )}
               </>
             ) : (
-              <FotoSlot rotulo={`Apartamento ${a.nome}`} proporcao="3 / 2" aviso="Foto a ser fornecida pelo hotel" />
+              <FotoSlot rotulo={`${t.categoriaRotulo} ${a.nome}`} proporcao="3 / 2" aviso={t.semFoto} />
             )}
           </div>
           <div class="cat__txt">
             <p class="cat__n num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
-            <h3 id={`h-${a.id}`}>Apartamento {a.nome}</h3>
+            <h3 id={`h-${a.id}`}>{t.categoriaRotulo} {a.nome}</h3>
             <p class="cat__cap num">Para {a.pessoas} pessoas</p>
-            <p class="sec-txt">Cama box, ar-condicionado, TV de LED com parabólica, frigobar e banheiro com box blindex, como nos demais apartamentos.</p>
+            <p class="sec-txt">{t.equipCat}</p>
           </div>
         </article>
       ))}
@@ -75,30 +68,32 @@ const emDefinicao = [
 
   <section class="section sec--champ corpo" aria-labelledby="h-no">
     <div class="container corpo__g">
-      <h2 id="h-no">No hotel</h2>
+      <h2 id="h-no">{t.noHotel}</h2>
       <div>
         <Comodidades compacta />
         <dl class="horas num">
           <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
           <div><dt>Check-out</dt><dd>{hotel.checkOut}</dd></div>
-          <div><dt>Cartões</dt><dd class="horas__cartoes">{cartoes.join(', ')}</dd></div>
+          {cartoes.length > 0 && <div><dt>Cartões</dt><dd class="horas__cartoes">{cartoes.join(', ')}</dd></div>}
         </dl>
       </div>
     </div>
   </section>
 
+  {t.emDefinicao.length > 0 && (
   <section class="section" aria-labelledby="h-d">
     <div class="container corpo__g">
-      <h2 id="h-d">Em definição com o hotel</h2>
+      <h2 id="h-d">{t.emDefinicaoTitulo}</h2>
       <div>
-        <p class="sec-txt">Estas informações ainda não foram confirmadas, por isso o site não as apresenta.</p>
-        <ul class="lista">{emDefinicao.map((c) => <li>{c}</li>)}</ul>
+        <p class="sec-txt">{t.emDefinicaoNota}</p>
+        <ul class="lista">{t.emDefinicao.map((c) => <li>{c}</li>)}</ul>
       </div>
     </div>
   </section>
+  )}
 
   <section class="section sec--champ" aria-labelledby="h-r">
-    <div class="container reserva"><h2 id="h-r">Peça a sua reserva</h2><ReservaForm /></div>
+    <div class="container reserva"><h2 id="h-r">{textos.contato.reserva}</h2><ReservaForm /></div>
   </section>
 </Base>
 <style>

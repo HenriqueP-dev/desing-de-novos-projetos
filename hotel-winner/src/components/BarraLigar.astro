@@ -1,10 +1,10 @@
 ---
 // No celular, ligar é a ação mais natural e o telefone é o único canal confirmado:
 // fica fixo no rodapé da tela, sempre ao alcance do polegar. No desktop não aparece.
-import { hotel } from '../data/hotel';
+import { hotel, textos } from '../conteudo/ativo';
 ---
 <a class="ligar" href={hotel.telefoneLink}>
-  <span class="ligar__t">Ligar para o hotel</span>
+  <span class="ligar__t">{textos.hero.ligar}</span>
   <span class="ligar__n num">{hotel.telefone}</span>
 </a>
 <style>

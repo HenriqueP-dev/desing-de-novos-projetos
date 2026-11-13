@@ -1,11 +1,19 @@
 ---
 // Logo oficial do hotel (PNG com fundo transparente, 171 x 100 px).
 // O arquivo é pequeno: exibido em até ~90 px de largura fica nítido; para tamanhos maiores, pedir o vetor (SVG) ao hotel.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { hotel } from '../conteudo/ativo';
 interface Props { altura?: number }
 const { altura = 52 } = Astro.props;
 const largura = Math.round(altura * 1.71);
+// Sem arquivo de logo em public/, mostra o nome em texto (o site já funciona antes de a logo chegar).
+const temLogo = existsSync(join(process.cwd(), 'public', hotel.logo));
 ---
-<img class="logo" src="/logo-winner.png" alt="Hotel Winner, Barretos" width={largura} height={altura} decoding="async" />
+{temLogo
+  ? <img class="logo" src={hotel.logo} alt={`${hotel.nome}, ${hotel.cidade}`} width={largura} height={altura} decoding="async" />
+  : <span class="logo logo--texto">{hotel.nome}</span>}
 <style>
   .logo { display: block; height: auto; max-width: 100%; }
+  .logo--texto { font: 400 1.5rem/1.1 var(--f-titulo); letter-spacing: -.01em; color: var(--grafite); }
 </style>

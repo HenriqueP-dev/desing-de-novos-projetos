@@ -5,15 +5,9 @@ import FotoSlot from '../components/FotoSlot.astro';
 import Comodidades from '../components/Comodidades.astro';
 import ReservaForm from '../components/ReservaForm.astro';
 import { temVideoHero } from '../lib/midia';
-import { hotel, avaliacao, distancias, apartamentos, cartoes, pontosTuristicos } from '../data/hotel';
+import { hotel, avaliacao, apartamentos, cartoes, pontosTuristicos, distancias, textos, secoes } from '../conteudo/ativo';
 
-// A ideia do site: o hotel é uma base prática para quem chega a Barretos.
-// Cada passo usa só fatos do documento do hotel (ou o que os hóspedes elogiam nas avaliações).
-const passos = [
-  { n: '1', t: 'Chegar', d: `Check-in ${hotel.checkIn}, com estacionamento para os hóspedes.` },
-  { n: '2', t: 'Descansar', d: 'Camas confortáveis e bons chuveiros, segundo os hóspedes.' },
-  { n: '3', t: 'Tomar café e seguir', d: `Café da manhã incluído. Check-out ${hotel.checkOut}.` },
-];
+const passos = textos.roteiro.passos.map((p, i) => ({ n: String(i + 1), ...p }));
 ---
 <Base>
   <!-- HERO: o vídeo ocupa a primeira tela inteira; título e ação ficam sobre ele, o formulário vem logo abaixo -->
@@ -22,25 +16,26 @@ const passos = [
     <div class="hero__veu" aria-hidden="true"></div>
     <div class="container hero__conteudo">
       <p class="hero__selo">{hotel.categoria} · {hotel.cidade}, {hotel.uf}</p>
-      <h1 id="h-hero"><span class="linha"><span data-hero-linha>Chegue, estacione,</span></span> <span class="linha"><span data-hero-linha>descanse.</span></span></h1>
+      <h1 id="h-hero"><span class="linha"><span data-hero-linha>{textos.hero.linha1}</span></span> <span class="linha"><span data-hero-linha>{textos.hero.linha2}</span></span></h1>
       <div class="hero__lado" data-hero-sub>
-        <p class="lead">A {distancias[1].km} do centro de {hotel.cidade}, com estacionamento e café da manhã incluído.</p>
+        <p class="lead">{textos.hero.lead}</p>
         <div class="hero__acoes">
-          <a class="btn" href={hotel.telefoneLink}>Ligar para o hotel</a>
-          <a class="link-ouro hero__alt" href="#reserva">ou peça uma reserva abaixo</a>
+          <a class="btn" href={hotel.telefoneLink}>{textos.hero.ligar}</a>
+          <a class="link-ouro hero__alt" href="#reserva">{textos.hero.reservaLink}</a>
         </div>
       </div>
     </div>
-    <p class="hero__leg">{temVideoHero ? 'Vídeo ilustrativo, não mostra o hotel' : 'Espaço reservado para o vídeo do hotel'}</p>
+    <p class="hero__leg">{temVideoHero ? textos.hero.legendaVideo : textos.hero.legendaSemVideo}</p>
   </section>
   <div class="reserva-faixa">
     <div class="container hero__barra" data-hero-barra><ReservaForm /></div>
   </div>
 
   <!-- DO CHECK-IN AO CHECK-OUT: seção densa, em sequência, com as seis comodidades numa faixa -->
+  {secoes.roteiro && (
   <section class="section sec--champ sec--densa" id="roteiro" aria-labelledby="h-rot">
     <div class="container">
-      <h2 id="h-rot">Do check-in ao check-out</h2>
+      <h2 id="h-rot">{textos.roteiro.titulo}</h2>
       <ol class="passos num" data-revelar>
         {passos.map((p) => <li><span class="passo__n" aria-hidden="true">{p.n}</span><h3 class="passo__t">{p.t}</h3><p>{p.d}</p></li>)}
       </ol>
@@ -50,13 +45,14 @@ const passos = [
       </div>
     </div>
   </section>
+  )}
 
   <!-- ACOMODAÇÕES: as categorias citadas no site antigo do hotel, com as fotos reais recebidas -->
   <section class="section" id="acomodacoes" aria-labelledby="h-aco">
     <div class="container">
       <div class="aco__topo">
-        <h2 id="h-aco">Acomodações</h2>
-        <p class="lead">Apartamentos duplos, triplos, quádruplos e quíntuplos, com cama box, ar-condicionado, TV de LED com parabólica e frigobar.</p>
+        <h2 id="h-aco">{textos.acomodacoes.titulo}</h2>
+        <p class="lead">{textos.acomodacoes.lead}</p>
       </div>
       <ul class="aco__grade" data-revelar>
         {apartamentos.map((a) => (
@@ -64,15 +60,15 @@ const passos = [
             <a class="aco__card" href={`/acomodacoes/#${a.id}`}>
               {a.fotos.length > 0
                 ? <img src={a.fotos[0].src} alt={a.fotos[0].alt} width="600" height="400" loading="lazy" decoding="async" />
-                : <FotoSlot rotulo="" proporcao="3 / 2" aviso="Foto a ser fornecida pelo hotel" />}
+                : <FotoSlot rotulo="" proporcao="3 / 2" aviso={textos.acomodacoes.semFoto} />}
               <span class="aco__nome">{a.nome}</span>
               <span class="aco__cap num">Para {a.pessoas} pessoas</span>
             </a>
           </li>
         ))}
       </ul>
-      <p class="sec-txt aco__nota">Capacidade pelo nome da categoria e fotos enviadas para o projeto; o hotel ainda vai confirmar capacidade, camas e a categoria de cada foto.</p>
-      <a class="btn btn--linha" href="/acomodacoes/">Ver os apartamentos</a>
+      <p class="sec-txt aco__nota">{textos.acomodacoes.nota}</p>
+      <a class="btn btn--linha" href="/acomodacoes/">{textos.acomodacoes.botao}</a>
     </div>
   </section>
 
@@ -80,10 +76,10 @@ const passos = [
   <section class="section" id="localizacao" aria-labelledby="h-loc">
     <div class="container loc">
       <div class="loc__txt">
-        <h2 id="h-loc">Localização</h2>
+        <h2 id="h-loc">{textos.localizacao.titulo}</h2>
         <address>
           <p class="lead">{hotel.enderecoCompleto}</p>
-          <a class="btn btn--linha" href={hotel.mapaLink} target="_blank" rel="noopener">Ver no Google Maps</a>
+          <a class="btn btn--linha" href={hotel.mapaLink} target="_blank" rel="noopener">{textos.localizacao.botaoMapa}</a>
         </address>
       </div>
       <div>
@@ -91,51 +87,55 @@ const passos = [
           <li class="rota__inicio"><span class="rota__lugar">{hotel.nome}</span><span class="rota__km">ponto de partida</span></li>
           {distancias.map((d) => <li><span class="rota__lugar">{d.lugar}</span><span class="rota__km">{d.km}</span></li>)}
         </ol>
-        <p class="sec-txt rota__nota">Distâncias aproximadas a partir do hotel.</p>
+        <p class="sec-txt rota__nota">{textos.localizacao.notaDistancias}</p>
       </div>
     </div>
   </section>
 
   <!-- PONTOS TURÍSTICOS: os nomes da página do hotel, em tipografia grande; o detalhe fica numa página própria -->
+  {secoes.pontosTuristicos && pontosTuristicos.length > 0 && (
   <section class="section sec--champ sec--densa" id="pontos" aria-labelledby="h-pt">
     <div class="container pt">
       <div class="pt__txt">
-        <h2 id="h-pt">Para conhecer em Barretos</h2>
-        <a class="btn btn--linha" href="/pontos-turisticos/">Ver pontos turísticos</a>
+        <h2 id="h-pt">{textos.pontos.tituloHome}</h2>
+        <a class="btn btn--linha" href="/pontos-turisticos/">{textos.pontos.botaoHome}</a>
       </div>
       <ul class="pt__lista" data-revelar>
         {pontosTuristicos.map((p) => <li>{p.nome}</li>)}
       </ul>
     </div>
   </section>
+  )}
 
   <!-- AVALIAÇÕES: uma frase em escala enorme; abaixo, o que os hóspedes elogiam, por assunto -->
+  {secoes.avaliacoes && (
   <section class="section sec--preto sec--grande" id="avaliacoes" aria-labelledby="h-av">
     <div class="container av">
-      <h2 id="h-av" class="sr-only">Experiência dos hóspedes</h2>
+      <h2 id="h-av" class="sr-only">{textos.avaliacoes.tituloLeitor}</h2>
       <p class="mega num" data-revelar>Em {avaliacao.total} avaliações no {avaliacao.fonte}, a nota média é <span class="mega__nota">{avaliacao.nota}</span>.</p>
       <div class="temas" data-revelar>
         {avaliacao.temas.map((t) => (
           <div class="tema"><h3 class="tema__t">{t.titulo}</h3><ul>{t.itens.map((i) => <li>{i}</li>)}</ul></div>
         ))}
       </div>
-      <p class="sec-txt av__fonte">Resumo das avaliações públicas do {avaliacao.fonte}, não são citações literais. Notas e comentários mudam com o tempo.</p>
+      <p class="sec-txt av__fonte">{textos.avaliacoes.nota}</p>
     </div>
   </section>
+  )}
 
   <!-- CONTATO: só o canal que existe, o telefone -->
   <section class="section sec--champ contato" aria-labelledby="h-contato">
     <div class="container contato__g">
       <div>
-        <h2 id="h-contato">Fale com o hotel.</h2>
-        <p class="lead">Para reservas e informações, ligue para a recepção.</p>
+        <h2 id="h-contato">{textos.contato.titulo}</h2>
+        <p class="lead">{textos.contato.lead}</p>
       </div>
       <address class="contato__dados">
         <a class="contato__tel num" href={hotel.telefoneLink}>{hotel.telefone}</a>
         <p class="sec-txt">{hotel.enderecoCompleto}</p>
-        <p class="sec-txt contato__cartoes">Cartões: {cartoes.join(', ')}.</p>
+        {cartoes.length > 0 && <p class="sec-txt contato__cartoes">Cartões: {cartoes.join(', ')}.</p>}
         <div class="contato__acoes">
-          <a class="btn" href={hotel.telefoneLink}>Ligar para o hotel</a>
+          <a class="btn" href={hotel.telefoneLink}>{textos.hero.ligar}</a>
           <a class="btn btn--linha" href="#reserva">Pedir reserva</a>
         </div>
       </address>

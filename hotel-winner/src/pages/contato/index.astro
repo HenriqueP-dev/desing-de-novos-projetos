@@ -1,21 +1,21 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ReservaForm from '../../components/ReservaForm.astro';
-import { hotel } from '../../data/hotel';
+import { hotel, textos } from '../../conteudo/ativo';
 ---
-<Base title="Contato · Hotel Winner" description="Telefone, endereço e horários do Hotel Winner, em Barretos. Projeto conceitual.">
+<Base title={`Contato · ${hotel.nome}`} description={textos.contato.descricao}>
   <section class="section" aria-labelledby="h-c">
     <div class="container topo">
       <h1 id="h-c">Contato</h1>
       <dl class="dados">
         <div><dt>Telefone</dt><dd><a class="tel num" href={hotel.telefoneLink}>{hotel.telefone}</a></dd></div>
-        <div><dt>Endereço</dt><dd><address>{hotel.enderecoCompleto}</address><a class="link-ouro" href={hotel.mapaLink} target="_blank" rel="noopener">Ver no Google Maps</a></dd></div>
+        <div><dt>Endereço</dt><dd><address>{hotel.enderecoCompleto}</address><a class="link-ouro" href={hotel.mapaLink} target="_blank" rel="noopener">{textos.localizacao.botaoMapa}</a></dd></div>
         <div><dt>Horários</dt><dd>Check-in {hotel.checkIn}. Check-out {hotel.checkOut}.</dd></div>
       </dl>
     </div>
   </section>
   <section class="section sec--champ" aria-labelledby="h-r">
-    <div class="container reserva"><h2 id="h-r">Peça a sua reserva</h2><ReservaForm /></div>
+    <div class="container reserva"><h2 id="h-r">{textos.contato.reserva}</h2><ReservaForm /></div>
   </section>
 </Base>
 <style>

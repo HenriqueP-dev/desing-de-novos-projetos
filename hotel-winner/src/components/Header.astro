@@ -1,11 +1,11 @@
 ---
 import Logo from './Logo.astro';
-import { hotel } from '../data/hotel';
+import { hotel, secoes } from '../conteudo/ativo';
 interface Props { temReserva?: boolean }
 const { temReserva = true } = Astro.props;
 // Em páginas sem formulário (ex.: 404) o botão leva ao formulário da home.
 const alvoReserva = temReserva ? '#reserva' : '/#reserva';
-const esq = [{ href: '/acomodacoes/', t: 'Acomodações' }, { href: '/pontos-turisticos/', t: 'Pontos turísticos' }];
+const esq = [{ href: '/acomodacoes/', t: 'Acomodações' }, ...(secoes.pontosTuristicos ? [{ href: '/pontos-turisticos/', t: 'Pontos turísticos' }] : [])];
 const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/', t: 'Contato' }];
 const extra = [{ href: '/#comodidades', t: 'Comodidades' }];
 ---

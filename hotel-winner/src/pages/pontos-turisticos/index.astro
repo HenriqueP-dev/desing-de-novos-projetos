@@ -1,13 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { hotel, pontosTuristicos } from '../../data/hotel';
-const mapa = (n: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(n + ' Barretos SP')}`;
+import { hotel, pontosTuristicos, textos } from '../../conteudo/ativo';
+const t = textos.pontos;
+const mapa = (n: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${n} ${hotel.cidade} ${hotel.uf}`)}`;
 ---
-<Base title="Pontos turísticos · Hotel Winner" description="Região dos Lagos, Parque do Peão, Estação Cultura e o Museu Histórico, Artístico e Folclórico Rui Menezes: pontos turísticos de Barretos perto do Hotel Winner. Projeto conceitual.">
+<Base title={`${t.titulo} · ${hotel.nome}`} description={t.descricao}>
   <section class="section topo" aria-labelledby="h-p">
     <div class="container topo__g">
-      <h1 id="h-p">Pontos turísticos</h1>
-      <p class="lead">Região dos Lagos, Parque do Peão, Estação Cultura e o Museu Histórico, Artístico e Folclórico “Rui Menezes” estão entre os pontos turísticos de Barretos.</p>
+      <h1 id="h-p">{t.titulo}</h1>
+      <p class="lead">{t.lead}</p>
     </div>
   </section>
 
@@ -19,24 +20,24 @@ const mapa = (n: string) => `https://www.google.com/maps/search/?api=1&query=${e
           <li>
             <span class="pts__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <h3 class="pts__nome">{p.nome}</h3>
-            <p class="pts__d">{p.distancia || 'Distância a confirmar com o hotel'}</p>
+            <p class="pts__d">{p.distancia || t.semDistancia}</p>
             <a class="link-ouro" href={mapa(p.nome)} target="_blank" rel="noopener">Ver no mapa<span class="sr-only"> ({p.nome}, abre em nova aba)</span></a>
           </li>
         ))}
       </ol>
-      <p class="sec-txt nota">Os quatro primeiros nomes vêm da página de pontos turísticos do site do hotel; a Catedral e as distâncias vêm do documento de conteúdo do projeto. Fotos dos pontos turísticos serão incluídas quando houver imagens com autorização de uso.</p>
+      <p class="sec-txt nota">{t.nota}</p>
     </div>
   </section>
 
   <section class="section" aria-labelledby="h-c">
     <div class="container cta">
       <div>
-        <h2 id="h-c">Hospede-se perto de tudo isso.</h2>
+        <h2 id="h-c">{t.chamada}</h2>
         <p class="lead">O {hotel.nome} fica na {hotel.enderecoCompleto}.</p>
       </div>
       <div class="cta__acoes">
-        <a class="btn" href={hotel.telefoneLink}>Ligar para o hotel</a>
-        <a class="btn btn--linha" href="/acomodacoes/">Ver os apartamentos</a>
+        <a class="btn" href={hotel.telefoneLink}>{textos.hero.ligar}</a>
+        <a class="btn btn--linha" href="/acomodacoes/">{textos.acomodacoes.botao}</a>
       </div>
     </div>
   </section>

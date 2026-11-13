@@ -1,5 +1,7 @@
 # Hotel Winner (projeto conceitual)
 
+> **Este projeto é um modelo reutilizável.** Para criar o site de outro cliente, veja [`COMO-CRIAR-NOVO-SITE.md`](COMO-CRIAR-NOVO-SITE.md). O conteúdo do cliente fica em `src/conteudo/`, as cores e fontes em `src/styles/tema.css`.
+
 Site conceitual para o Hotel Winner, de Barretos (SP). **Não é o site oficial** e nada aqui foi
 confirmado com o hotel. Identidade clara de hotel boutique: paleta original do hotel (preto, amarelo, vermelho, branco); Bodoni Moda nos títulos e Jost no texto.
 
@@ -60,7 +62,7 @@ celular, vídeo e "reduzir movimento".
 
 | O quê | Onde |
 |---|---|
-| Endereço, telefone, horários, comodidades, distâncias, avaliação, pendências | `src/data/hotel.ts` |
+| Endereço, telefone, horários, comodidades, distâncias, avaliação, pendências | `src/conteudo/winner.ts` |
 | Cores, tipografia, espaçamentos | `src/styles/global.css` (variáveis em `:root`) |
 | Animações (GSAP + ScrollTrigger) | `src/scripts/movimento.ts` |
 | Fotos (espaços reservados) | `src/components/FotoSlot.astro`: passe `foto="/fotos/arquivo.jpg"` e `alt` |
@@ -97,14 +99,14 @@ O vídeo não toca sozinho para quem pede "reduzir movimento" no sistema nem com
 ## WhatsApp
 
 O WhatsApp do hotel **não foi informado**. Sem ele, o formulário prepara o pedido e oferece "Ligar para o hotel" e "Copiar mensagem".
-Se o hotel tiver WhatsApp, preencha `whatsapp` em `src/data/hotel.ts` (formato internacional, só dígitos, ex.: `5517999999999`).
+Se o hotel tiver WhatsApp, preencha `whatsapp` em `src/conteudo/winner.ts` (formato internacional, só dígitos, ex.: `5517999999999`).
 
 ## Dados
 
 Tudo o que aparece no site vem do documento de conteúdo enviado para o projeto (endereço, telefone, check-in e check-out,
 comodidades, distâncias e a nota do Google). **O site não afirma nada além disso.**
 
-O que ainda falta confirmar está na lista `pendencias` de `src/data/hotel.ts`: categorias e quantidade de quartos, fotos oficiais,
+O que ainda falta confirmar está na lista `pendencias` de `src/conteudo/winner.ts`: categorias e quantidade de quartos, fotos oficiais,
 valores, formas de pagamento, cancelamento, horário do café, regras para crianças e animais, link de reservas, redes sociais,
 o que "Acessibilidade" inclui e o bairro (o documento cita "Dr. Paulo Prata" e "Jardim Campo Redondo").
 

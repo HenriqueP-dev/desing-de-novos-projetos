@@ -1,16 +1,16 @@
 ---
 import Logo from './Logo.astro';
-import { hotel, lema } from '../data/hotel';
+import { hotel, lema, textos } from '../conteudo/ativo';
 ---
 <footer class="ft">
   <div class="container ft__in">
-    <div class="ft__marca"><Logo /><p class="ft__lema">{lema}</p></div>
+    <div class="ft__marca"><Logo />{lema && <p class="ft__lema">{lema}</p>}</div>
     <address class="ft__dados">
       <p>{hotel.enderecoCompleto}</p>
       <p><a class="link-ouro num" href={hotel.telefoneLink}>{hotel.telefone}</a></p>
-      <p><a class="link-ouro" href={hotel.siteAtual} rel="noopener">Site atual do hotel: hotelwinner.com.br</a></p>
+      {hotel.siteAtual && <p><a class="link-ouro" href={hotel.siteAtual} rel="noopener">{textos.rodapeSite} {hotel.siteAtualRotulo}</a></p>}
     </address>
-    <p class="ft__nota">Projeto conceitual de design e desenvolvimento, sem vínculo oficial com o {hotel.nome}. As informações vêm do conteúdo enviado para o projeto. Valores, fotos, categorias de quarto e políticas ainda dependem de confirmação com o hotel. O vídeo do topo é ilustrativo.</p>
+    {textos.rodapeNota && <p class="ft__nota">{textos.rodapeNota}</p>}
   </div>
 </footer>
 <style>

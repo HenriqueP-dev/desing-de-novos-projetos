@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import { hotel } from '../conteudo/ativo';
 ---
-<Base title="Página não encontrada · Hotel Winner" temReserva={false}>
+<Base title={`Página não encontrada · ${hotel.nome}`} temReserva={false}>
   <section class="section">
     <div class="container nf">
       <span class="filete" aria-hidden="true"></span>

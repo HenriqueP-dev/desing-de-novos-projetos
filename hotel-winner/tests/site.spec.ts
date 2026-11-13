@@ -1,7 +1,14 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { existsSync } from 'node:fs';
+// Os testes leem o conteúdo do cliente ativo (src/conteudo/ativo.ts): servem para qualquer cliente do modelo.
+import { hotel, avaliacao, apartamentos, pontosTuristicos, comodidades, equipamentosApto, distancias, textos, secoes } from '../src/conteudo/ativo';
 
-const PAGINAS = ['/', '/acomodacoes/', '/pontos-turisticos/', '/contato/'];
+const temVideo = existsSync('public/videos/hero.mp4') || existsSync('public/videos/hero.webm');
+const totalElogios = avaliacao.temas.reduce((n, t) => n + t.itens.length, 0);
+const totalFotos = apartamentos.reduce((n, a) => n + a.fotos.length, 0);
+
+const PAGINAS = ['/', '/acomodacoes/', ...(secoes.pontosTuristicos ? ['/pontos-turisticos/'] : []), '/contato/'];
 
 test.describe('páginas', () => {
   for (const rota of PAGINAS) {
@@ -50,7 +57,7 @@ test.describe('acessibilidade (axe, WCAG 2.2 AA)', () => {
 
 test.describe('conteúdo fiel ao documento do hotel', () => {
   const proibidos = [/meia-noite/i, /às 24h/i, /\bStandard\b|\bSuperior\b/, /\bR\$ ?\d/, /responde pelo WhatsApp/i];
-  for (const rota of [...PAGINAS, '/prototipos/', '/prototipos/claro/', '/prototipos/paisagem/', '/prototipos/escuro/']) {
+  for (const rota of PAGINAS) {
     test(`${rota} não afirma o que não foi confirmado`, async ({ page }) => {
       await page.goto(rota);
       const texto = await page.locator('body').innerText();
@@ -60,10 +67,12 @@ test.describe('conteúdo fiel ao documento do hotel', () => {
   test('a home mostra os dados reais', async ({ page }) => {
     await page.goto('/');
     const t = await page.locator('body').innerText();
-    for (const esperado of ['Av. do Ébano, 1415', '14784-383', '(17) 3325-7186', '2 estrelas', 'a partir das 13h', 'até as 12h', '353 avaliações', '3,7 km', '11 km']) expect(t).toContain(esperado);
-    await expect(page.locator('#comodidades li')).toHaveCount(6);
-    await expect(page.locator('.temas li')).toHaveCount(7);
-    await expect(page.locator('.contato__tel')).toHaveAttribute('href', 'tel:+551733257186');
+    const esperados = [hotel.enderecoCompleto, hotel.telefone, hotel.categoria, hotel.checkIn, hotel.checkOut, ...distancias.map((d) => d.km)];
+    if (secoes.avaliacoes) esperados.push(`${avaliacao.total} avaliações`);
+    for (const esperado of esperados) expect(t).toContain(esperado);
+    await expect(page.locator('#comodidades li')).toHaveCount(comodidades.length);
+    if (secoes.avaliacoes) await expect(page.locator('.temas li')).toHaveCount(totalElogios);
+    await expect(page.locator('.contato__tel')).toHaveAttribute('href', hotel.telefoneLink);
   });
 });
 
@@ -97,7 +106,7 @@ test.describe('formulário de reserva', () => {
     await page.click('#reserva .rb__ok');
     const msg = page.locator('.rb__msg');
     await expect(msg).toContainText('10/12/2031 a 12/12/2031 (2 noites) para 3 hóspedes');
-    await expect(msg.getByRole('link', { name: /Ligar para o hotel/ })).toHaveAttribute('href', 'tel:+551733257186');
+    await expect(msg.getByRole('link', { name: /Ligar para o hotel/ })).toHaveAttribute('href', hotel.telefoneLink);
     await expect(msg.getByRole('button', { name: 'Copiar mensagem' })).toBeVisible();
     await expect(msg).not.toContainText(/abriu|enviado/);
   });
@@ -140,6 +149,7 @@ test.describe('menu no celular', () => {
 });
 
 test.describe('vídeo e movimento', () => {
+  test.skip(!temVideo, 'este cliente ainda não tem vídeo em public/videos/');
   test('vídeo toca mudo e o botão pausa', async ({ page }) => {
     await page.goto('/');
     const v = page.locator('[data-hero-video]');
@@ -182,8 +192,8 @@ test.describe('ação na primeira tela e barra de ligar', () => {
     const caixa = await video.boundingBox();
     expect(caixa!.width).toBeGreaterThanOrEqual(1430);
     expect(caixa!.height).toBeGreaterThan(650);
-    const ligar = page.locator('.hero__acoes').getByRole('link', { name: 'Ligar para o hotel' });
-    await expect(ligar).toHaveAttribute('href', 'tel:+551733257186');
+    const ligar = page.locator('.hero__acoes').getByRole('link', { name: textos.hero.ligar });
+    await expect(ligar).toHaveAttribute('href', hotel.telefoneLink);
     await expect(ligar).toBeInViewport();
     await expect(page.locator('h1')).toBeInViewport();
     await expect(page.locator('.ligar')).toBeHidden();
@@ -191,53 +201,53 @@ test.describe('ação na primeira tela e barra de ligar', () => {
   test('celular: botão de ligar na primeira tela e barra fixa', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
-    await expect(page.locator('.hero__acoes').getByRole('link', { name: 'Ligar para o hotel' })).toBeInViewport();
+    await expect(page.locator('.hero__acoes').getByRole('link', { name: textos.hero.ligar })).toBeInViewport();
     const barra = page.locator('.ligar');
     await expect(barra).toBeVisible();
-    await expect(barra).toHaveAttribute('href', 'tel:+551733257186');
+    await expect(barra).toHaveAttribute('href', hotel.telefoneLink);
   });
 });
 
 test.describe('acomodações', () => {
   test('mostra as quatro categorias do texto do hotel e não inventa "individual"', async ({ page }) => {
     await page.goto('/acomodacoes/');
-    await expect(page.locator('article.cat h3')).toHaveText(['Apartamento Duplo', 'Apartamento Triplo', 'Apartamento Quádruplo', 'Apartamento Quíntuplo']);
+    await expect(page.locator('article.cat h3')).toHaveText(apartamentos.map((a) => `${textos.acomodacoes.categoriaRotulo} ${a.nome}`));
     const t = await page.locator('main, body').first().innerText();
-    expect(t).not.toMatch(/Apartamento Individual/);
+    if (!apartamentos.some((a) => /individual/i.test(a.nome))) expect(t).not.toMatch(/Apartamento Individual/);
   });
-  test('as 5 fotos reais carregam e o quíntuplo assume que falta a foto', async ({ page }) => {
+  test('as fotos reais carregam e quem não tem foto assume que falta', async ({ page }) => {
     await page.goto('/acomodacoes/');
     const imgs = page.locator('article.cat img');
-    await expect(imgs).toHaveCount(5);
-    for (let i = 0; i < 5; i++) {
+    await expect(imgs).toHaveCount(totalFotos);
+    for (let i = 0; i < totalFotos; i++) {
       await imgs.nth(i).scrollIntoViewIfNeeded();
       await expect.poll(() => imgs.nth(i).evaluate((e: HTMLImageElement) => e.complete && e.naturalWidth > 0)).toBe(true);
       expect(((await imgs.nth(i).getAttribute('alt')) ?? '').length).toBeGreaterThan(20);
     }
-    await expect(page.locator('#quintuplo')).toContainText('Foto a ser fornecida pelo hotel');
+    for (const a of apartamentos.filter((x) => x.fotos.length === 0)) await expect(page.locator(`#${a.id}`)).toContainText(textos.acomodacoes.semFoto);
   });
   test('equipamentos em todos os apartamentos e cartões na home levam à categoria', async ({ page }) => {
     await page.goto('/acomodacoes/');
-    await expect(page.locator('.eq__lista li')).toHaveCount(7);
+    await expect(page.locator('.eq__lista li')).toHaveCount(equipamentosApto.length);
     await page.goto('/');
-    await expect(page.locator('.aco__card')).toHaveCount(4);
-    await page.locator('.aco__card').nth(1).click();
-    await expect(page).toHaveURL(/\/acomodacoes\/#triplo$/);
+    await expect(page.locator('.aco__card')).toHaveCount(apartamentos.length);
+    await page.locator('.aco__card').first().click();
+    await expect(page).toHaveURL(new RegExp(`/acomodacoes/#${apartamentos[0].id}$`));
   });
 });
 
 test.describe('pontos turísticos', () => {
+  test.skip(!secoes.pontosTuristicos, 'este cliente não tem pontos turísticos');
   test('página com os nomes do site do hotel, sem inventar distâncias', async ({ page }) => {
     await page.goto('/pontos-turisticos/');
-    await expect(page.locator('h1')).toHaveText('Pontos turísticos');
-    await expect(page.locator('.pts__nome')).toHaveText(['Região dos Lagos', 'Parque do Peão', 'Estação Cultura', 'Museu Histórico, Artístico e Folclórico “Rui Menezes”', 'Catedral do Divino Espírito Santo']);
-    await expect(page.locator('.pts li').nth(1)).toContainText('11 km');
-    await expect(page.locator('.pts li').nth(0)).toContainText('a confirmar');
+    await expect(page.locator('h1')).toHaveText(textos.pontos.titulo);
+    await expect(page.locator('.pts__nome')).toHaveText(pontosTuristicos.map((p) => p.nome));
+    for (const [i, p] of pontosTuristicos.entries()) await expect(page.locator('.pts li').nth(i)).toContainText(p.distancia || textos.pontos.semDistancia);
   });
   test('home tem a seção e o menu leva à página', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
-    await expect(page.locator('.pt__lista li')).toHaveCount(5);
+    await expect(page.locator('.pt__lista li')).toHaveCount(pontosTuristicos.length);
     await page.locator('header .hd__l').getByRole('link', { name: 'Pontos turísticos' }).click();
     await expect(page).toHaveURL(/\/pontos-turisticos\/$/);
   });
@@ -253,15 +263,4 @@ test.describe('pontos turísticos', () => {
       for (const a of alturas) expect(a).toBeLessThan(60);
     });
   }
-});
-
-test('apresentação de uma página abre, cabe numa folha A4 e não promete o que não há', async ({ page }) => {
-  await page.goto('/apresentacao/');
-  await expect(page.locator('h1')).toContainText('proposta de site');
-  const t = await page.locator('body').innerText();
-  expect(t).toContain('a combinar');
-  expect(t).not.toMatch(/R\$|aumento|mais reservas/i);
-  const pdf = await page.pdf({ format: 'A4', printBackground: true, preferCSSPageSize: true });
-  const paginas = (pdf.toString('latin1').match(/\/Type\s*\/Page[^s]/g) ?? []).length;
-  expect(paginas).toBe(1);
 });

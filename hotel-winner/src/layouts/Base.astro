@@ -3,12 +3,12 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BarraLigar from '../components/BarraLigar.astro';
-import { hotel, comodidades } from '../data/hotel';
+import { hotel, comodidades, textos, seo } from '../conteudo/ativo';
 
 interface Props { title?: string; description?: string; temReserva?: boolean }
 const {
   title = `${hotel.nome} · Hospedagem em ${hotel.cidade}, ${hotel.uf}`,
-  description = `${hotel.nome}, ${hotel.categoria.toLowerCase()} em ${hotel.cidade}, ${hotel.uf}. Café da manhã incluído, Wi-Fi gratuito, estacionamento e piscina. Projeto conceitual.`,
+  description = seo.descricao,
   temReserva = true,
 } = Astro.props;
 
@@ -16,9 +16,9 @@ const {
 // porque o Google não aceita avaliações autodeclaradas em dados estruturados.
 const dados = {
   '@context': 'https://schema.org', '@type': 'Hotel', name: hotel.nome,
-  address: { '@type': 'PostalAddress', streetAddress: hotel.endereco, addressLocality: hotel.cidade, addressRegion: hotel.uf, postalCode: '14784-383', addressCountry: 'BR' },
-  telephone: '+55 17 3325-7186', checkinTime: '13:00', checkoutTime: '12:00',
-  starRating: { '@type': 'Rating', ratingValue: 2 },
+  address: { '@type': 'PostalAddress', streetAddress: hotel.endereco, addressLocality: hotel.cidade, addressRegion: hotel.uf, postalCode: hotel.cep, addressCountry: 'BR' },
+  telephone: hotel.telefoneIntl, checkinTime: hotel.checkInHora, checkoutTime: hotel.checkOutHora,
+  ...(hotel.estrelas ? { starRating: { '@type': 'Rating', ratingValue: hotel.estrelas } } : {}),
   amenityFeature: comodidades.map((c) => ({ '@type': 'LocationFeatureSpecification', name: c, value: true })),
 };
 ---
@@ -30,7 +30,7 @@ const dados = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="robots" content="noindex" /> <!-- protótipo conceitual: não indexar -->
+    {!seo.indexar && <meta name="robots" content="noindex" />}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:title" content={title} />
@@ -47,7 +47,7 @@ const dados = {
   </head>
   <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-    <aside class="aviso" aria-label="Aviso do projeto">Projeto conceitual de design. Este não é o site oficial do {hotel.nome}.</aside>
+    {textos.aviso && <aside class="aviso" aria-label="Aviso do projeto">{textos.aviso}</aside>}
     <Header temReserva={temReserva} />
     <main id="conteudo"><slot /></main>
     <Footer />
