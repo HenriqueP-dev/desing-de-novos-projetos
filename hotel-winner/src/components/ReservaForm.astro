@@ -111,35 +111,37 @@ import { hotel } from '../data/hotel';
 </script>
 
 <style>
-  .rb { background: #fff; color: var(--tinta); padding: 1.25rem 1.5rem 1rem; border: 1px solid var(--nevoa-2); }
-  .rb__resumo { margin-bottom: 1.25rem; padding: .9rem 1rem; border-left: 3px solid #8a2417; background: #fbf3f1; }
+  /* Cartão branco com uma só elevação (sombra suave, sem borda). */
+  .rb { background: #fff; color: var(--grafite); padding: 1.5rem 1.5rem 1.25rem; border-radius: var(--raio); box-shadow: var(--sombra); }
+  .rb__resumo { margin-bottom: 1.25rem; padding: .95rem 1.1rem; border: 1px solid #c9a39a; border-radius: var(--raio); background: #fbf3f0; }
   .rb__resumo[hidden] { display: none; }
-  .rb__resumo:focus { outline: 2px solid var(--tinta); outline-offset: 2px; }
-  .rb__resumo-t { margin: 0 0 .4rem; font-weight: 500; color: #8a2417; }
+  .rb__resumo:focus { outline: 2px solid var(--grafite); outline-offset: 3px; }
+  .rb__resumo-t { margin: 0 0 .3rem; font-weight: 500; color: #8a2417; }
   .rb__resumo ul { display: grid; gap: 0; }
   /* os links do resumo são criados por JS: o estilo precisa ser global ao componente */
-  .rb__resumo :global(a) { color: #8a2417; display: inline-flex; align-items: center; min-height: 2.75rem; }
-  .rb__campos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.25rem; }
-  .campo { display: grid; gap: .3rem; align-content: start; min-width: 0; }
-  .campo label { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); }
-  .campo input, .campo select { appearance: none; width: 100%; min-height: 2.9rem; padding: .4rem 0; background: transparent; border: 0; border-bottom: 1px solid var(--tinta-2); border-radius: 0; color: var(--tinta); font: 400 1.0625rem var(--f); }
-  .campo select { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%230d1820' stroke-width='1.5'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right .25rem center; padding-right: 1.5rem; }
-  .campo input:focus, .campo select:focus { outline: none; border-bottom: 2px solid var(--tinta); }
-  .campo input[aria-invalid='true'] { border-bottom: 2px solid #9a2a1c; }
+  .rb__resumo :global(a) { color: #8a2417; display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration-color: currentColor; }
+  .rb__campos { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 1.5rem; }
+  .campo { display: grid; gap: .35rem; align-content: start; min-width: 0; }
+  .campo label { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--marrom); }
+  /* sublinhado em marrom (5,6:1): é a borda do campo, precisa de contraste de controle */
+  .campo input, .campo select { appearance: none; width: 100%; min-height: 2.9rem; padding: .45rem 0; background: transparent; border: 0; border-bottom: 1px solid var(--marrom); border-radius: 0; color: var(--grafite); font: 400 1.0625rem var(--f-texto); transition: border-color .25s var(--ease); }
+  .campo select { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23292725' stroke-width='1.25'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right .2rem center; padding-right: 1.5rem; }
+  .campo input:focus, .campo select:focus { outline: none; border-bottom: 2px solid var(--grafite); }
+  .campo input[aria-invalid='true'] { border-bottom: 2px solid #8a2417; }
   .erro { margin: 0; font-size: .875rem; line-height: 1.35; color: #8a2417; font-weight: 500; max-width: none; }
-  .erro::before { content: 'Atenção: '; font-weight: 500; }
+  .erro::before { content: 'Atenção: '; }
   .erro[hidden] { display: none; }
-  .rb__ok { width: 100%; margin-top: 1.25rem; }
-  .rb__nota { margin: .9rem 0 0; font-size: .9rem; color: var(--tinta-2); max-width: none; }
+  .rb__ok { width: 100%; margin-top: 1.4rem; }
+  .rb__nota { margin: 1rem 0 0; font-size: .875rem; color: var(--marrom); max-width: none; }
   .rb__msg { margin: 0; max-width: none; }
-  .rb__msg:not(:empty) { margin-top: .9rem; padding: .8rem 1rem; background: var(--nevoa); border-left: 3px solid var(--noite); font-size: .95rem; }
+  .rb__msg:not(:empty) { margin-top: 1rem; padding: 1rem 1.1rem; background: var(--off); border: 1px solid var(--areia); border-radius: var(--raio); font-size: .95rem; }
   .rb__msg :global(p) { margin: 0; max-width: none; }
-  .rb__msg :global(.rb__acoes) { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .75rem; }
+  .rb__msg :global(.rb__acoes) { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .9rem; }
   @media (min-width: 62rem) {
-    .rb { display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem; align-items: start; padding: 1.1rem 1.25rem 1rem 1.5rem; }
+    .rb { display: grid; grid-template-columns: 1fr auto; column-gap: 2rem; align-items: start; padding: 1.4rem 1.6rem 1.25rem 2rem; }
     .rb__resumo { grid-column: 1 / -1; }
     .rb__campos { grid-template-columns: repeat(3, 1fr); }
-    .rb__ok { width: auto; margin: 1.4rem 0 0; padding-inline: 2.75rem; }
+    .rb__ok { width: auto; margin: 1.45rem 0 0; padding-inline: 2.75rem; }
     .rb__nota, .rb__msg { grid-column: 1 / -1; }
   }
 </style>

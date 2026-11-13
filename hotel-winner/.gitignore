@@ -4,3 +4,5 @@ dist
 # originais pesados ficam só no seu computador; o site usa as versões otimizadas de public/
 videos-originais/
 fotos-originais/
+test-results
+playwright-report

@@ -1,7 +1,7 @@
 # Hotel Winner (projeto conceitual)
 
 Site conceitual para o Hotel Winner, de Barretos (SP). **Não é o site oficial** e nada aqui foi
-confirmado com o hotel. Identidade "Claro": branco, névoa azulada, tipografia fina (Jost), foto no comando.
+confirmado com o hotel. Identidade clara de hotel boutique: off-white, champagne e dourado suave; Bodoni Moda nos títulos e Jost no texto.
 
 ## Rodar
 
@@ -9,7 +9,48 @@ confirmado com o hotel. Identidade "Claro": branco, névoa azulada, tipografia f
 npm install      # no Windows/PowerShell, se bloquear: npm.cmd install
 npm run dev      # npm.cmd run dev  →  http://localhost:4321
 npm run build    # gera o site estático em dist/
+npm run test:e2e # testes no navegador (1ª vez: npx playwright install chromium)
 ```
+
+## Identidade visual
+
+| Cor | Código | Uso | Contraste |
+|---|---|---|---|
+| Off-white | `#FAF9F6` | Fundo principal | — |
+| Champagne | `#EDE5D7` | Seções alternadas | — |
+| Dourado suave | `#B89A62` | Só filetes e detalhes | 2,55:1: **nunca** texto nem borda de campo |
+| Dourado escuro | `#7A6338` | Ícones e destaques em texto | 5,4:1 no off-white |
+| Bege areia | `#D6C7B2` | Linhas divisórias, fundo de foto | — |
+| Marrom elegante | `#65564A` | Texto secundário, borda dos campos | 6,7:1 off-white, 5,6:1 champagne |
+| Grafite | `#292725` | Títulos e texto | 14,1:1 |
+
+Movimento: um momento principal (a moldura do vídeo se abre ao rolar) e revelações discretas.
+Tudo desliga com "reduzir movimento". As animações usam só `opacity` e transformações; o conteúdo
+continua legível para leitores de tela antes de aparecer.
+
+## Skills do Claude Code (em `.claude/skills/` na raiz do repositório)
+
+Instaladas com `npx skills add <repositório> --skill <nome> --agent claude-code --copy`
+(versões registradas em `skills-lock.json`):
+
+| Skill | Origem oficial |
+|---|---|
+| frontend-design | anthropics/skills |
+| impeccable | pbakaus/impeccable |
+| ui-ux-pro-max | nextlevelbuilder/ui-ux-pro-max-skill |
+| emil-design-eng, animate, review-animations | emilkowalski/skills |
+| gsap-core, gsap-timeline, gsap-scrolltrigger, gsap-performance | greensock/gsap-skills |
+| web-design-guidelines | vercel-labs/agent-skills |
+
+Não instaladas de propósito: `vercel-react-best-practices` (o projeto não usa React) e as variantes
+de React, Vue e React Native das outras coleções. Playwright não é skill: é dependência de testes.
+
+## Testes
+
+`npm run test:e2e` roda 46 testes em `tests/site.spec.ts`: páginas e 404, ausência de rolagem
+horizontal em 375/768/1280/1920 px, acessibilidade com axe (WCAG 2.2 AA, inclusive com erros no
+formulário), dados reais presentes e afirmações não confirmadas ausentes, formulário, menu do
+celular, vídeo e "reduzir movimento".
 
 ## Onde mexer
 
@@ -17,6 +58,8 @@ npm run build    # gera o site estático em dist/
 |---|---|
 | Endereço, telefone, horários, comodidades, distâncias, avaliação, pendências | `src/data/hotel.ts` |
 | Cores, tipografia, espaçamentos | `src/styles/global.css` (variáveis em `:root`) |
+| Animações (GSAP + ScrollTrigger) | `src/scripts/movimento.ts` |
+| Fotos (espaços reservados) | `src/components/FotoSlot.astro`: passe `foto="/fotos/arquivo.jpg"` e `alt` |
 | Página inicial / Acomodações / Contato | `src/pages/` |
 | Formulário de reserva (validação, ligar, copiar, WhatsApp) | `src/components/ReservaForm.astro` |
 

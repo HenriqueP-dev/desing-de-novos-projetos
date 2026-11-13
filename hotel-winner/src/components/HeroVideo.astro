@@ -1,32 +1,24 @@
 ---
 /**
- * Fundo do topo da home: vídeo quando existir, ilustração quando não existir.
- *
- * Regras de acessibilidade e desempenho:
+ * Mídia do topo da home, dentro da moldura do hero.
  *  - vídeo mudo, em repetição, decorativo (aria-hidden), com botão de pausa visível (WCAG 2.2.2);
- *  - quem pede "reduzir movimento" no sistema, ou usa economia de dados / conexão lenta,
- *    vê só a imagem de capa e pode tocar pelo botão;
- *  - o vídeo só começa por script, então sem JavaScript fica a imagem de capa.
+ *  - "reduzir movimento", economia de dados ou conexão lenta: fica a capa e o botão permite tocar;
+ *  - sem os arquivos em public/videos/, mostra um espaço reservado assumido como tal.
  */
-import Imagem from './Imagem.astro';
 import { temWebm, temMp4, temVideoHero, temPosterHero } from '../lib/midia';
-
-interface Props { alt: string }
-const { alt } = Astro.props;
 ---
 {temVideoHero ? (
-  <div class="hv">
+  <>
     <video class="hv__v" muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"
       poster={temPosterHero ? '/videos/hero-poster.jpg' : undefined} data-hero-video>
       {temWebm && <source src="/videos/hero.webm" type="video/webm" />}
       {temMp4 && <source src="/videos/hero.mp4" type="video/mp4" />}
     </video>
     <button class="hv__btn" type="button" data-hero-btn>Pausar vídeo</button>
-  </div>
+  </>
 ) : (
-  <Imagem cena="alvorada" alt={alt} carregar="eager" />
+  <div class="hv__vazio"><span>Vídeo do hotel</span></div>
 )}
-
 <script>
   const v = document.querySelector<HTMLVideoElement>('[data-hero-video]');
   const btn = document.querySelector<HTMLButtonElement>('[data-hero-btn]');
@@ -40,15 +32,16 @@ const { alt } = Astro.props;
     btn.addEventListener('click', () => { if (v.paused) tocar(); else { v.pause(); rotulo(false); } });
   }
 </script>
-
 <style>
-  .hv { position: absolute; inset: 0; background: var(--nevoa-2); }
-  .hv__v { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hv__v { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: center; }
+  .hv__vazio { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, var(--champ), var(--areia)); font: 400 1.5rem var(--f-titulo); }
+  /* o botão fica dentro da área visível mesmo com a moldura recolhida */
   .hv__btn {
-    position: absolute; z-index: 3; right: max(var(--gutter), calc((100% - var(--max)) / 2)); top: calc(var(--hd-h) + 2.4rem);
-    min-height: 2.75rem; padding: .5rem 1rem; cursor: pointer;
-    background: rgb(255 255 255 / .9); color: var(--tinta); border: 1px solid var(--tinta);
-    font: 400 .72rem / 1 var(--f); letter-spacing: .18em; text-transform: uppercase;
+    position: absolute; z-index: 2; bottom: 1.1rem; right: calc(max(var(--gutter), (100% - var(--max)) / 2) + 1.1rem);
+    min-height: 2.75rem; padding: .55rem 1.1rem; border: 0; border-radius: var(--raio); cursor: pointer;
+    background: rgb(250 249 246 / .92); color: var(--grafite); box-shadow: var(--sombra);
+    font: 500 var(--t-mini) / 1 var(--f-texto); letter-spacing: .18em; text-transform: uppercase;
+    transition: background-color .3s var(--ease);
   }
-  @media (hover: hover) { .hv__btn:hover { background: var(--tinta); color: #fff; } }
+  @media (hover: hover) { .hv__btn:hover { background: var(--off); } }
 </style>

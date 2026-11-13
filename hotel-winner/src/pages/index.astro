@@ -1,40 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
-import Imagem from '../components/Imagem.astro';
 import HeroVideo from '../components/HeroVideo.astro';
-import { temVideoHero } from '../lib/midia';
+import FotoSlot from '../components/FotoSlot.astro';
+import Comodidades from '../components/Comodidades.astro';
 import ReservaForm from '../components/ReservaForm.astro';
-import { hotel, avaliacao, comodidades, distancias } from '../data/hotel';
----
-<Base sobre textoClaro={temVideoHero}>
-  <!-- HERO -->
-  <section class={`hero ${temVideoHero ? 'hero--video' : ''}`} aria-labelledby="h-hero">
-    <div class="hero__bg"><HeroVideo alt="Colinas suaves ao amanhecer no interior paulista" /></div>
-    <div class="hero__veu" aria-hidden="true"></div>
-    <p class="legenda-ilus">{temVideoHero ? 'Vídeo ilustrativo' : 'Imagem ilustrativa'}</p>
-    <div class="hero__txt">
-      <h1 id="h-hero">Barretos, sem pressa.</h1>
-      <p>Café da manhã incluído, Wi-Fi gratuito, estacionamento e piscina.</p>
-    </div>
-    <div class="hero__barra"><ReservaForm /></div>
-  </section>
-  <script>
-    // Mede a barra de reserva sem mensagens e fixa a altura da 1ª linha da hero.
-    // Assim, quando erros aparecem, a barra cresce para baixo e nada acima dela se desloca.
-    const hero = document.querySelector<HTMLElement>('.hero');
-    const barra = document.querySelector<HTMLElement>('.hero__barra');
-    const semMensagens = () => !document.querySelector('.rb .erro:not([hidden]), .rb__resumo:not([hidden])') && !document.querySelector('.rb__msg')?.textContent;
-    const medir = () => { if (hero && barra && semMensagens()) hero.style.setProperty('--barra-base', `${barra.offsetHeight}px`); };
-    medir(); document.fonts?.ready.then(medir); addEventListener('resize', medir);
-  </script>
+import { temVideoHero } from '../lib/midia';
+import { hotel, avaliacao, distancias } from '../data/hotel';
 
-  <!-- SOBRE O HOTEL -->
+// 4,3 de 5 = 86% das estrelas preenchidas (visualização exata da nota, não arredondada).
+const preenchido = (parseFloat(avaliacao.nota.replace(',', '.')) / 5) * 100;
+---
+<Base>
+  <!-- HERO: título editorial sobre o off-white e o vídeo numa moldura que se abre ao rolar -->
+  <section class="hero" aria-labelledby="h-hero">
+    <div class="container hero__topo">
+      <h1 id="h-hero"><span class="linha"><span data-hero-linha>Barretos,</span></span> <span class="linha"><span data-hero-linha>sem pressa.</span></span></h1>
+      <div class="hero__sub" data-hero-sub>
+        <span class="filete" aria-hidden="true"></span>
+        <p class="lead">Café da manhã incluído, Wi-Fi gratuito, estacionamento e piscina, a {distancias[1].km} do centro de {hotel.cidade}.</p>
+      </div>
+    </div>
+    <div class="quadro" data-hero-quadro>
+      <HeroVideo />
+    </div>
+    <div class="container hero__base">
+      <p class="hero__leg">{temVideoHero ? 'Vídeo ilustrativo, não mostra o hotel' : 'Espaço reservado para o vídeo do hotel'}</p>
+      <div class="hero__barra" data-hero-barra><ReservaForm /></div>
+    </div>
+  </section>
+
+  <!-- SOBRE: declaração em serifa e fatos em lista fina -->
   <section class="section" aria-labelledby="h-sobre">
-    <div class="container intro">
+    <div class="container sobre">
       <h2 id="h-sobre">Um hotel 2 estrelas em Barretos, bem avaliado por quem já se hospedou.</h2>
-      <div class="intro__col">
-        <p>O {hotel.nome} fica na {hotel.endereco}, em {hotel.cidade}, no interior de São Paulo. O café da manhã é incluído, o Wi-Fi é gratuito e há estacionamento para os hóspedes.</p>
-        <dl class="fatos">
+      <div class="sobre__col">
+        <p class="lead">O {hotel.nome} fica na {hotel.endereco}, em {hotel.cidade}, no interior de São Paulo. O café da manhã é incluído, o Wi-Fi é gratuito e há estacionamento para os hóspedes.</p>
+        <dl class="fatos num">
           <div><dt>Categoria</dt><dd>2 estrelas</dd></div>
           <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
           <div><dt>Check-out</dt><dd>{hotel.checkOut}</dd></div>
@@ -44,134 +45,157 @@ import { hotel, avaliacao, comodidades, distancias } from '../data/hotel';
     </div>
   </section>
 
-  <!-- ACOMODAÇÕES -->
-  <section class="section sec--nevoa" id="acomodacoes" aria-labelledby="h-aco">
+  <!-- ACOMODAÇÕES: foto grande deslocada e texto ao lado -->
+  <section class="section sec--champ" id="acomodacoes" aria-labelledby="h-aco">
     <div class="container aco">
-      <div class="aco__img"><Imagem cena="quarto" variante="standard" alt="Quarto claro com cama e janela" /></div>
+      <FotoSlot rotulo="Foto do quarto" proporcao="4 / 5" class="aco__foto" />
       <div class="aco__txt">
         <h2 id="h-aco">Acomodações</h2>
-        <p>Nas avaliações do Google, os hóspedes elogiam a limpeza dos quartos, o conforto das camas e os bons chuveiros.</p>
-        <p class="aco__nota">Categorias de quarto, capacidades e fotos oficiais serão adicionadas depois da confirmação com o hotel. A imagem ao lado é ilustrativa.</p>
+        <p class="lead">Nas avaliações do Google, os hóspedes elogiam a limpeza dos quartos, o conforto das camas e os bons chuveiros.</p>
+        <p class="sec-txt aco__nota">Categorias de quarto, capacidades e fotos oficiais serão publicadas depois da confirmação com o hotel.</p>
         <a class="btn btn--linha" href="/acomodacoes/">Ver acomodações</a>
       </div>
     </div>
   </section>
 
-  <!-- COMODIDADES -->
+  <!-- COMODIDADES: lista com ícones desenhados, em colunas -->
   <section class="section" id="comodidades" aria-labelledby="h-com">
-    <div class="container">
-      <header class="sec-hd"><h2 id="h-com">Comodidades</h2></header>
-      <ul class="com">{comodidades.map((c) => <li>{c}</li>)}</ul>
+    <div class="container com-wrap">
+      <h2 id="h-com">Comodidades</h2>
+      <Comodidades />
     </div>
   </section>
 
-  <!-- EXPERIÊNCIA DOS HÓSPEDES -->
-  <section class="section sec--nevoa" id="avaliacoes" aria-labelledby="h-av">
+  <!-- EXPERIÊNCIA DOS HÓSPEDES: o que é elogiado vira texto corrido em serifa -->
+  <section class="section sec--champ" id="avaliacoes" aria-labelledby="h-av">
     <div class="container av">
-      <div class="av__nota">
-        <h2 id="h-av" class="sr-only">Experiência dos hóspedes</h2>
-        <p class="av__num" aria-label={`Nota ${avaliacao.nota} de 5`}>{avaliacao.nota}</p>
-        <p class="av__leg">Nota média no {avaliacao.fonte}, em {avaliacao.total} avaliações.</p>
+      <div class="av__topo">
+        <h2 id="h-av">O que os hóspedes destacam</h2>
+        <p class="av__nota num">
+          <span class="estrelas" aria-hidden="true"><span class="estrelas__cheias" style={`width:${preenchido}%`}></span></span>
+          <span>{avaliacao.nota} de 5 no {avaliacao.fonte}, em {avaliacao.total} avaliações</span>
+        </p>
       </div>
-      <div class="av__txt">
-        <p class="av__tit" aria-hidden="true">O que os hóspedes mais destacam</p>
-        <ul>{avaliacao.elogios.map((e) => <li>{e}</li>)}</ul>
-        <p class="av__fonte">Resumo de avaliações públicas do {avaliacao.fonte}. Notas e comentários mudam com o tempo.</p>
-      </div>
+      <ul class="elogios" data-revelar>{avaliacao.elogios.map((e) => <li>{e}</li>)}</ul>
+      <p class="sec-txt av__fonte">Resumo das avaliações públicas do {avaliacao.fonte}, não são citações literais. Notas e comentários mudam com o tempo.</p>
     </div>
   </section>
 
-  <!-- LOCALIZAÇÃO -->
+  <!-- LOCALIZAÇÃO: endereço e o caminho até os principais pontos, por distância -->
   <section class="section" id="localizacao" aria-labelledby="h-loc">
     <div class="container loc">
-      <div>
+      <div class="loc__txt">
         <h2 id="h-loc">Localização</h2>
         <address>
-          <p>{hotel.enderecoCompleto}</p>
+          <p class="lead">{hotel.enderecoCompleto}</p>
           <a class="btn btn--linha" href={hotel.mapaLink} target="_blank" rel="noopener">Ver no Google Maps</a>
         </address>
       </div>
       <div>
-        <dl class="dist">{distancias.map((d) => <div><dt>{d.lugar}</dt><dd>{d.km}</dd></div>)}</dl>
-        <p class="dist__nota">Distâncias aproximadas a partir do hotel.</p>
+        <ol class="rota num" aria-label="Distâncias a partir do hotel" data-revelar>
+          <li class="rota__inicio"><span class="rota__lugar">{hotel.nome}</span><span class="rota__km">ponto de partida</span></li>
+          {distancias.map((d) => <li><span class="rota__lugar">{d.lugar}</span><span class="rota__km">{d.km}</span></li>)}
+        </ol>
+        <p class="sec-txt rota__nota">Distâncias aproximadas a partir do hotel.</p>
       </div>
     </div>
   </section>
 
-  <!-- RESERVAS E CONTATO -->
-  <section class="section escuro contato" aria-labelledby="h-contato">
+  <!-- RESERVAS E CONTATO: só o canal que existe, o telefone -->
+  <section class="section sec--champ contato" aria-labelledby="h-contato">
     <div class="container contato__g">
-      <h2 id="h-contato">Fale com o hotel.</h2>
-      <address>
-        <p class="contato__tel"><a href={hotel.telefoneLink}>{hotel.telefone}</a></p>
-        <p>{hotel.enderecoCompleto}</p>
-        <a class="btn" href="#reserva">Pedir reserva</a>
+      <div>
+        <h2 id="h-contato">Fale com o hotel.</h2>
+        <p class="lead">Para reservas e informações, ligue para a recepção.</p>
+      </div>
+      <address class="contato__dados">
+        <a class="contato__tel num" href={hotel.telefoneLink}>{hotel.telefone}</a>
+        <p class="sec-txt">{hotel.enderecoCompleto}</p>
+        <div class="contato__acoes">
+          <a class="btn" href={hotel.telefoneLink}>Ligar para o hotel</a>
+          <a class="btn btn--linha" href="#reserva">Pedir reserva</a>
+        </div>
       </address>
     </div>
   </section>
 </Base>
 
 <style>
-  /* hero: sobe por baixo do cabeçalho transparente */
-  .hero { position: relative; margin-top: calc(-1 * var(--hd-h)); padding-top: var(--hd-h); display: grid; grid-template-rows: minmax(calc(100svh - var(--aviso-h) - var(--hd-h) - var(--barra-base, 10rem)), auto) auto; overflow: hidden; color: var(--tinta); }
-  .hero__bg { position: absolute; inset: 0; }
-  .hero__veu { position: absolute; inset: 0; background: linear-gradient(to bottom, rgb(255 255 255 / .22), transparent 30%); }
-  .hero__txt { position: relative; z-index: 2; align-self: end; width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; padding: 3rem 0 clamp(2rem, 5vw, 4rem); animation: surge 1.4s var(--ease) both; }
-  .hero__txt p { margin: 1.5rem 0 0; font-size: var(--t-lead); font-weight: 300; max-width: 36ch; }
-  h1 { max-width: 12ch; font-weight: 250; }
-  .hero__barra { position: relative; z-index: 2; width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; padding: 0 0 clamp(1.25rem, 3vw, 2.5rem); }
-  /* com vídeo: texto branco sobre um véu escuro leve (contraste medido em vários quadros) */
-  .hero--video { color: #fff; }
-  .hero--video .hero__veu { background: linear-gradient(90deg, rgb(8 12 16 / .62), rgb(8 12 16 / .34) 58%, rgb(8 12 16 / .12)), linear-gradient(to bottom, rgb(8 12 16 / .5), transparent 28%, transparent 64%, rgb(8 12 16 / .3)); }
-  .hero--video .legenda-ilus { color: #fff; background: rgb(8 12 16 / .75); padding: .4rem .65rem; }
-  @keyframes surge { from { opacity: 0; transform: translateY(1rem); } to { opacity: 1; transform: none; } }
+  /* ---------- hero ---------- */
+  .hero { padding-top: clamp(2.5rem, 6vw, 5.5rem); }
+  .hero__topo { display: grid; gap: 2rem; align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .linha { display: block; overflow: hidden; padding-bottom: .06em; }
+  .linha > span { display: block; }
+  .hero__sub { display: grid; gap: 1.25rem; max-width: 30rem; }
+  .hero__sub .lead { margin: 0; }
+  @media (min-width: 62rem) { .hero__topo { grid-template-columns: 1.35fr .65fr; gap: 4rem; } }
 
-  .intro { display: grid; gap: 3rem; }
-  .intro h2 { max-width: 20ch; font-size: clamp(2.1rem, 1.2rem + 3.4vw, 4.2rem); }
-  .intro__col p { font-size: var(--t-lead); color: var(--tinta-2); font-weight: 300; }
-  .fatos { display: grid; margin-top: 2.5rem; border-top: 1px solid var(--tinta); }
-  .fatos div { display: grid; grid-template-columns: 9rem 1fr; padding: 1rem 0; border-bottom: 1px solid var(--nevoa-2); }
-  .fatos dt, .dist dt.rot { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); padding-top: .3rem; }
-  .fatos dd { font-size: 1.25rem; font-weight: 300; }
-  @media (min-width: 62rem) { .intro { grid-template-columns: 1.1fr .9fr; gap: 7rem; } }
+  /* moldura em largura total, recolhida ao trilho do conteúdo; o movimento a abre ao rolar */
+  .quadro { position: relative; height: clamp(22rem, 62vw, 46rem); overflow: hidden; background: var(--areia);
+    clip-path: inset(0 max(var(--gutter), calc((100% - var(--max)) / 2)) round var(--raio)); }
+  .hero__leg { margin: .9rem 0 0; font-size: .8rem; color: var(--marrom); text-align: right; max-width: none; }
+  .hero__barra { margin-top: 1.5rem; }
+  /* desktop: a barra sobe sobre a borda da moldura; a legenda fica na coluna ao lado, fora do vídeo */
+  @media (min-width: 62rem) {
+    .hero__base { display: grid; grid-template-columns: minmax(0, 64rem) 1fr; gap: 2rem; align-items: start; }
+    .hero__barra { grid-column: 1; grid-row: 1; margin-top: -4.5rem; position: relative; z-index: 2; }
+    .hero__leg { grid-column: 2; grid-row: 1; }
+  }
 
-  .sec--nevoa { background: var(--nevoa); }
-  .sec-hd { display: grid; gap: 1.25rem; margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+  /* ---------- sobre ---------- */
+  .sobre { display: grid; gap: 3rem; }
+  .sobre h2 { max-width: 16ch; }
+  .fatos { margin-top: 2.5rem; border-top: 1px solid var(--grafite); }
+  .fatos div { display: grid; grid-template-columns: 9.5rem 1fr; align-items: baseline; padding: 1.05rem 0; border-bottom: 1px solid var(--areia); }
+  .fatos dt { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--marrom); }
+  .fatos dd { font: 400 1.3rem/1.2 var(--f-titulo); }
+  @media (min-width: 62rem) { .sobre { grid-template-columns: 1.1fr .9fr; gap: 7rem; } .sobre__col { padding-top: .6rem; } }
 
-  .aco { display: grid; gap: 2.5rem; align-items: center; }
-  .aco__img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--nevoa-2); }
-  .aco__txt { display: grid; gap: 1.25rem; justify-items: start; } .aco__txt p { margin: 0; color: var(--tinta-2); max-width: 42ch; font-size: var(--t-lead); font-weight: 300; }
-  .aco__txt .aco__nota { font-size: .95rem; font-weight: 400; }
-  @media (min-width: 62rem) { .aco { grid-template-columns: 1.15fr .85fr; gap: 6rem; } }
+  /* ---------- acomodações ---------- */
+  .aco { display: grid; gap: 3rem; align-items: center; }
+  .aco__txt { display: grid; gap: 1.5rem; justify-items: start; }
+  .aco__txt .lead, .aco__nota { margin: 0; max-width: 40ch; }
+  @media (min-width: 62rem) { .aco { grid-template-columns: .95fr 1.05fr; gap: 7rem; } :global(.aco__foto) { margin-block: -9rem 0; } }
 
-  .com { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--tinta); }
-  .com li { padding: 1.4rem 0; border-bottom: 1px solid var(--nevoa-2); font-size: var(--t-h3); font-weight: 250; line-height: 1.1; letter-spacing: -.01em; }
-  @media (min-width: 40rem) { .com { grid-template-columns: 1fr 1fr; column-gap: 3rem; } }
-  @media (min-width: 62rem) { .com { grid-template-columns: repeat(3, 1fr); } }
+  /* ---------- comodidades ---------- */
+  .com-wrap { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
 
-  .av { display: grid; gap: 3rem; align-items: center; }
-  .av__num { margin: 0; font-size: clamp(7rem, 4rem + 14vw, 16rem); font-weight: 200; line-height: .85; letter-spacing: -.04em; }
-  .av__leg { margin: 1rem 0 0; font-size: var(--t-lead); font-weight: 300; color: var(--tinta-2); max-width: 24ch; }
-  .av__tit { margin: 0 0 1rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); }
-  .av__txt ul { display: grid; border-top: 1px solid var(--tinta); }
-  .av__txt li { padding: .85rem 0; border-bottom: 1px solid var(--nevoa-2); font-size: 1.15rem; font-weight: 300; }
-  .av__fonte { margin: 1.25rem 0 0; font-size: .875rem; color: var(--tinta-2); }
-  @media (min-width: 62rem) { .av { grid-template-columns: .9fr 1.1fr; gap: 7rem; } }
+  /* ---------- avaliações ---------- */
+  .av { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
+  .av__topo { display: grid; gap: 1.5rem; }
+  .av__nota { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem 1.25rem; margin: 0; color: var(--grafite); }
+  .estrelas { position: relative; display: inline-block; width: 7.2rem; height: 1.25rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z' fill='none' stroke='%237a6338' stroke-width='1.1'/%3E%3C/svg%3E") repeat-x left center / 1.44rem 1.25rem; }
+  .estrelas__cheias { position: absolute; inset: 0 auto 0 0; overflow: hidden;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z' fill='%23b89a62' stroke='%237a6338' stroke-width='1.1'/%3E%3C/svg%3E") repeat-x left center / 1.44rem 1.25rem; }
+  .elogios { display: flex; flex-wrap: wrap; gap: .35rem 0; font: 400 clamp(1.6rem, 1.15rem + 1.9vw, 2.75rem)/1.25 var(--f-titulo); letter-spacing: -.015em; max-width: 64rem; }
+  .elogios li { display: inline-flex; align-items: center; }
+  .elogios li:not(:last-child)::after { content: ''; width: .42em; height: .42em; margin-inline: .55em; transform: rotate(45deg); border: 1px solid var(--ouro); flex: none; }
+  .av__fonte { margin: 0; font-size: .875rem; }
+  @media (min-width: 62rem) { .av__topo { grid-template-columns: 1fr auto; align-items: end; } }
 
+  /* ---------- localização ---------- */
   .loc { display: grid; gap: 3rem; align-items: start; }
-  .loc address { font-style: normal; display: grid; gap: 1.25rem; justify-items: start; margin-top: 1.5rem; } .loc address p { margin: 0; color: var(--tinta-2); font-size: var(--t-lead); font-weight: 300; }
-  .dist { display: grid; border-top: 1px solid var(--tinta); }
-  .dist div { display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--nevoa-2); align-items: baseline; }
-  .dist dt { font-size: 1.15rem; font-weight: 300; } .dist dd { font-size: var(--t-h3); font-weight: 250; line-height: 1; }
-  .dist__nota { margin: 1rem 0 0; font-size: .875rem; color: var(--tinta-2); }
-  @media (min-width: 62rem) { .loc { grid-template-columns: 1fr 1fr; gap: 7rem; } }
+  .loc address { font-style: normal; display: grid; gap: 1.5rem; justify-items: start; margin-top: 1.75rem; }
+  .loc address .lead { margin: 0; }
+  .rota { position: relative; display: grid; }
+  .rota::before { content: ''; position: absolute; left: .4rem; top: 1.9rem; bottom: 1.9rem; width: 1px; background: var(--ouro); }
+  .rota li { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 1rem; padding: 1.25rem 0 1.25rem 2.25rem; border-bottom: 1px solid var(--areia); }
+  .rota li::before { content: ''; position: absolute; left: .1rem; top: 50%; width: .62rem; height: .62rem; margin-top: -.31rem; border-radius: 50%; background: var(--off); border: 1px solid var(--ouro-texto); }
+  .rota .rota__inicio::before { background: var(--ouro); border-color: var(--ouro-texto); }
+  .rota__lugar { font-size: 1.0625rem; }
+  .rota__km { font: 400 clamp(1.5rem, 1.2rem + 1vw, 2rem)/1 var(--f-titulo); }
+  .rota__inicio .rota__km { font: 400 .875rem var(--f-texto); color: var(--marrom); }
+  .rota__nota { margin: 1rem 0 0; font-size: .875rem; }
+  @media (min-width: 62rem) { .loc { grid-template-columns: .9fr 1.1fr; gap: 7rem; } }
 
-  .contato { background: var(--noite); color: #fff; }
+  /* ---------- contato ---------- */
   .contato__g { display: grid; gap: 3rem; align-items: end; }
-  address { font-style: normal; }
-  .contato address { display: grid; gap: .25rem; justify-items: start; } .contato address p { margin: 0 0 .5rem; color: rgb(255 255 255 / .85); }
-  .contato__tel { font-size: clamp(2rem, 1.4rem + 2.2vw, 3.2rem); font-weight: 250; line-height: 1.1; }
-  .contato__tel a { color: #fff; text-decoration: none; }
-  .contato address .btn { margin-top: 1.5rem; }
-  @media (min-width: 62rem) { .contato__g { grid-template-columns: 1.2fr .8fr; gap: 7rem; } }
+  .contato__g .lead { margin: 1.25rem 0 0; }
+  .contato__dados { font-style: normal; display: grid; gap: .5rem; justify-items: start; }
+  .contato__tel { font: 400 clamp(2.4rem, 1.6rem + 3vw, 4.25rem)/1.05 var(--f-titulo); text-decoration: none; letter-spacing: -.02em; }
+  @media (hover: hover) { .contato__tel { transition: color .3s var(--ease); } .contato__tel:hover { color: var(--ouro-texto); } }
+  .contato__dados .sec-txt { margin: .25rem 0 1.25rem; }
+  .contato__acoes { display: flex; flex-wrap: wrap; gap: .9rem; }
+  @media (min-width: 62rem) { .contato__g { grid-template-columns: 1fr 1fr; gap: 7rem; } }
 </style>

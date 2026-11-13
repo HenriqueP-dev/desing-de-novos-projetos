@@ -1,9 +1,13 @@
 ---
-// Marca só em tipografia: fina, espaçada, sem ornamento.
+// Marca tipográfica: nome em Bodoni, filete dourado e cidade espaçada.
 ---
-<span class="logo"><span class="logo__n">Hotel Winner</span><span class="logo__l">Barretos</span></span>
+<span class="logo">
+  <span class="logo__n">Hotel Winner</span>
+  <span class="logo__l"><span class="logo__f" aria-hidden="true"></span>Barretos<span class="logo__f" aria-hidden="true"></span></span>
+</span>
 <style>
-  .logo { display: inline-grid; justify-items: center; gap: .35rem; line-height: 1; }
-  .logo__n { font-size: 1.15rem; font-weight: 300; letter-spacing: .38em; text-transform: uppercase; padding-left: .38em; }
-  .logo__l { font-size: .6rem; letter-spacing: .5em; text-transform: uppercase; padding-left: .5em; opacity: .85; }
+  .logo { display: inline-grid; justify-items: center; gap: .3rem; line-height: 1; color: var(--grafite); }
+  .logo__n { font: 400 1.45rem/1 var(--f-titulo); letter-spacing: .01em; }
+  .logo__l { display: inline-flex; align-items: center; gap: .55rem; font: 500 .58rem/1 var(--f-texto); letter-spacing: .42em; text-transform: uppercase; padding-left: .42em; color: var(--marrom); }
+  .logo__f { width: .9rem; height: 1px; background: var(--ouro); }
 </style>

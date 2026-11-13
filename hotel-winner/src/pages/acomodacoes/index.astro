@@ -1,53 +1,59 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Imagem from '../../components/Imagem.astro';
+import FotoSlot from '../../components/FotoSlot.astro';
+import Comodidades from '../../components/Comodidades.astro';
 import ReservaForm from '../../components/ReservaForm.astro';
-import { hotel, comodidades, pendencias } from '../../data/hotel';
+import { hotel } from '../../data/hotel';
 const emDefinicao = ['Categorias e quantidade de quartos', 'Capacidade de cada quarto', 'Fotos oficiais dos quartos', 'Valores das diárias', 'Política de cancelamento', 'Regras para crianças e animais de estimação'];
 ---
-<Base title="Acomodações · Hotel Winner" description="Acomodações do Hotel Winner, em Barretos. Projeto conceitual.">
-  <section class="section" aria-labelledby="h-a">
-    <div class="container">
-      <header class="topo">
-        <h1 id="h-a">Acomodações</h1>
-        <p>Nas avaliações do Google, os hóspedes elogiam a limpeza dos quartos, o conforto das camas e os bons chuveiros.</p>
-      </header>
-      <div class="corpo">
-        <div class="corpo__img"><Imagem cena="quarto" variante="standard" alt="Quarto claro com cama e janela" /></div>
-        <div class="corpo__txt">
-          <h2>No hotel</h2>
-          <ul class="lista">{comodidades.map((c) => <li>{c}</li>)}</ul>
-          <dl class="fatos">
-            <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
-            <div><dt>Check-out</dt><dd>{hotel.checkOut}</dd></div>
-          </dl>
-        </div>
+<Base title="Acomodações · Hotel Winner" description="Acomodações do Hotel Winner, em Barretos: o que o hotel oferece e o que ainda está em definição. Projeto conceitual.">
+  <section class="section topo" aria-labelledby="h-a">
+    <div class="container topo__g">
+      <h1 id="h-a">Acomodações</h1>
+      <p class="lead">Nas avaliações do Google, os hóspedes elogiam a limpeza dos quartos, o conforto das camas e os bons chuveiros.</p>
+    </div>
+    <div class="container"><FotoSlot rotulo="Foto do quarto" proporcao="16 / 9" /></div>
+  </section>
+
+  <section class="section corpo" aria-labelledby="h-no">
+    <div class="container corpo__g">
+      <h2 id="h-no">No hotel</h2>
+      <div>
+        <Comodidades compacta />
+        <dl class="horas num">
+          <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
+          <div><dt>Check-out</dt><dd>{hotel.checkOut}</dd></div>
+        </dl>
       </div>
     </div>
   </section>
-  <section class="section sec--nevoa" aria-labelledby="h-d">
-    <div class="container def">
+
+  <section class="section sec--champ" aria-labelledby="h-d">
+    <div class="container corpo__g">
       <h2 id="h-d">Em definição com o hotel</h2>
       <div>
-        <p>Estas informações ainda não foram confirmadas, por isso o site não as apresenta. A imagem desta página é ilustrativa.</p>
+        <p class="sec-txt">Estas informações ainda não foram confirmadas, por isso o site não as apresenta.</p>
         <ul class="lista">{emDefinicao.map((c) => <li>{c}</li>)}</ul>
       </div>
     </div>
   </section>
+
   <section class="section" aria-labelledby="h-r">
     <div class="container reserva"><h2 id="h-r">Peça a sua reserva</h2><ReservaForm /></div>
   </section>
 </Base>
 <style>
-  h1 { font-size: clamp(3rem, 1.2rem + 7vw, 7rem); }
-  .topo { display: grid; gap: 1.25rem; margin-bottom: clamp(3rem, 6vw, 5.5rem); } .topo p { margin: 0; font-size: var(--t-lead); font-weight: 300; color: var(--tinta-2); }
-  .corpo { display: grid; gap: 2.5rem; align-items: start; }
-  .corpo__img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--nevoa); }
-  .corpo__txt { display: grid; gap: 1.5rem; } .corpo__txt h2, .def h2 { font-size: var(--t-h3); }
-  .lista { display: grid; border-top: 1px solid var(--tinta); } .lista li { padding: .75rem 0; border-bottom: 1px solid var(--nevoa-2); font-weight: 300; font-size: 1.15rem; }
-  .fatos { display: grid; margin-top: .5rem; } .fatos div { display: grid; grid-template-columns: 9rem 1fr; padding: .6rem 0; }
-  .fatos dt { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); padding-top: .3rem; } .fatos dd { font-size: 1.15rem; font-weight: 300; }
-  .sec--nevoa { background: var(--nevoa); } .def { display: grid; gap: 2rem; } .def p { color: var(--tinta-2); max-width: 46ch; }
+  .topo { padding-bottom: 0; }
+  .topo__g { display: grid; gap: 1.5rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .topo__g .lead { margin: 0; max-width: 42ch; }
+  @media (min-width: 62rem) { .topo__g { grid-template-columns: 1fr 1fr; align-items: end; gap: 6rem; } }
+  .corpo__g { display: grid; gap: 2.5rem; }
+  @media (min-width: 62rem) { .corpo__g { grid-template-columns: .8fr 1.2fr; gap: 7rem; } }
+  .horas { margin-top: 2rem; }
+  .horas div { display: grid; grid-template-columns: 9rem 1fr; align-items: baseline; padding: .8rem 0; }
+  .horas dt { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--marrom); }
+  .horas dd { font: 400 1.25rem var(--f-titulo); }
+  .lista { display: grid; margin-top: 1.5rem; border-top: 1px solid var(--marrom); }
+  .lista li { padding: .9rem 0; border-bottom: 1px solid var(--areia); font: 400 1.25rem/1.3 var(--f-titulo); }
   .reserva { display: grid; gap: 2.5rem; }
-  @media (min-width: 62rem) { .corpo { grid-template-columns: 1.2fr .8fr; gap: 6rem; } .def { grid-template-columns: .8fr 1.2fr; gap: 6rem; } }
 </style>

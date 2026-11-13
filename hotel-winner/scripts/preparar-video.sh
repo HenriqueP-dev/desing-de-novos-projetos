@@ -51,7 +51,7 @@ ffmpeg -y -loglevel error -ss "$INICIO" -t "$DURACAO" -i "$ENTRADA" -an "${ARGS_
   -c:v libvpx-vp9 -b:v 0 -crf "$CRF_WEBM" -row-mt 1 "$SAIDA/hero.webm"
 echo "Gerando imagem de capa..."
 ffmpeg -y -loglevel error -ss "$(awk -v i="$INICIO" -v f="$FADE" 'BEGIN { printf "%.3f", i + f }')" -i "$ENTRADA" -frames:v 1 \
-  -vf "scale='min(1920,iw)':-2" -q:v 3 "$SAIDA/hero-poster.jpg"
+  -vf "scale='min(1600,iw)':-2" -q:v 6 "$SAIDA/hero-poster.jpg"
 
 echo
 DUR_FINAL=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$SAIDA/hero.mp4" | awk '{ printf "%.1f", $1 }')

@@ -1,19 +1,19 @@
 ---
 import Logo from './Logo.astro';
-interface Props { sobre?: boolean; temReserva?: boolean; textoClaro?: boolean }
-const { sobre = false, temReserva = true, textoClaro = false } = Astro.props;
+interface Props { temReserva?: boolean }
+const { temReserva = true } = Astro.props;
 // Em páginas sem formulário (ex.: 404) o botão leva ao formulário da home.
 const alvoReserva = temReserva ? '#reserva' : '/#reserva';
 const esq = [{ href: '/acomodacoes/', t: 'Acomodações' }, { href: '/#comodidades', t: 'Comodidades' }];
 const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/', t: 'Contato' }];
 ---
-<header class={`hd ${sobre ? 'hd--sobre' : 'hd--solido'} ${textoClaro ? 'hd--claro' : ''}`}>
+<header class="hd" data-hd>
   <div class="hd__in">
-    <nav class="hd__l tracado" aria-label="Principal">{esq.map((l) => <a href={l.href}>{l.t}</a>)}</nav>
+    <nav class="hd__l tracado" aria-label="Principal">{esq.map((l) => <a class="hd__a" href={l.href}>{l.t}</a>)}</nav>
     <a href="/" class="hd__logo"><Logo /></a>
     <div class="hd__r">
-      <nav class="tracado hd__links" aria-label="Secundário">{dir.map((l) => <a href={l.href}>{l.t}</a>)}</nav>
-      <a class="hd__cta tracado" href={alvoReserva}>Pedir reserva</a>
+      <nav class="tracado hd__links" aria-label="Secundário">{dir.map((l) => <a class="hd__a" href={l.href}>{l.t}</a>)}</nav>
+      <a class="btn btn--linha hd__cta" href={alvoReserva}>Pedir reserva</a>
       <button class="hd__menu tracado" type="button" aria-expanded="false" aria-controls="painel">Menu</button>
     </div>
   </div>
@@ -25,9 +25,15 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
   </div>
 </header>
 <script>
-  const btn = document.querySelector<HTMLButtonElement>('.hd__menu')!;
+  const hd = document.querySelector<HTMLElement>('[data-hd]')!;
+  const btn = hd.querySelector<HTMLButtonElement>('.hd__menu')!;
   const painel = document.getElementById('painel')!;
-  // Com o painel aberto, o resto da página fica inerte: o Tab circula só entre o botão e os links do painel.
+  // Cabeçalho ganha fundo e filete ao rolar (estado discreto, sem salto de layout).
+  let pedido = false;
+  const marcar = () => { hd.classList.toggle('is-rolado', scrollY > 8); pedido = false; };
+  addEventListener('scroll', () => { if (!pedido) { pedido = true; requestAnimationFrame(marcar); } }, { passive: true });
+  marcar();
+  // Com o painel aberto, o resto da página fica inerte: o Tab circula só entre o botão e os links.
   const fundo = () => [...document.querySelectorAll<HTMLElement>('.skip, .aviso, .hd__logo, main, footer')];
   function abrir(o: boolean, focar = true) {
     btn.setAttribute('aria-expanded', String(o)); btn.textContent = o ? 'Fechar' : 'Menu';
@@ -38,31 +44,30 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
   btn.addEventListener('click', () => abrir(btn.getAttribute('aria-expanded') !== 'true'));
   painel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => abrir(false)));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !painel.hidden) { abrir(false); btn.focus(); } });
-  // Se a janela crescer até o layout de desktop com o painel aberto, fecha e devolve a página.
   matchMedia('(min-width: 62.01rem)').addEventListener('change', (m) => { if (m.matches && !painel.hidden) abrir(false, false); });
 </script>
 <style>
-  .hd { position: relative; z-index: 30; height: var(--hd-h); }
-  .hd--solido { background: #fff; border-bottom: 1px solid var(--nevoa-2); }
-  /* sobre foto ou vídeo escuro: texto branco. O painel do menu continua branco, então volta ao texto escuro. */
-  .hd--claro { color: #fff; }
-  .hd--claro .hd__painel { color: var(--tinta); }
-  .hd--claro .hd__menu[aria-expanded='true'] { color: var(--tinta); }
+  .hd { position: sticky; top: 0; z-index: 30; height: var(--hd-h); background: var(--off); transition: box-shadow .4s var(--ease), background-color .4s var(--ease); }
+  .hd::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--areia); opacity: 0; transition: opacity .4s var(--ease); }
+  .hd.is-rolado { box-shadow: 0 10px 30px -24px rgb(41 39 37 / .45); }
+  .hd.is-rolado::after { opacity: 1; }
   .hd__in { height: 100%; width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
-  .hd a, .hd__menu { text-decoration: none; padding: .6rem 0; }
-  .hd__l { display: flex; gap: 2rem; }
-  .hd__r { display: flex; justify-content: flex-end; align-items: center; gap: 2rem; }
-  .hd__links { display: flex; gap: 2rem; }
-  .hd__cta { border: 1px solid currentColor; padding: .75rem 1.4rem !important; }
-  .hd__menu { display: none; background: none; border: 0; color: inherit; font-family: inherit; cursor: pointer; min-height: 2.75rem; }
-  @media (hover: hover) { .hd__l a:hover, .hd__links a:hover { opacity: .6; } .hd__cta:hover { background: var(--tinta); color: #fff; border-color: var(--tinta); } }
-  .hd__painel { position: fixed; inset: 0; z-index: 25; background: #fff; padding: calc(var(--hd-h) + 2rem) var(--gutter) 2rem; overflow: auto; }
+  .hd__logo { text-decoration: none; }
+  .hd__l, .hd__links { display: flex; gap: 2.2rem; }
+  .hd__r { display: flex; justify-content: flex-end; align-items: center; gap: 2.2rem; }
+  .hd__a { position: relative; display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; color: var(--grafite); }
+  .hd__a::after { content: ''; position: absolute; left: 0; right: 0; bottom: .6rem; height: 1px; background: var(--ouro); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-out); }
+  @media (hover: hover) { .hd__a:hover::after { transform: scaleX(1); } }
+  .hd__cta { min-height: 2.75rem; padding: .6rem 1.4rem; }
+  .hd__menu { display: none; position: relative; z-index: 40; min-height: 2.75rem; padding: .5rem 0; background: none; border: 0; color: var(--grafite); font-family: var(--f-texto); cursor: pointer; }
+  .hd__painel { position: fixed; inset: 0; z-index: 25; background: var(--off); padding: calc(var(--hd-h) + 1.5rem) var(--gutter) 2rem; overflow: auto; animation: painel .45s var(--ease-out); }
   .hd__painel[hidden] { display: none; }
   .hd__painel nav { display: grid; }
-  .hd__painel a { font-size: clamp(2rem, 8vw, 3rem); font-weight: 250; letter-spacing: -.01em; text-transform: none; padding: .9rem 0; border-bottom: 1px solid var(--nevoa-2); text-decoration: none; }
-  .hd__menu { position: relative; z-index: 40; }
+  .hd__painel a { padding: 1rem 0; border-bottom: 1px solid var(--areia); font: 400 clamp(2rem, 8vw, 2.8rem)/1.1 var(--f-titulo); color: var(--grafite); text-decoration: none; }
+  @keyframes painel { from { opacity: 0; transform: translateY(-.75rem); } to { opacity: 1; transform: none; } }
   @media (max-width: 62rem) {
-    .hd__in { grid-template-columns: 1fr auto; } .hd__l, .hd__links, .hd__cta { display: none; } .hd__logo { grid-column: 1; grid-row: 1; justify-self: start; }
+    .hd__in { grid-template-columns: 1fr auto; } .hd__l, .hd__links, .hd__cta { display: none; }
+    .hd__logo { grid-column: 1; grid-row: 1; justify-self: start; } .hd__logo :global(.logo) { justify-items: start; }
     .hd__r { grid-column: 2; grid-row: 1; } .hd__menu { display: block; }
   }
   @media (min-width: 62.01rem) { .hd__painel { display: none !important; } }

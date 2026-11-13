@@ -4,21 +4,20 @@ import { hotel } from '../data/hotel';
 ---
 <footer class="ft">
   <div class="container ft__in">
-    <div class="ft__logo"><Logo /></div>
+    <div class="ft__marca"><Logo /></div>
     <address class="ft__dados">
       <p>{hotel.enderecoCompleto}</p>
-      <p><a href={hotel.telefoneLink}>{hotel.telefone}</a></p>
-      <p><a href={hotel.siteAtual} rel="noopener">Site atual do hotel: hotelwinner.com.br</a></p>
+      <p><a class="link-ouro num" href={hotel.telefoneLink}>{hotel.telefone}</a></p>
+      <p><a class="link-ouro" href={hotel.siteAtual} rel="noopener">Site atual do hotel: hotelwinner.com.br</a></p>
     </address>
-    <p class="ft__nota">Projeto conceitual de design e desenvolvimento, sem vínculo oficial com o {hotel.nome}. As informações vêm do conteúdo enviado para o projeto. Valores, fotos, categorias de quarto e políticas ainda dependem de confirmação com o hotel, e as imagens são ilustrativas.</p>
+    <p class="ft__nota">Projeto conceitual de design e desenvolvimento, sem vínculo oficial com o {hotel.nome}. As informações vêm do conteúdo enviado para o projeto. Valores, fotos, categorias de quarto e políticas ainda dependem de confirmação com o hotel. O vídeo do topo é ilustrativo.</p>
   </div>
 </footer>
 <style>
-  .ft { background: var(--nevoa); padding-block: 4rem; }
+  .ft { border-top: 1px solid var(--areia); padding-block: 4.5rem 3.5rem; }
   .ft__in { display: grid; gap: 2.5rem; align-items: start; }
-  .ft__logo { justify-self: start; } .ft__logo :global(.logo) { justify-items: start; }
-  .ft__dados { font-style: normal; } .ft__dados p { margin: 0 0 .5rem; }
-  .ft__dados a { display: inline-flex; align-items: center; min-height: 2.75rem; text-underline-offset: .2em; }
-  .ft__nota { margin: 0; font-size: .9rem; color: var(--tinta-2); max-width: 48ch; }
-  @media (min-width: 62rem) { .ft__in { grid-template-columns: 1fr 1fr 1.3fr; gap: 4rem; } }
+  .ft__marca :global(.logo) { justify-items: start; }
+  .ft__dados { font-style: normal; } .ft__dados p { margin: 0 0 .25rem; }
+  .ft__nota { margin: 0; font-size: .875rem; color: var(--marrom); max-width: 50ch; }
+  @media (min-width: 62rem) { .ft__in { grid-template-columns: 1fr 1.1fr 1.3fr; gap: 4rem; } }
 </style>

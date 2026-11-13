@@ -2,16 +2,24 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { hotel } from '../data/hotel';
+import { hotel, comodidades } from '../data/hotel';
 
-interface Props { title?: string; description?: string; sobre?: boolean; temReserva?: boolean; textoClaro?: boolean }
+interface Props { title?: string; description?: string; temReserva?: boolean }
 const {
   title = `${hotel.nome} · Hospedagem em ${hotel.cidade}, ${hotel.uf}`,
   description = `${hotel.nome}, ${hotel.categoria.toLowerCase()} em ${hotel.cidade}, ${hotel.uf}. Café da manhã incluído, Wi-Fi gratuito, estacionamento e piscina. Projeto conceitual.`,
-  sobre = false,
   temReserva = true,
-  textoClaro = false,
 } = Astro.props;
+
+// Dados estruturados (Schema.org): só fatos do documento do hotel. Sem nota de avaliação,
+// porque o Google não aceita avaliações autodeclaradas em dados estruturados.
+const dados = {
+  '@context': 'https://schema.org', '@type': 'Hotel', name: hotel.nome,
+  address: { '@type': 'PostalAddress', streetAddress: hotel.endereco, addressLocality: hotel.cidade, addressRegion: hotel.uf, postalCode: '14784-383', addressCountry: 'BR' },
+  telephone: '+55 17 3325-7186', checkinTime: '13:00', checkoutTime: '12:00',
+  starRating: { '@type': 'Rating', ratingValue: 2 },
+  amenityFeature: comodidades.map((c) => ({ '@type': 'LocationFeatureSpecification', name: c, value: true })),
+};
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -20,18 +28,31 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#faf9f6" />
     <meta name="robots" content="noindex" /> <!-- protótipo conceitual: não indexar -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(dados)} />
+    <!-- Movimento só quando permitido. Se o script de animação não carregar em 2,5 s, o conteúdo aparece mesmo assim. -->
+    <script is:inline>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var r = document.documentElement; r.classList.add('mov');
+        setTimeout(function () { if (!r.classList.contains('mov-ok')) r.classList.remove('mov'); }, 2500);
+      }
+    </script>
   </head>
   <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
     <aside class="aviso" aria-label="Aviso do projeto">Projeto conceitual de design. Este não é o site oficial do {hotel.nome}.</aside>
-    <Header sobre={sobre} temReserva={temReserva} textoClaro={textoClaro} />
+    <Header temReserva={temReserva} />
     <main id="conteudo"><slot /></main>
     <Footer />
+    <script>import '../scripts/movimento';</script>
   </body>
 </html>
 <style is:global>
-  .aviso { min-height: var(--aviso-h); display: grid; place-items: center; background: var(--noite); color: #fff; font-size: .78rem; line-height: 1.2; text-align: center; padding-inline: var(--gutter); }
+  .aviso { padding: .55rem var(--gutter); background: var(--champ); color: var(--marrom); font-size: .8rem; line-height: 1.3; text-align: center; }
 </style>

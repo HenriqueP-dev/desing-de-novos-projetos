@@ -1,0 +1,18 @@
+---
+import Icone from './Icone.astro';
+import { comodidades } from '../data/hotel';
+interface Props { compacta?: boolean }
+const { compacta = false } = Astro.props;
+---
+<ul class:list={['com', { 'com--compacta': compacta }]}>
+  {comodidades.map((c) => <li><Icone nome={c} class="com__i" /><span>{c}</span></li>)}
+</ul>
+<style>
+  .com { display: grid; border-top: 1px solid var(--areia); }
+  .com li { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 1.25rem; padding: 1.5rem 0; border-bottom: 1px solid var(--areia); font: 400 clamp(1.3rem, 1.1rem + .7vw, 1.65rem)/1.2 var(--f-titulo); }
+  .com :global(.com__i) { width: 2rem; height: 2rem; color: var(--ouro-texto); }
+  .com--compacta li { padding: 1rem 0; font: 400 1.0625rem/1.4 var(--f-texto); gap: 1rem; }
+  .com--compacta :global(.com__i) { width: 1.5rem; height: 1.5rem; }
+  @media (min-width: 44rem) { .com:not(.com--compacta) { grid-template-columns: 1fr 1fr; column-gap: 3rem; } }
+  @media (min-width: 70rem) { .com:not(.com--compacta) { grid-template-columns: repeat(3, 1fr); } }
+</style>
