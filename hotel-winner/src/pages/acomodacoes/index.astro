@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import FotoSlot from '../../components/FotoSlot.astro';
 import Comodidades from '../../components/Comodidades.astro';
 import ReservaForm from '../../components/ReservaForm.astro';
-import { hotel, apartamentos, equipamentosApto } from '../../data/hotel';
+import { hotel, apartamentos, equipamentosApto, cartoes } from '../../data/hotel';
 
 const emDefinicao = [
   'Categoria "individual": a página de apartamentos do hotel não a cita',
@@ -81,6 +81,7 @@ const emDefinicao = [
         <dl class="horas num">
           <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
           <div><dt>Check-out</dt><dd>{hotel.checkOut}</dd></div>
+          <div><dt>Cartões</dt><dd class="horas__cartoes">{cartoes.join(', ')}</dd></div>
         </dl>
       </div>
     </div>
@@ -141,6 +142,7 @@ const emDefinicao = [
   .horas div { display: grid; grid-template-columns: 9rem 1fr; align-items: baseline; padding: .8rem 0; }
   .horas dt { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--marrom); }
   .horas dd { font: 400 1.25rem var(--f-titulo); }
+  .horas .horas__cartoes { font-size: 1.1rem; }
   .lista { display: grid; margin-top: 1.5rem; border-top: 1px solid var(--grafite); }
   .lista li { padding: .9rem 0; border-bottom: 1px solid var(--areia); font: 400 1.25rem/1.3 var(--f-titulo); }
   .reserva { display: grid; gap: 2.5rem; }

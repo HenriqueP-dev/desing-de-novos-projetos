@@ -23,6 +23,11 @@ export const hotel = {
   cafe: 'Incluído',
 } as const;
 
+/** Bandeiras mostradas na página de apartamentos do site do hotel (conferido numa captura de tela enviada pelo cliente). */
+export const cartoes = ['Mastercard', 'Visa', 'American Express', 'Diners Club', 'Visa Electron'] as const;
+/** Lema que aparece no topo do site do hotel. */
+export const lema = 'Excelência em servi-lo!';
+
 export const avaliacao = {
   nota: '4,3',
   total: 353,

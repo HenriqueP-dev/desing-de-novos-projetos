@@ -12,7 +12,12 @@ O site oficial (hotelwinner.com.br) **não pôde ser aberto diretamente** nesta 
 
 - A página tem um carrossel ("slideshow") de **13 fotos**, todas juntas: photoaction-0035, 0041, 0074, 0087, 0099, 0104, 0110, 0112, 0122, 0135, 0147, 0155 e 9985. **Não diz a que categoria cada foto pertence.**
 - A página não cita capacidade, camas, nem a categoria "individual".
-- Aparece a palavra "Master" acima do texto, sem explicação. Pode ser título da página ou de uma categoria: **não usada**.
+- Aparece o título "Master" acima do texto e das fotos, sem explicação. Pode ser o nome do álbum ou de uma categoria: **não usado**.
+- Segundo a captura da página enviada pelo cliente, os 13 miniaturas se repetem bastante (mesmas camas e cômodos); o cliente decidiu que **não é preciso usar todas**. Entre elas há uma foto de banheiro (toalhas e pia) e uma da fechadura eletrônica da porta, que não foram recebidas em boa resolução.
+- Menu do site: Apartamentos, Estacionamento, Como Chegar, Galeria, Contato. As páginas Estacionamento, Como Chegar e Galeria ainda não foram lidas.
+- Ícone do Facebook no topo do site (o endereço do perfil não foi informado).
+- Lema no topo: "Excelência em servi-lo!" (usado no rodapé).
+- Bandeiras de cartão exibidas ao lado do texto: Mastercard, Visa, American Express, Diners Club e Visa Electron (usadas como "Cartões", só em texto; confirmar se valem para a hospedagem e se há outras formas de pagamento).
 
 Também veio do documento de conteúdo original: endereço, telefone, check-in a partir das 13h, check-out até as 12h, Wi-Fi gratuito, café da manhã incluído, estacionamento, acessibilidade, piscina, ar-condicionado, distâncias e as 7 avaliações resumidas.
 
@@ -33,12 +38,12 @@ Também veio do documento de conteúdo original: endereço, telefone, check-in a
 | Configuração das camas | Não afirmada; só o que aparece em cada foto, em legenda |
 | Quantos apartamentos de cada tipo; total de unidades (~20 em listagem externa) | Não exibido |
 | A que categoria cada foto corresponde | A página do hotel não associa: a associação do site é nossa, pelo número de camas visíveis: **a confirmar** |
-| Fotos recebidas: 5 de 13 do carrossel oficial | Faltam 8 (ver seção acima); não se sabe quais das 5 são as oficiais |
+| Fotos recebidas: 5 de 13 do carrossel oficial | Suficiente (cliente: as demais repetem); não se sabe quais das 5 são as oficiais. Falta uma foto do banheiro em boa resolução |
 | Autor, origem e direitos das 5 fotos | Desconhecidos (ver CREDITOS.md) |
 | Fotos de fachada, recepção, banheiros, café da manhã, estacionamento, áreas internas, jardim, vista aérea | **A fornecer pelo hotel**: a galeria só terá fotos reais |
 | Lan house | Citada pelo cliente; **não exibida** até confirmar |
 | Recepção (horário, 24 h?) | Não exibida |
-| Valores, formas de pagamento, política de cancelamento, crianças e animais | Não exibidos |
+| Valores, outras formas de pagamento além dos cartões, política de cancelamento, crianças e animais | Não exibidos |
 | Horário do café da manhã | Não exibido |
 | O que "Acessibilidade" inclui | Aparece só como o nome da comodidade |
 | Bairro: "Dr. Paulo Prata" ou "Jardim Campo Redondo" | Divergência no documento original: bairro omitido |
