@@ -174,13 +174,18 @@ test.describe('vídeo e movimento', () => {
 });
 
 test.describe('ação na primeira tela e barra de ligar', () => {
-  test('desktop: ligar e formulário aparecem sem rolar', async ({ page }) => {
+  test('desktop: o vídeo ocupa a primeira tela e o botão de ligar aparece sobre ele', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
+    const video = page.locator('.hero__video');
+    await expect(video).toBeInViewport({ ratio: 0.9 });
+    const caixa = await video.boundingBox();
+    expect(caixa!.width).toBeGreaterThanOrEqual(1430);
+    expect(caixa!.height).toBeGreaterThan(650);
     const ligar = page.locator('.hero__acoes').getByRole('link', { name: 'Ligar para o hotel' });
     await expect(ligar).toHaveAttribute('href', 'tel:+551733257186');
     await expect(ligar).toBeInViewport();
-    await expect(page.locator('.hero__barra form')).toBeInViewport({ ratio: 0.5 });
+    await expect(page.locator('h1')).toBeInViewport();
     await expect(page.locator('.ligar')).toBeHidden();
   });
   test('celular: botão de ligar na primeira tela e barra fixa', async ({ page }) => {

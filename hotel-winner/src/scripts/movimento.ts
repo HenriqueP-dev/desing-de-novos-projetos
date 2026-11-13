@@ -18,9 +18,9 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const linhas = gsap.utils.toArray<HTMLElement>('[data-hero-linha]');
   if (linhas.length) {
     gsap.timeline({ defaults: { ease: 'expo.out' } })
-      .from(linhas, { yPercent: 108, duration: 1.5, stagger: 0.12 })
+      .from('[data-hero-quadro]', { opacity: 0, duration: 1.2, ease: 'power1.out' })
+      .from(linhas, { yPercent: 108, duration: 1.5, stagger: 0.12 }, '-=0.8')
       .from('[data-hero-sub]', { opacity: 0, y: 14, duration: 1.1 }, '-=1.15')
-      .from('[data-hero-quadro]', { opacity: 0, y: 36, duration: 1.5 }, '-=1.0')
       .from('[data-hero-barra]', { opacity: 0, y: 20, duration: 1.1 }, '-=1.15');
   }
 
@@ -28,7 +28,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const quadro = document.querySelector<HTMLElement>('[data-hero-quadro]');
   const midia = quadro?.querySelector('video, .hv__vazio');
   if (quadro && midia) {
-    gsap.fromTo(midia, { scale: 1.06 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: quadro, start: 'top 85%', end: 'bottom 30%', scrub: 0.6 } });
+    gsap.fromTo(midia, { scale: 1 }, { scale: 1.08, ease: 'none', scrollTrigger: { trigger: quadro, start: 'top top', end: 'bottom top', scrub: 0.6 } });
   }
 
   // 3. Revelações discretas: blocos marcados sobem e aparecem; fotos se abrem por máscara.

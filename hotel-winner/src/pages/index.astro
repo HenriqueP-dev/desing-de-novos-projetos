@@ -15,13 +15,13 @@ const passos = [
 ];
 ---
 <Base>
-  <!-- HERO: a ação (ligar ou pedir reserva) aparece na primeira tela; o vídeo fica logo abaixo -->
+  <!-- HERO: o vídeo ocupa a primeira tela inteira; título e ação ficam sobre ele, o formulário vem logo abaixo -->
   <section class="hero" aria-labelledby="h-hero">
-    <div class="container hero__topo">
-      <div class="hero__tit">
+    <div class="hero__video" data-hero-quadro><HeroVideo /></div>
+    <div class="hero__veu" aria-hidden="true"></div>
+    <div class="container hero__conteudo">
       <p class="hero__selo">{hotel.categoria} · {hotel.cidade}, {hotel.uf}</p>
       <h1 id="h-hero"><span class="linha"><span data-hero-linha>Chegue, estacione,</span></span> <span class="linha"><span data-hero-linha>descanse.</span></span></h1>
-      </div>
       <div class="hero__lado" data-hero-sub>
         <p class="lead">A {distancias[1].km} do centro de {hotel.cidade}, com estacionamento e café da manhã incluído.</p>
         <div class="hero__acoes">
@@ -30,12 +30,11 @@ const passos = [
         </div>
       </div>
     </div>
-    <div class="container hero__barra" data-hero-barra><ReservaForm /></div>
-    <div class="container hero__midia">
-      <div class="quadro" data-hero-quadro><HeroVideo /></div>
-      <p class="hero__leg">{temVideoHero ? 'Vídeo ilustrativo, não mostra o hotel' : 'Espaço reservado para o vídeo do hotel'}</p>
-    </div>
+    <p class="hero__leg">{temVideoHero ? 'Vídeo ilustrativo, não mostra o hotel' : 'Espaço reservado para o vídeo do hotel'}</p>
   </section>
+  <div class="reserva-faixa">
+    <div class="container hero__barra" data-hero-barra><ReservaForm /></div>
+  </div>
 
   <!-- DO CHECK-IN AO CHECK-OUT: seção densa, em sequência, com as seis comodidades numa faixa -->
   <section class="section sec--champ sec--densa" id="roteiro" aria-labelledby="h-rot">
@@ -105,21 +104,23 @@ const passos = [
 </Base>
 
 <style>
-  /* ---------- hero ---------- */
-  .hero { padding-top: clamp(2.25rem, 5vw, 4.5rem); }
-  .hero__topo { display: grid; gap: 1.75rem; align-items: end; margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem); }
+  /* ---------- hero: vídeo em tela cheia ---------- */
+  .hero { position: relative; display: grid; align-items: end; min-height: max(32rem, calc(100svh - 7.5rem)); overflow: hidden; background: #000; color: #fff; }
+  .hero__video { position: absolute; inset: 0; }
+  .hero__veu { position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / .8), rgb(0 0 0 / .4) 55%, rgb(0 0 0 / .18)); }
+  .hero__conteudo { position: relative; z-index: 1; padding-block: 3rem clamp(3rem, 6vw, 4.5rem); display: grid; gap: 1.5rem; }
+  .hero__selo { margin: 0; font: 500 var(--t-mini)/1 var(--f-texto); letter-spacing: .06em; color: var(--ouro); }
+  .hero h1 { color: #fff; max-width: 14ch; }
   .linha { display: block; overflow: hidden; padding-bottom: .06em; }
   .linha > span { display: block; }
-  .hero__selo { margin: 0 0 1.1rem; font: 500 var(--t-mini)/1 var(--f-texto); letter-spacing: .04em; color: var(--ouro-texto); }
   .hero__lado { display: grid; gap: 1.5rem; max-width: 34rem; }
-  .hero__lado .lead { margin: 0; }
+  .hero__lado .lead { margin: 0; color: rgb(255 255 255 / .95); font-weight: 400; }
   .hero__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
-  .hero__alt { font-size: .95rem; }
-  .hero__acoes .btn { flex: 0 0 auto; white-space: nowrap; }
-  @media (min-width: 62rem) { .hero__topo { grid-template-columns: 1.4fr .6fr; gap: 4rem; } }
-  .hero__barra { margin-bottom: clamp(2rem, 4vw, 3rem); }
-  .quadro { position: relative; height: clamp(15rem, 36vw, 30rem); overflow: hidden; background: var(--areia); border-radius: var(--raio); }
-  .hero__leg { margin: .8rem 0 0; font-size: .8rem; color: var(--marrom); text-align: right; max-width: none; }
+  .hero__alt { font-size: .95rem; color: #fff; }
+  .hero__leg { position: absolute; z-index: 1; right: var(--gutter); top: 1rem; margin: 0; padding: .35rem .7rem; font-size: .8rem; line-height: 1.2; color: #fff; background: rgb(0 0 0 / .6); border-radius: var(--raio); max-width: none; }
+  .reserva-faixa { padding-block: clamp(2rem, 4vw, 3rem); background: var(--creme); border-bottom: 1px solid var(--areia); }
+  @media (max-width: 61.99rem) { .hero { min-height: max(30rem, calc(100svh - 12.5rem)); } }
+  @media (min-width: 62rem) { .hero h1 { max-width: none; } }
 
   /* ---------- seções com densidades diferentes ---------- */
   .sec--densa { padding-block: clamp(3.5rem, 6vw, 5.5rem); }
