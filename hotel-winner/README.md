@@ -15,37 +15,37 @@ npm run build    # gera o site estático em dist/
 
 | O quê | Onde |
 |---|---|
-| Telefone, e-mail, endereço, WhatsApp, horários | `src/data/hotel.ts` |
-| Quartos e experiências (textos, capacidades) | `src/data/hotel.ts` |
+| Endereço, telefone, horários, comodidades, distâncias, avaliação, pendências | `src/data/hotel.ts` |
 | Cores, tipografia, espaçamentos | `src/styles/global.css` (variáveis em `:root`) |
-| Página inicial / Quartos / Contato | `src/pages/` |
-| Formulário de reserva (validação, WhatsApp, relógio) | `src/components/ReservaForm.astro` |
+| Página inicial / Acomodações / Contato | `src/pages/` |
+| Formulário de reserva (validação, ligar, copiar, WhatsApp) | `src/components/ReservaForm.astro` |
 
 ## Trocar as ilustrações por fotos reais
 
 Todas as imagens passam pelo componente `src/components/Imagem.astro`: sem foto, ele desenha a
 ilustração; com foto, usa a foto. Para trocar:
 
-1. Coloque o arquivo em `public/fotos/` (ex.: `public/fotos/quarto-standard.jpg`).
-2. Em `src/data/hotel.ts`, preencha o campo `foto` do quarto ou da experiência: `foto: '/fotos/quarto-standard.jpg'`.
-3. Para a foto do topo da home, passe `foto="/fotos/fachada.jpg"` no `<Imagem>` de `src/pages/index.astro`.
+1. Coloque o arquivo em `public/fotos/` (ex.: `public/fotos/fachada.jpg`).
+2. Passe o caminho no `<Imagem>` que você quer trocar, por exemplo `foto="/fotos/fachada.jpg"` em `src/pages/index.astro`.
 
 Escreva sempre um `alt` descritivo. Depois de trocar, revise o contraste do texto sobre a foto do topo
 (o texto é escuro; fotos escuras exigem trocá-lo para branco).
 
-## Ativar o WhatsApp
+## WhatsApp
 
-Em `src/data/hotel.ts`, preencha `whatsapp` com o número real (formato internacional, só dígitos, ex.: `5517999999999`).
-Enquanto estiver vazio, o formulário mostra só a prévia da mensagem.
+O WhatsApp do hotel **não foi informado**. Sem ele, o formulário prepara o pedido e oferece "Ligar para o hotel" e "Copiar mensagem".
+Se o hotel tiver WhatsApp, preencha `whatsapp` em `src/data/hotel.ts` (formato internacional, só dígitos, ex.: `5517999999999`).
 
-## Dados a confirmar com o hotel
+## Dados
 
-Quando o hotel confirmar os horários, troque `horariosConfirmados` para `true` em `src/data/hotel.ts`:
-o relógio da barra de reserva deixa de mostrar "(horário a confirmar)".
+Tudo o que aparece no site vem do documento de conteúdo enviado para o projeto (endereço, telefone, check-in e check-out,
+comodidades, distâncias e a nota do Google). **O site não afirma nada além disso.**
 
+O que ainda falta confirmar está na lista `pendencias` de `src/data/hotel.ts`: categorias e quantidade de quartos, fotos oficiais,
+valores, formas de pagamento, cancelamento, horário do café, regras para crianças e animais, link de reservas, redes sociais,
+o que "Acessibilidade" inclui e o bairro (o documento cita "Dr. Paulo Prata" e "Jardim Campo Redondo").
 
-Check-in 13h às 24h, check-out até 12h e café da manhã continental vieram de listagens de terceiros.
-Todo o resto (preços, categorias, capacidades, contatos, "a confirmar") é fictício.
+Os preços de referência (R$ 260 no Booking/Agoda) **não** são exibidos, como o documento orienta.
 
 ## Outras versões
 
@@ -59,6 +59,6 @@ saída para pop-up bloqueado (link e copiar mensagem), menu com foco preso no pa
 do título quando aparecem erros e página 404.
 
 
-axe-core sem violações (home, quartos e contato, desktop e celular, incluindo erros do formulário);
-contraste do texto sobre a imagem do topo medido no pior caso (mínimo 8,5:1); sem rolagem horizontal.
+axe-core sem violações (home, acomodações, contato e 404, desktop e celular, incluindo erros do formulário);
+varredura de todas as páginas publicadas contra afirmações não confirmadas; sem rolagem horizontal.
 Não testado com leitor de tela real.

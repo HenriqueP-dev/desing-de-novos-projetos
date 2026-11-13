@@ -8,12 +8,9 @@
     <select name="g"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
   </label>
   <button class="rb__ok" type="submit">Reservar</button>
-  <p class="rb__nota">Check-in até meia-noite · <span data-agora>agora em Barretos</span></p>
+  <p class="rb__nota">Check-in a partir das 13h. Check-out até as 12h.</p>
 </form>
 <script>
-  const f = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
-  const t = () => document.querySelectorAll<HTMLElement>('[data-agora]').forEach((e) => (e.textContent = `agora ${f.format(new Date())} em Barretos`));
-  t(); setInterval(t, 20000);
   document.querySelectorAll('.rb').forEach((x) => x.addEventListener('submit', (e) => e.preventDefault()));
 </script>
 <style>

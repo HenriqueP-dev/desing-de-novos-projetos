@@ -4,8 +4,8 @@ interface Props { sobre?: boolean; temReserva?: boolean }
 const { sobre = false, temReserva = true } = Astro.props;
 // Em páginas sem formulário (ex.: 404) o botão leva ao formulário da home.
 const alvoReserva = temReserva ? '#reserva' : '/#reserva';
-const esq = [{ href: '/quartos/', t: 'Quartos' }, { href: '/#experiencias', t: 'Experiências' }];
-const dir = [{ href: '/#direto', t: 'Reserva direta' }, { href: '/contato/', t: 'Contato' }];
+const esq = [{ href: '/acomodacoes/', t: 'Acomodações' }, { href: '/#comodidades', t: 'Comodidades' }];
+const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/', t: 'Contato' }];
 ---
 <header class={`hd ${sobre ? 'hd--sobre' : 'hd--solido'}`}>
   <div class="hd__in">

@@ -1,68 +1,70 @@
 /**
  * Dados do hotel num único lugar.
  *
- * PROJETO CONCEITUAL: o que está marcado como "placeholder" é fictício e deve
- * ser trocado por dados reais, confirmados com o hotel, antes de qualquer uso.
- * Horários de check-in/check-out e café da manhã vieram de listagens de
- * terceiros (Expedia/Trip.com) e também precisam de confirmação.
+ * PROJETO CONCEITUAL. Tudo aqui vem do documento de conteúdo enviado para o projeto.
+ * Não invente nada que não esteja nele: o que ainda falta está em `pendencias`.
  */
 export const hotel = {
   nome: 'Hotel Winner',
+  categoria: 'Hotel 2 estrelas',
   cidade: 'Barretos',
   uf: 'SP',
-  // placeholder: vazio = modo conceitual (mostra a prévia da mensagem).
-  // Para ativar, use o WhatsApp real, formato internacional, só dígitos (ex.: '5517999999999').
+  endereco: 'Av. do Ébano, 1415',
+  enderecoCompleto: 'Av. do Ébano, 1415, Barretos, SP, CEP 14784-383',
+  telefone: '(17) 3325-7186',
+  telefoneLink: 'tel:+551733257186',
+  siteAtual: 'https://hotelwinner.com.br',
+  mapaLink: 'https://www.google.com/maps/search/?api=1&query=Av.+do+%C3%89bano+1415+Barretos+SP',
+  // WhatsApp NÃO foi informado. Vazio = o formulário prepara a mensagem e oferece ligar ou copiar.
+  // Se o hotel tiver WhatsApp, preencha com o número internacional, só dígitos (ex.: '5517999999999').
   whatsapp: '',
-  telefone: '(00) 0000-0000', // placeholder
-  email: 'reservas@exemplo.com.br', // placeholder
-  endereco: 'Endereço a confirmar, Barretos, SP', // placeholder
-  // Check-in em minutos desde 00:00 (13h às 24h). Usado pelo relógio da barra de reserva.
-  checkInAbre: 13 * 60,
-  checkInFecha: 24 * 60,
-  checkIn: '13h às 24h',
-  checkOut: 'até 12h',
-  cafe: 'Continental',
-  fuso: 'America/Sao_Paulo',
-  // Troque para true quando o hotel confirmar check-in, check-out e café da manhã.
-  horariosConfirmados: false,
+  checkIn: 'a partir das 13h',
+  checkOut: 'até as 12h',
+  cafe: 'Incluído',
 } as const;
 
-/**
- * `foto`: caminho da foto real (ex.: '/fotos/quarto-standard.jpg', arquivo em /public/fotos).
- * Enquanto estiver vazio, o site mostra a ilustração indicada em `variante`.
- */
-export const quartos = [
-  {
-    id: 'standard', nome: 'Standard', max: 2, cama: 'Casal ou duas de solteiro', variante: 'standard', foto: '',
-    resumo: 'O essencial bem resolvido para quem chega depois da estrada e sai cedo.',
-    itens: ['Banheiro privativo', 'Mesa de trabalho (a confirmar)', 'Café da manhã incluso'],
-  },
-  {
-    id: 'superior', nome: 'Superior', max: 3, cama: 'Queen ou king', variante: 'superior', foto: '',
-    resumo: 'Mais espaço para estadias longas ou para quem prefere descansar sem pressa.',
-    itens: ['Área de estar (a confirmar)', 'Banheiro privativo', 'Café da manhã incluso'],
-  },
-  {
-    id: 'familia', nome: 'Família', max: 4, cama: 'Casal e solteiros', variante: 'familia', foto: '',
-    resumo: 'Todos juntos, com espaço de sobra para as malas.',
-    itens: ['Até quatro hóspedes', 'Banheiro privativo', 'Pergunte por berço ao reservar'],
-  },
+export const avaliacao = {
+  nota: '4,3',
+  total: 353,
+  fonte: 'Google',
+  elogios: [
+    'Quartos limpos e bem cuidados',
+    'Camas confortáveis',
+    'Bons chuveiros',
+    'Estacionamento conveniente',
+    'Bom custo-benefício',
+    'Café da manhã saboroso',
+    'Equipe educada e atenciosa',
+  ],
+} as const;
+
+export const comodidades = [
+  'Wi-Fi gratuito',
+  'Café da manhã incluído',
+  'Estacionamento',
+  'Acessibilidade',
+  'Piscina',
+  'Ar-condicionado',
 ] as const;
 
-export const experiencias = [
-  {
-    id: 'festa', titulo: 'Para a Festa do Peão', cena: 'campo', foto: '', quarto: 'superior',
-    texto: 'Em agosto e nos feriados prolongados, Barretos recebe gente do Brasil inteiro. Quem reserva cedo escolhe o quarto; quem deixa para depois fica com o que sobrou.',
-    dicas: ['Reserve com semanas de antecedência', 'Saiu tarde do evento? O check-in vai até meia-noite', 'Café da manhã antes de voltar para a estrada'],
-  },
-  {
-    id: 'trabalho', titulo: 'Para quem viaja a trabalho', cena: 'estrada', foto: '', quarto: 'standard',
-    texto: 'Horário flexível na chegada e saída sem fila na manhã seguinte fazem diferença para quem está na estrada a negócios.',
-    dicas: ['Check-in das 13h às 24h', 'Check-out até 12h', 'Avise a chegada tardia ao reservar'],
-  },
-  {
-    id: 'familia', titulo: 'Para ficar em família', cena: 'alvorada', foto: '', quarto: 'familia',
-    texto: 'Fins de semana e visitas a parentes pedem um quarto que junte todo mundo e deixe a bagagem fora do caminho.',
-    dicas: ['Quarto para até quatro hóspedes', 'Café da manhã para todos', 'Peça berço ou cama extra na hora da reserva'],
-  },
+export const distancias = [
+  { lugar: 'Catedral do Divino Espírito Santo', km: '3,7 km' },
+  { lugar: 'Centro de Barretos', km: '5 km' },
+  { lugar: 'Parque do Peão, arena de shows e rodeios', km: '11 km' },
+] as const;
+
+/** Ainda precisa ser confirmado com o hotel. O site não afirma nenhum destes itens. */
+export const pendencias = [
+  'Quantidade e categorias de quartos',
+  'Fotos oficiais dos quartos e das instalações',
+  'Descrição dos tipos de acomodação',
+  'Valores atualizados das diárias',
+  'Formas de pagamento',
+  'Política de cancelamento',
+  'Horário do café da manhã',
+  'Regras para crianças e animais de estimação',
+  'Link direto para reservas (e WhatsApp, se houver)',
+  'Redes sociais oficiais',
+  'O que "Acessibilidade" inclui',
+  'Bairro: o documento cita "Dr. Paulo Prata" e "Jardim Campo Redondo"',
 ] as const;

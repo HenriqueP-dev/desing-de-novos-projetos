@@ -7,7 +7,7 @@ import { hotel } from '../data/hotel';
 interface Props { title?: string; description?: string; sobre?: boolean; temReserva?: boolean }
 const {
   title = `${hotel.nome} · Hospedagem em ${hotel.cidade}, ${hotel.uf}`,
-  description = `Hospedagem em ${hotel.cidade} com check-in até meia-noite, café da manhã e reserva direta. Projeto conceitual.`,
+  description = `${hotel.nome}, ${hotel.categoria.toLowerCase()} em ${hotel.cidade}, ${hotel.uf}. Café da manhã incluído, Wi-Fi gratuito, estacionamento e piscina. Projeto conceitual.`,
   sobre = false,
   temReserva = true,
 } = Astro.props;
