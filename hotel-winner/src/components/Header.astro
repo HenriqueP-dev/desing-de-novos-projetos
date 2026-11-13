@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import { hotel } from '../data/hotel';
 interface Props { temReserva?: boolean }
 const { temReserva = true } = Astro.props;
 // Em páginas sem formulário (ex.: 404) o botão leva ao formulário da home.
@@ -13,7 +14,7 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
     <a href="/" class="hd__logo"><Logo /></a>
     <div class="hd__r">
       <nav class="tracado hd__links" aria-label="Secundário">{dir.map((l) => <a class="hd__a" href={l.href}>{l.t}</a>)}</nav>
-      <a class="btn btn--linha hd__cta" href={alvoReserva}>Pedir reserva</a>
+      <a class="btn btn--linha hd__cta" href={hotel.telefoneLink}>Ligar <span class="num">{hotel.telefone}</span></a>
       <button class="hd__menu tracado" type="button" aria-expanded="false" aria-controls="painel">Menu</button>
     </div>
   </div>
@@ -21,6 +22,7 @@ const dir = [{ href: '/#localizacao', t: 'Localização' }, { href: '/contato/',
     <nav aria-label="Menu">
       {[...esq, ...dir].map((l) => <a href={l.href}>{l.t}</a>)}
       <a href={alvoReserva}>Pedir reserva</a>
+      <a href={hotel.telefoneLink}>Ligar para o hotel</a>
     </nav>
   </div>
 </header>

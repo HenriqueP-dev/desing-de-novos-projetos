@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import HeroVideo from '../components/HeroVideo.astro';
-import FotoSlot from '../components/FotoSlot.astro';
 import Comodidades from '../components/Comodidades.astro';
 import ReservaForm from '../components/ReservaForm.astro';
 import { temVideoHero } from '../lib/midia';
@@ -10,11 +9,9 @@ import { hotel, avaliacao, distancias } from '../data/hotel';
 // A ideia do site: o hotel é uma base prática para quem chega a Barretos.
 // Cada passo usa só fatos do documento do hotel (ou o que os hóspedes elogiam nas avaliações).
 const passos = [
-  { n: '1', t: 'Chegar', d: `Check-in ${hotel.checkIn}.` },
-  { n: '2', t: 'Estacionar', d: 'Estacionamento para os hóspedes.' },
-  { n: '3', t: 'Descansar', d: 'Camas confortáveis e bons chuveiros, segundo os hóspedes.' },
-  { n: '4', t: 'Tomar café', d: 'Café da manhã incluído.' },
-  { n: '5', t: 'Seguir', d: `Check-out ${hotel.checkOut}.` },
+  { n: '1', t: 'Chegar', d: `Check-in ${hotel.checkIn}, com estacionamento para os hóspedes.` },
+  { n: '2', t: 'Descansar', d: 'Camas confortáveis e bons chuveiros, segundo os hóspedes.' },
+  { n: '3', t: 'Tomar café e seguir', d: `Café da manhã incluído. Check-out ${hotel.checkOut}.` },
 ];
 ---
 <Base>
@@ -29,7 +26,7 @@ const passos = [
         <p class="lead">A {distancias[1].km} do centro de {hotel.cidade}, com estacionamento e café da manhã incluído.</p>
         <div class="hero__acoes">
           <a class="btn" href={hotel.telefoneLink}>Ligar para o hotel</a>
-          <a class="btn btn--linha" href="#reserva">Pedir reserva</a>
+          <a class="link-ouro hero__alt" href="#reserva">ou peça uma reserva abaixo</a>
         </div>
       </div>
     </div>
@@ -88,14 +85,12 @@ const passos = [
     </div>
   </section>
 
-  <!-- ACOMODAÇÕES: compacta, até haver fotos e categorias confirmadas -->
-  <section class="section" id="acomodacoes" aria-labelledby="h-aco">
+  <!-- ACOMODAÇÕES: só uma linha honesta até haver fotos e categorias confirmadas -->
+  <section class="section sec--fina" id="acomodacoes" aria-labelledby="h-aco">
     <div class="container aco">
-      <FotoSlot rotulo="Foto do quarto" proporcao="4 / 3" class="aco__foto" />
+      <h2 id="h-aco">Acomodações</h2>
       <div class="aco__txt">
-        <h2 id="h-aco">Acomodações</h2>
-        <p class="lead">Os hóspedes elogiam a limpeza dos quartos, o conforto das camas e os bons chuveiros.</p>
-        <p class="sec-txt aco__nota">Categorias, capacidades e fotos oficiais serão publicadas depois da confirmação com o hotel.</p>
+        <p class="lead">Fotos, categorias e capacidades dos quartos entram aqui depois da confirmação com o hotel.</p>
         <a class="btn btn--linha" href="/acomodacoes/">Ver acomodações</a>
       </div>
     </div>
@@ -129,7 +124,8 @@ const passos = [
   .hero__selo { margin: 0 0 1.1rem; font: 500 var(--t-mini)/1 var(--f-texto); letter-spacing: .04em; color: var(--ouro-texto); }
   .hero__lado { display: grid; gap: 1.5rem; max-width: 34rem; }
   .hero__lado .lead { margin: 0; }
-  .hero__acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .hero__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+  .hero__alt { font-size: .95rem; }
   .hero__acoes .btn { flex: 0 0 auto; white-space: nowrap; }
   @media (min-width: 62rem) { .hero__topo { grid-template-columns: 1.4fr .6fr; gap: 4rem; } }
   .hero__barra { margin-bottom: clamp(2rem, 4vw, 3rem); }
@@ -147,10 +143,10 @@ const passos = [
   .passos li::before { content: ''; position: absolute; left: 0; top: .5rem; width: .65rem; height: .65rem; border-radius: 50%; background: var(--champ); border: 2px solid var(--grafite); }
   .passo__n { font: 400 .8rem var(--f-texto); letter-spacing: .15em; color: var(--ouro-texto); }
   .passo__t { font: 400 clamp(1.6rem, 1.3rem + 1vw, 2.1rem)/1.1 var(--f-titulo); }
-  .passos p { margin: 0; color: var(--marrom); max-width: 24ch; }
+  .passos p { margin: 0; color: var(--marrom); max-width: 30ch; }
   .com-wrap { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
   @media (min-width: 62rem) {
-    .passos { grid-template-columns: repeat(5, 1fr); column-gap: 2rem; }
+    .passos { grid-template-columns: repeat(3, 1fr); column-gap: 3rem; }
     .passos::before { left: .32rem; right: 0; top: .26rem; bottom: auto; width: auto; height: 3px; }
     .passos li { padding: 2rem 0 0 0; }
     .passos li::before { top: 0; }
@@ -183,17 +179,18 @@ const passos = [
   .av__fonte { margin: 0; font-size: .875rem; color: #c4c4c4; }
   @media (min-width: 52rem) { .temas { grid-template-columns: repeat(3, 1fr); gap: 3rem; } }
 
-  /* ---------- acomodações (compacta) ---------- */
-  .aco { display: grid; gap: 2.5rem; align-items: center; }
+  /* ---------- acomodações (enxuta) ---------- */
+  .sec--fina { padding-block: clamp(3.5rem, 7vw, 6rem); border-top: 3px solid var(--ouro); }
+  .aco { display: grid; gap: 1.5rem; align-items: center; }
   .aco__txt { display: grid; gap: 1.25rem; justify-items: start; }
-  .aco__txt .lead, .aco__nota { margin: 0; max-width: 40ch; }
-  @media (min-width: 62rem) { .aco { grid-template-columns: .85fr 1.15fr; gap: 6rem; } }
+  .aco__txt .lead { margin: 0; max-width: 42ch; }
+  @media (min-width: 62rem) { .aco { grid-template-columns: .8fr 1.2fr; gap: 5rem; } }
 
   /* ---------- contato ---------- */
   .contato__g { display: grid; gap: 3rem; align-items: end; }
   .contato__g .lead { margin: 1.25rem 0 0; }
   .contato__dados { font-style: normal; display: grid; gap: .5rem; justify-items: start; }
-  .contato__tel { font: 400 clamp(2.4rem, 1.6rem + 3vw, 4.25rem)/1.05 var(--f-titulo); text-decoration: none; letter-spacing: -.02em; }
+  .contato__tel { display: inline-block; min-height: 2.75rem; padding-block: .25rem; font: 400 clamp(2.4rem, 1.6rem + 3vw, 4.25rem)/1.05 var(--f-titulo); text-decoration: none; letter-spacing: -.02em; }
   @media (hover: hover) { .contato__tel { transition: color .3s var(--ease); } .contato__tel:hover { color: var(--ouro-texto); } }
   .contato__dados .sec-txt { margin: .25rem 0 1.25rem; }
   .contato__acoes { display: flex; flex-wrap: wrap; gap: .9rem; }
